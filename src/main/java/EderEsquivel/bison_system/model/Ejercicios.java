@@ -24,7 +24,7 @@ public class Ejercicios {
     @Id
     @Column(name="id_ejercicio")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_ejericio;
+    private Integer id_ejericio;
     
     private String nombre;
     private String descripcion;
@@ -40,7 +40,7 @@ public class Ejercicios {
     @JoinColumn(name="id_dificultad")
     private Dificultades id_dificultad;
 
-    public Ejercicios(Long id_ejericio, String nombre, String descripcion, Musculos musculoPrincipal, Musculos musculoSecundario, Dificultades id_dificultad) {
+    public Ejercicios(Integer id_ejericio, String nombre, String descripcion, Musculos musculoPrincipal, Musculos musculoSecundario, Dificultades id_dificultad) {
         this.id_ejericio = id_ejericio;
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -60,11 +60,11 @@ public class Ejercicios {
     public Ejercicios() {
     }
 
-    public Long getId_ejericio() {
+    public Integer getId_ejericio() {
         return id_ejericio;
     }
 
-    public void setId_ejericio(Long id_ejericio) {
+    public void setId_ejericio(Integer id_ejericio) {
         this.id_ejericio = id_ejericio;
     }
 

@@ -4,8 +4,7 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.TipoUsuario;
-import EderEsquivel.bison_system.services.InicioSesionServices;
+import EderEsquivel.bison_system.model.DatosGenerales;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -211,7 +210,7 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
         int op;
-        if (hayConexion()) {
+        if (DatosGenerales.hayConexion()) {
             String usuario = tfUsuario.getText();
             String password = new String(pfContrasena.getPassword());
             Integer tuElegido=0;
@@ -300,18 +299,6 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
         });
     }
     
-    public static boolean hayConexion() {
-        try {
-            URL url = new URL("http://www.google.com");
-            HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
-            conexion.setRequestMethod("HEAD");
-            conexion.setConnectTimeout(3000);
-            conexion.connect();
-            return (conexion.getResponseCode() == HttpURLConnection.HTTP_OK);
-        } catch (IOException e) {
-            return false;
-        }
-    }
     
     public boolean verificarUsuarioConServidor(String username, String password, Integer tipoUsuario) {
     try {

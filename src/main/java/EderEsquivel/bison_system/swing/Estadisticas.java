@@ -36,6 +36,8 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         setVerifyInputWhenFocusTarget(false);
         setVisible(true);
 
+        jPanel1.setBackground(java.awt.SystemColor.window);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(

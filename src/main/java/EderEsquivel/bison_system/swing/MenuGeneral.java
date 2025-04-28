@@ -21,7 +21,7 @@ public class MenuGeneral extends javax.swing.JFrame {
         this.setResizable(false);
         this.setSize(1100, 700);
         this.setLocationRelativeTo(null);
-        dpFondo.setBackground(Color.BLACK);
+        
     }
 
     /**
@@ -282,22 +282,22 @@ public class MenuGeneral extends javax.swing.JFrame {
 
     private void miVerEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVerEjerciciosActionPerformed
         // TODO add your handling code here:
-         if (ventanaEjercicio == null || ventanaEjercicio.isClosed()) {
-            ventanaEjercicio = new Ejercicio();
-            dpFondo.add(ventanaEjercicio);
-            int x = (dpFondo.getWidth() - ventanaEjercicio.getWidth()) / 2;
-            int y = (dpFondo.getHeight() - ventanaEjercicio.getHeight()) / 2;
-            ventanaEjercicio.setLocation(x, y);
-            ventanaEjercicio.setVisible(true);
+         if (ventanaCatEjercicios == null || ventanaCatEjercicios.isClosed()) {
+            ventanaCatEjercicios = new CategoriasEjercicios();
+            dpFondo.add(ventanaCatEjercicios);
+            int x = (dpFondo.getWidth() - ventanaCatEjercicios.getWidth()) / 2;
+            int y = (dpFondo.getHeight() - ventanaCatEjercicios.getHeight()) / 2;
+            ventanaCatEjercicios.setLocation(x, y);
+            ventanaCatEjercicios.setVisible(true);
         } else {
             try {
            
-                ventanaEjercicio.setIcon(false); // Restaurar si está minimizada
-                int x = (dpFondo.getWidth() - ventanaEjercicio.getWidth()) / 2;
-                int y = (dpFondo.getHeight() - ventanaEjercicio.getHeight()) / 2;
-                ventanaEjercicio.setLocation(x, y);
-                ventanaEjercicio.setSelected(true); // Darle foco
-                ventanaEjercicio.toFront(); // Al frente
+                ventanaCatEjercicios.setIcon(false); // Restaurar si está minimizada
+                int x = (dpFondo.getWidth() - ventanaCatEjercicios.getWidth()) / 2;
+                int y = (dpFondo.getHeight() - ventanaCatEjercicios.getHeight()) / 2;
+                ventanaCatEjercicios.setLocation(x, y);
+                ventanaCatEjercicios.setSelected(true); // Darle foco
+                ventanaCatEjercicios.toFront(); // Al frente
             } catch (java.beans.PropertyVetoException ex) {
                 ex.printStackTrace();
             }
@@ -342,8 +342,8 @@ public class MenuGeneral extends javax.swing.JFrame {
     private Informacion ventanaInformacion;
     private Medidas ventanaMedidas;
     private Estadisticas ventanaEstadisticas;
-    private Ejercicio ventanaEjercicio;
     private GruposMusculares ventanaGM;
+    private CategoriasEjercicios ventanaCatEjercicios;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem cbxmiModoOscuro;

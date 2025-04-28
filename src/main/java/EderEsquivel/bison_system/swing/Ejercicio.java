@@ -1,20 +1,30 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
 package EderEsquivel.bison_system.swing;
+
+import EderEsquivel.bison_system.model.Musculos;
+import java.awt.BorderLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 
 /**
  *
  * @author edere
  */
-public class Ejercicio extends javax.swing.JInternalFrame {
+public class Ejercicio extends javax.swing.JDialog {
 
     /**
-     * Creates new form Ejercicio
+     * Creates new form Ejercicios
      */
-    public Ejercicio() {
+    public Ejercicio(java.awt.Frame parent) {
+        super(parent, "Ejercicios", ModalityType.APPLICATION_MODAL);
+        setResizable(false);
         initComponents();
+        gM.setIcon(icongm);
+        actEjercicio();
     }
 
     /**
@@ -26,24 +36,298 @@ public class Ejercicio extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setClosable(true);
-        setIconifiable(true);
+        jPanel1 = new javax.swing.JPanel();
+        imagenEjercicio = new javax.swing.JLabel();
+        btnAnteriorEjercicio = new javax.swing.JButton();
+        btnSiguienteEjercicio = new javax.swing.JButton();
+        lblTituloEjercicio = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        taDescripcion = new javax.swing.JTextArea();
+        jLabel5 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        taMP = new javax.swing.JTextArea();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        taMS = new javax.swing.JTextArea();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        taDificultad = new javax.swing.JTextArea();
+        gM = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jPanel1.setBackground(java.awt.SystemColor.window);
+
+        imagenEjercicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(26, 35, 126), 5));
+
+        btnAnteriorEjercicio.setText("<-Anterior");
+        btnAnteriorEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorEjercicioActionPerformed(evt);
+            }
+        });
+
+        btnSiguienteEjercicio.setText("Siguiente->");
+        btnSiguienteEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteEjercicioActionPerformed(evt);
+            }
+        });
+
+        lblTituloEjercicio.setText("jLabel1");
+
+        jLabel1.setText("Musculo Principal:");
+
+        jLabel2.setText("Musculo Secundario:");
+
+        jLabel3.setText("Dificultad:");
+
+        jLabel4.setText("Descripcion:");
+
+        jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane5.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        taDescripcion.setEditable(false);
+        taDescripcion.setColumns(20);
+        taDescripcion.setLineWrap(true);
+        taDescripcion.setRows(5);
+        taDescripcion.setWrapStyleWord(true);
+        jScrollPane5.setViewportView(taDescripcion);
+
+        jLabel5.setText("Musculos Trabajados:");
+
+        jScrollPane6.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane6.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        taMP.setEditable(false);
+        taMP.setColumns(20);
+        taMP.setRows(5);
+        jScrollPane6.setViewportView(taMP);
+
+        jScrollPane7.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane7.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        taMS.setEditable(false);
+        taMS.setColumns(100);
+        taMS.setRows(5);
+        jScrollPane7.setViewportView(taMS);
+
+        jScrollPane8.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane8.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        taDificultad.setEditable(false);
+        taDificultad.setColumns(20);
+        taDificultad.setRows(5);
+        jScrollPane8.setViewportView(taDificultad);
+
+        gM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                gMMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(imagenEjercicio, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(gM, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addGap(533, 533, 533))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addComponent(jLabel1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel2)
+                                        .addComponent(jLabel3))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(139, 139, 139)
+                .addComponent(btnAnteriorEjercicio)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSiguienteEjercicio)
+                .addGap(244, 244, 244))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblTituloEjercicio)
+                .addGap(344, 344, 344))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addComponent(imagenEjercicio, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(gM, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(lblTituloEjercicio)
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(64, 64, 64)
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel5)
+                                .addGap(39, 39, 39)
+                                .addComponent(jLabel1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(55, 55, 55)
+                                .addComponent(jLabel3))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)
+                                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(93, 93, 93)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAnteriorEjercicio)
+                    .addComponent(btnSiguienteEjercicio)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 768, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 901, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 464, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSiguienteEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteEjercicioActionPerformed
+        // TODO add your handling code here:
+        if (indiceLista < CategoriasEjercicios.listaEjercicios.size() - 1) {
+            indiceLista++;
+            actEjercicio();
+        }
+    }//GEN-LAST:event_btnSiguienteEjercicioActionPerformed
 
+    private void btnAnteriorEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorEjercicioActionPerformed
+        // TODO add your handling code here:
+        if (indiceLista > 0) {
+            indiceLista--;
+            actEjercicio();
+        }
+    }//GEN-LAST:event_btnAnteriorEjercicioActionPerformed
+
+    private void gMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gMMouseClicked
+        // TODO add your handling code here:
+        abrirGPMayorResolucion();
+    }//GEN-LAST:event_gMMouseClicked
+    
+    
+    private void actEjercicio(){
+        lblTituloEjercicio.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getNombre());
+        taDescripcion.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getDescripcion());
+        taMP.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getMusculoPrincipal().getNombre());
+        
+        Musculos musculoSecundario = CategoriasEjercicios.listaEjercicios.get(indiceLista).getMusculoSecundario();
+        if (musculoSecundario != null && musculoSecundario.getNombre() != null) {
+            taMS.setText(musculoSecundario.getNombre());
+        } else {
+            taMS.setText(" ");  // En caso de que musculoSecundario o su nombre sean null
+        }
+        
+        taDificultad.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getId_dificultad().getNombre());
+        imagen = "/" + CategoriasEjercicios.listaEjercicios.get(indiceLista).getId_ejericio() + ".gif";
+        icon = new ImageIcon(getClass().getResource(imagen));
+        imagenEjercicio.setIcon(icon);;
+        
+        btnAnteriorEjercicio.setEnabled(indiceLista > 0);
+        btnSiguienteEjercicio.setEnabled(indiceLista < CategoriasEjercicios.listaEjercicios.size() - 1);
+    }
+    
+    private void abrirGPMayorResolucion() {
+        JDialog imagenGrandeDialog = new JDialog(this, "Imagen Grande", true);
+
+        String imagenAltaResolucion = "/GruposMusculares.jpeg"; 
+        ImageIcon iconAltaResolucion = new ImageIcon(getClass().getResource(imagenAltaResolucion));
+
+        JLabel imagenLabel = new JLabel(iconAltaResolucion);
+
+        imagenGrandeDialog.setLayout(new BorderLayout());
+        imagenGrandeDialog.add(imagenLabel, BorderLayout.CENTER);
+
+        imagenGrandeDialog.pack();  
+
+        imagenGrandeDialog.setLocationRelativeTo(this); 
+        imagenGrandeDialog.setVisible(true);
+    }
+    /**
+     * @param args the command line arguments
+     */
+    
+ 
+    
+    public int indiceLista=0;
+    public String imagen;
+    public ImageIcon icon;
+    public String imagengm= imagen = "/GM.jpeg";
+    public ImageIcon icongm =new ImageIcon(getClass().getResource(imagengm));
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAnteriorEjercicio;
+    private javax.swing.JButton btnSiguienteEjercicio;
+    private javax.swing.JLabel gM;
+    private javax.swing.JLabel imagenEjercicio;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JLabel lblTituloEjercicio;
+    private javax.swing.JTextArea taDescripcion;
+    private javax.swing.JTextArea taDificultad;
+    private javax.swing.JTextArea taMP;
+    private javax.swing.JTextArea taMS;
     // End of variables declaration//GEN-END:variables
 }

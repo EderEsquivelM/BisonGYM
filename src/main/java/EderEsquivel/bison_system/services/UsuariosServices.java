@@ -22,8 +22,13 @@ public class UsuariosServices {
         this.usuariosRep = usuariosRep;
     }
     
-    public void nuevoUsuario(Usuarios us){
-        usuariosRep.save(us);
+    public boolean nuevoUsuario(Usuarios us) {
+        try {
+            usuariosRep.save(us); 
+            return true;  
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

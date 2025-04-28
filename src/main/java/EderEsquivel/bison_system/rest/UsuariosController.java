@@ -6,10 +6,11 @@ package EderEsquivel.bison_system.rest;
 
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.repository.UsuariosRepository;
-import java.util.List;
+import EderEsquivel.bison_system.services.UsuariosServices;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,22 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuariosController {
-    private final UsuariosRepository usuariosRepository;
+    private final UsuariosServices usuariosServices;
+
+    public UsuariosController(UsuariosServices usuariosServices) {
+        this.usuariosServices = usuariosServices;
+    }
         
-    public UsuariosController(UsuariosRepository usuariosRepository){
-        this.usuariosRepository=usuariosRepository;
-    }
     
-    @GetMapping
-    public List<Usuarios> listar() {
-        return usuariosRepository.findAll();
-    }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuarios> obtenerPorId(@PathVariable Long id) {
-    return usuariosRepository.findById(id)
-            .map(usuario -> ResponseEntity.ok(usuario))
-            .orElse(ResponseEntity.notFound().build());
+    @PostMapping("/usuarios")
+    public boolean agregarUsuario(@RequestBody Usuarios usuario) {
+        return usuariosServices.nuevoUsuario(usuario);
     }
 
     

@@ -11,6 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author edere
  */
-public interface EjerciciosRepository extends JpaRepository<Ejercicios,Long>{
+public interface EjerciciosRepository extends JpaRepository<Ejercicios,Integer>{
     
 }

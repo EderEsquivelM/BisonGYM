@@ -4,6 +4,8 @@
  */
 package EderEsquivel.bison_system.swing;
 
+
+import java.awt.Color;
 import javax.swing.ImageIcon;
 
 /**
@@ -21,6 +23,8 @@ public class GruposMusculares extends javax.swing.JInternalFrame {
     public GruposMusculares() {
         initComponents();
         imagenGrupoMuscular.setIcon(icon);
+        this.getContentPane().setBackground(Color.WHITE);
+
     }
 
     /**
@@ -32,24 +36,28 @@ public class GruposMusculares extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pImagen = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         imagenGrupoMuscular = new javax.swing.JLabel();
 
+        setBackground(java.awt.SystemColor.window);
         setClosable(true);
         setIconifiable(true);
+        setOpaque(true);
         setPreferredSize(new java.awt.Dimension(590, 400));
 
-        javax.swing.GroupLayout pImagenLayout = new javax.swing.GroupLayout(pImagen);
-        pImagen.setLayout(pImagenLayout);
-        pImagenLayout.setHorizontalGroup(
-            pImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pImagenLayout.createSequentialGroup()
+        jPanel1.setBackground(java.awt.SystemColor.window);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(imagenGrupoMuscular, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 539, Short.MAX_VALUE))
         );
-        pImagenLayout.setVerticalGroup(
-            pImagenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pImagenLayout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(imagenGrupoMuscular, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(375, Short.MAX_VALUE))
@@ -60,14 +68,14 @@ public class GruposMusculares extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -77,6 +85,6 @@ public class GruposMusculares extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel imagenGrupoMuscular;
-    private javax.swing.JPanel pImagen;
+    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
