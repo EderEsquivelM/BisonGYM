@@ -2,70 +2,42 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package EderEsquivel.bison_system.model;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.util.Date;
+package EderEsquivel.bison_system.dto;
+
 /**
  *
  * @author edere
  */
-@Entity
-@Table(name="usuarios")
-public class Usuarios {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_usuario")
+import java.time.LocalDate;
+
+public class UsuariosDTO {
     private Long id;
-    
     private String nombre;
     private String apellido;
     private String username;
     private String correo;
     private String password_hash;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha_nacimiento;
     private boolean activo;
-    @ManyToOne
-    @JoinColumn(name="id_sexo")
-    private Sexo sexo;  
-    
-    @ManyToOne
-    @JoinColumn(name="id_t_usuario")
-    private TipoUsuario tipoUsuario;
-    
-   @JsonFormat(pattern = "yyyy-MM-dd")
+    private Integer sexoId;
+    private Integer tipoUsuarioId;
     private LocalDate fecha_creacion;
 
-    public Usuarios(String nombre, String apellido, String username,String correo , String password_hash, LocalDate fecha_nacimiento, boolean activo,Sexo sexo, TipoUsuario tipoUsuario, LocalDate fecha_creacion) {
+    // Constructor, getters y setters
+    public UsuariosDTO() {}
+
+    public UsuariosDTO(String nombre, String apellido, String username, String correo, String password_hash, LocalDate fecha_nacimiento, boolean activo, Integer sexoId, Integer tipoUsuarioId, LocalDate fecha_creacion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.username = username;
         this.correo = correo;
-        this.password_hash = password_hash; 
+        this.password_hash = password_hash;
         this.fecha_nacimiento = fecha_nacimiento;
-        this.activo=activo; 
-        this.sexo = sexo;
-        this.tipoUsuario = tipoUsuario;
+        this.activo = activo;
+        this.sexoId = sexoId;
+        this.tipoUsuarioId = tipoUsuarioId;
         this.fecha_creacion = fecha_creacion;
-       
     }
-    
-   
-    
-    public Usuarios() {
-    }
-    
-   
 
     public Long getId() {
         return id;
@@ -74,7 +46,7 @@ public class Usuarios {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public String getNombre() {
         return nombre;
     }
@@ -91,20 +63,20 @@ public class Usuarios {
         this.apellido = apellido;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getPassword_hash() {
@@ -123,23 +95,29 @@ public class Usuarios {
         this.fecha_nacimiento = fecha_nacimiento;
     }
 
-    public Sexo getSexo() {
-        return sexo;
+    public boolean isActivo() {
+        return activo;
     }
 
-    public void setSexo(Sexo sexo) {
-        this.sexo = sexo;
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
-    public TipoUsuario getTipoUsuario() {
-        return tipoUsuario;
+    public Integer getSexoId() {
+        return sexoId;
     }
 
-    public void setTipoUsuario(TipoUsuario tipoUsuario) {
-        this.tipoUsuario = tipoUsuario;
+    public void setSexoId(Integer sexoId) {
+        this.sexoId = sexoId;
     }
 
-    
+    public Integer getTipoUsuarioId() {
+        return tipoUsuarioId;
+    }
+
+    public void setTipoUsuarioId(Integer tipoUsuarioId) {
+        this.tipoUsuarioId = tipoUsuarioId;
+    }
 
     public LocalDate getFecha_creacion() {
         return fecha_creacion;
@@ -148,15 +126,6 @@ public class Usuarios {
     public void setFecha_creacion(LocalDate fecha_creacion) {
         this.fecha_creacion = fecha_creacion;
     }
-
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-    
     
     
 }

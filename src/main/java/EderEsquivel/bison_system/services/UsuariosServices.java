@@ -6,8 +6,8 @@ package EderEsquivel.bison_system.services;
 
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.repository.UsuariosRepository;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UsuariosServices {
+    @Autowired
     private UsuariosRepository usuariosRep;
 
+    
     public UsuariosServices(UsuariosRepository usuariosRep) {
         this.usuariosRep = usuariosRep;
     }

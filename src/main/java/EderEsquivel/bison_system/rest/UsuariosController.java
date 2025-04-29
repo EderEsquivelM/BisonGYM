@@ -4,11 +4,14 @@
  */
 package EderEsquivel.bison_system.rest;
 
+import EderEsquivel.bison_system.model.Entrenamientos;
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.repository.UsuariosRepository;
 import EderEsquivel.bison_system.services.UsuariosServices;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author edere
  */
+
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuariosController {
@@ -29,11 +33,9 @@ public class UsuariosController {
         
     
     
-    @PostMapping("/usuarios")
-    public boolean agregarUsuario(@RequestBody Usuarios usuario) {
+    @PostMapping()
+    public boolean agregarUsuario(@RequestBody Usuarios  usuario) {
         return usuariosServices.nuevoUsuario(usuario);
     }
-
-    
 
 }

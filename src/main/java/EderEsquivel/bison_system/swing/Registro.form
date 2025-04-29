@@ -274,7 +274,7 @@
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="dcFechaNacimiento">
           <Properties>
-            <Property name="dateFormatString" type="java.lang.String" value="yyyy MM dd&#xa;"/>
+            <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd "/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbxGenero">

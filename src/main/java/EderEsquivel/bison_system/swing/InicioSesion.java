@@ -5,14 +5,14 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.repository.InicioSesionRepository;
+import EderEsquivel.bison_system.services.InicioSesionServices;
 import java.awt.Color;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane; 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 
 /**
@@ -35,11 +35,16 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         logo.setIcon(icon);
+        isS = new InicioSesionServices();
     }
 
     
     
-
+    @Autowired
+    private InicioSesionServices isS;
+    
+    @Autowired
+    private InicioSesionRepository isR;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -222,7 +227,7 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
                 tuElegido=2;
             }
 
-            boolean verificarUsuario = verificarUsuarioConServidor(usuario, password, tuElegido);
+            boolean verificarUsuario = isS.verificarUsuario(usuario, password, tuElegido);
 
             if (verificarUsuario) {
                 JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
@@ -300,28 +305,23 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
     }
     
     
-    public boolean verificarUsuarioConServidor(String username, String password, Integer tipoUsuario) {
-    try {
-        String urlStr = "http://localhost:8080/api/vw_iniciosesion/" + username + "/" + password + "/" + tipoUsuario;
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setConnectTimeout(3000);
-        conn.setReadTimeout(3000);
+   private Boolean verificarUsuarioConServidor(String username, String password, Integer tipoUsuario) {
+    RestTemplate restTemplate = new RestTemplate();
+    String url = "http://localhost:8080/api/vw_iniciosesion/{username}/{password}/{tipoUsuario}";
 
-        int responseCode = conn.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String responseLine = in.readLine();
-            in.close();
-            return Boolean.parseBoolean(responseLine);
-        } else {
-            System.out.println("Error en la conexión: " + responseCode);
-        }
-    } catch (IOException e) {
+    try {
+        ResponseEntity<Boolean> response = restTemplate.getForEntity(
+            url, 
+            Boolean.class, 
+            username, 
+            password, 
+            tipoUsuario
+        );
+        return response.getBody();
+    } catch (Exception e) {
         e.printStackTrace();
+        return false;
     }
-    return false;
 }
 
     private char contrasena;

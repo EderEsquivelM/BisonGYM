@@ -4,9 +4,16 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.model.DatosGenerales;
 import EderEsquivel.bison_system.model.Sexo;
+import EderEsquivel.bison_system.model.TipoUsuario;
 import EderEsquivel.bison_system.model.Usuarios;
+import EderEsquivel.bison_system.repository.UsuariosRepository;
+import EderEsquivel.bison_system.services.UsuariosServices;
 import javax.swing.JOptionPane;
+import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  *
@@ -18,8 +25,6 @@ public class Registro extends javax.swing.JDialog  {
      * Creates new form Registro
      */
     
-    Sexo femenino=new Sexo(1,"femenino");
-    Sexo masculino=new Sexo(2,"masculino");
     public Registro(java.awt.Frame parent) {
         super(parent, "Registro", true);
         setResizable(false);
@@ -98,7 +103,7 @@ public class Registro extends javax.swing.JDialog  {
 
         pfContrasena.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        dcFechaNacimiento.setDateFormatString("yyyy MM dd\n");
+        dcFechaNacimiento.setDateFormatString("yyyy-MM-dd ");
 
         cbxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Femenino", "Masculino" }));
         cbxGenero.setSelectedIndex(-1);
@@ -233,15 +238,51 @@ public class Registro extends javax.swing.JDialog  {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
+        if (dcFechaNacimiento.getDate() == null) {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha de nacimiento.");
+        return;  // Salimos del método si no hay fecha seleccionada
+        }
         
-        Usuarios nuevoUsuario;
-        nuevoUsuario=new(tfNombre.getText(),tfApellido.getText(),tfCorreo.getText(),);
+        Date fechaHoy = new Date();
+        Sexo generoElegido=null;
+        if(cbxGenero.getSelectedIndex()==0){
+            generoElegido=femenino;
+        }else if(cbxGenero.getSelectedIndex()==1){
+            generoElegido=masculino;
+        }else{
+            
+        }
+        
+        String password = new String(pfContrasena.getPassword());
+        TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
+        
+        Usuarios nUsuario=null;
+        nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText(),tfCorreo.getText(),
+                password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,generoElegido,tusuario
+                ,DatosGenerales.cambioFecha(fechaHoy));
+        
+        
+       
+       if(usS.nuevoUsuario(nUsuario)){
+            System.out.println("Usuario Agregado con Exito");
+        }
+        else{
+            System.out.println("Error");
+        }
     }//GEN-LAST:event_btnRegistrarActionPerformed
-
+     
+    
+    @Autowired
+    private UsuariosServices usS;
+        
+    
+    Sexo femenino=new Sexo(1,"femenino");
+    Sexo masculino=new Sexo(2,"masculino");
+    
     /**
      * @param args the command line arguments
      */
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JComboBox<String> cbxGenero;
