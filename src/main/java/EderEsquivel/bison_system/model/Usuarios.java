@@ -30,7 +30,8 @@ public class Usuarios {
     private String apellido;
     private String username;
     private String correo;
-    private String password_hash;
+    @Column(name = "password_hash")
+    private String passwordHash; 
     
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha_nacimiento;
@@ -46,12 +47,12 @@ public class Usuarios {
    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha_creacion;
 
-    public Usuarios(String nombre, String apellido, String username,String correo , String password_hash, LocalDate fecha_nacimiento, boolean activo,Sexo sexo, TipoUsuario tipoUsuario, LocalDate fecha_creacion) {
+    public Usuarios(String nombre, String apellido, String username,String correo , String passwordHash, LocalDate fecha_nacimiento, boolean activo,Sexo sexo, TipoUsuario tipoUsuario, LocalDate fecha_creacion) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.username = username;
         this.correo = correo;
-        this.password_hash = password_hash; 
+        this.passwordHash = passwordHash; 
         this.fecha_nacimiento = fecha_nacimiento;
         this.activo=activo; 
         this.sexo = sexo;
@@ -107,12 +108,12 @@ public class Usuarios {
         this.username = username;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPassword_hash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public LocalDate getFecha_nacimiento() {

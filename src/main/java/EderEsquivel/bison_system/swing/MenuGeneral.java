@@ -4,8 +4,10 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
 import javax.swing.JOptionPane;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -16,7 +18,8 @@ public class MenuGeneral extends javax.swing.JFrame {
     /**
      * Creates new form MenuGeneral
      */
-    public MenuGeneral() {
+    public MenuGeneral(UsuariosServices usS) {
+        this.usS=usS;
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 700);
@@ -187,7 +190,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private void miInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miInformacionActionPerformed
         // TODO add your handling code here:
          if (ventanaInformacion == null || ventanaInformacion.isClosed()) {
-            ventanaInformacion = new Informacion();
+            ventanaInformacion = new Informacion(usS);
             dpFondo.add(ventanaInformacion);
             int x = (dpFondo.getWidth() - ventanaInformacion.getWidth()) / 2;
             int y = (dpFondo.getHeight() - ventanaInformacion.getHeight()) / 2;
@@ -330,11 +333,11 @@ public class MenuGeneral extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MenuGeneral.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        UsuariosServices usS=null;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuGeneral().setVisible(true);
+                new MenuGeneral(usS).setVisible(true);
             }
         });
     }
@@ -344,7 +347,16 @@ public class MenuGeneral extends javax.swing.JFrame {
     private Estadisticas ventanaEstadisticas;
     private GruposMusculares ventanaGM;
     private CategoriasEjercicios ventanaCatEjercicios;
+    
+    private UsuariosServices usS;
 
+    public UsuariosServices getUsS() {
+        return usS;
+    }
+
+  
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBoxMenuItem cbxmiModoOscuro;
     private javax.swing.JDesktopPane dpFondo;

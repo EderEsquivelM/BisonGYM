@@ -4,19 +4,30 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.model.Usuarios;
+import EderEsquivel.bison_system.services.UsuariosServices;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 /**
  *
  * @author edere
  */
 public class Informacion extends javax.swing.JInternalFrame {
-
+    
+    private UsuariosServices usS;
     /**
      * Creates new form Perfil
      */
-    public Informacion() {
+    public Informacion(UsuariosServices usS) {
+        this.usS=usS;
         initComponents();
         this.setResizable(false);
-
+        mostrarInfo();
+        editable(false);
+        contrasena=pfContrasena.getEchoChar();
     }
 
     /**
@@ -29,6 +40,22 @@ public class Informacion extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        tfNombre = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        tfApellido = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnEditar = new javax.swing.JButton();
+        btnAplicar = new javax.swing.JButton();
+        tfCorreo = new javax.swing.JTextField();
+        tfUsername = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        dcFechaNac = new com.toedter.calendar.JDateChooser();
+        jLabel8 = new javax.swing.JLabel();
+        pfContrasena = new javax.swing.JPasswordField();
+        chbxMostrar = new javax.swing.JCheckBox();
 
         setClosable(true);
         setIconifiable(true);
@@ -37,35 +64,231 @@ public class Informacion extends javax.swing.JInternalFrame {
 
         jPanel1.setBackground(java.awt.SystemColor.window);
 
+        tfNombre.setEditable(false);
+
+        jLabel2.setText("Nombre:");
+
+        tfApellido.setEditable(false);
+
+        jLabel3.setText("Apellido:");
+
+        jLabel4.setText("Fecha de Nacimiento:");
+
+        jLabel5.setText("Información");
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnAplicar.setText("Aplicar");
+        btnAplicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAplicarActionPerformed(evt);
+            }
+        });
+
+        tfCorreo.setEditable(false);
+
+        tfUsername.setEditable(false);
+
+        jLabel6.setText("Correo:");
+
+        jLabel7.setText("Username:");
+
+        dcFechaNac.setDateFormatString("yyyy-MM-dd");
+
+        jLabel8.setText("Conteraseña:");
+
+        chbxMostrar.setFont(new java.awt.Font("Verdana", 0, 10)); // NOI18N
+        chbxMostrar.setText("Mostrar Contraseña");
+        chbxMostrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        chbxMostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbxMostrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 688, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dcFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfUsername)
+                            .addComponent(tfCorreo)
+                            .addComponent(pfContrasena, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE))
+                        .addGap(1, 1, 1)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chbxMostrar)
+                .addContainerGap(13, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(198, 198, 198))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnEditar)
+                        .addGap(97, 97, 97)
+                        .addComponent(btnAplicar)
+                        .addGap(118, 118, 118))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 422, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(70, 70, 70)
+                .addComponent(jLabel5)
+                .addGap(47, 47, 47)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(dcFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(tfCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(pfContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chbxMostrar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAplicar)
+                    .addComponent(btnEditar))
+                .addGap(14, 14, 14))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        // TODO add your handling code here:
+        editable(true);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
+        // TODO add your handling code here:
+        Usuarios us=DatosGenerales.getInfoUsuarios();
+        us.setNombre(tfNombre.getText());
+        us.setApellido(tfApellido.getText());
+        us.setCorreo(tfCorreo.getText());
+        us.setFecha_nacimiento(DatosGenerales.cambioFecha(dcFechaNac.getDate()));
+        us.setUsername(tfUsername.getText());
+        String password=new String(pfContrasena.getPassword());
+        us.setPassword_hash(password);
+        
+        DatosGenerales.setInfoUsuarios(usS.actualizarUsuario(us));
+        if(DatosGenerales.getInfoUsuarios()!=null){
+            System.out.println("Bien");
+            editable(false);
+            mostrarInfo();
+        }else{
+            System.out.println("Mal");
+        }
+        
+        
+    }//GEN-LAST:event_btnAplicarActionPerformed
+
+    private void chbxMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbxMostrarActionPerformed
+        // TODO add your handling code here:
+        if(chbxMostrar.isSelected()){
+            pfContrasena.setEchoChar((char)0);
+        }else{
+            pfContrasena.setEchoChar(contrasena);
+        }
+    }//GEN-LAST:event_chbxMostrarActionPerformed
+
+    public void mostrarInfo(){
+        Usuarios usuario;
+        usuario=DatosGenerales.getInfoUsuarios();
+        Date fechaCambio=Date.from(usuario.getFecha_nacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        tfNombre.setText(usuario.getNombre());
+        tfApellido.setText(usuario.getApellido());
+        tfCorreo.setText(usuario.getCorreo());
+        tfUsername.setText(usuario.getUsername());
+        dcFechaNac.setDate(fechaCambio);
+        pfContrasena.setText(usuario.getPasswordHash());
+        
+    }
+    
+    public void editable(boolean estado){
+        tfNombre.setEditable(estado);
+            tfApellido.setEditable(estado);
+            tfCorreo.setEditable(estado);
+            tfUsername.setEditable(estado);
+            dcFechaNac.setEnabled(estado);
+            dcFechaNac.setEnabled(estado);
+            pfContrasena.setEditable(estado);
+            btnAplicar.setEnabled(estado);
+    }
+    
+    private char contrasena;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAplicar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JCheckBox chbxMostrar;
+    private com.toedter.calendar.JDateChooser dcFechaNac;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPasswordField pfContrasena;
+    private javax.swing.JTextField tfApellido;
+    private javax.swing.JTextField tfCorreo;
+    private javax.swing.JTextField tfNombre;
+    private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 }

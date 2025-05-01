@@ -25,10 +25,12 @@ public class Registro extends javax.swing.JDialog  {
      * Creates new form Registro
      */
     
-    public Registro(java.awt.Frame parent) {
+    public Registro(java.awt.Frame parent,UsuariosServices usS) {
         super(parent, "Registro", true);
+        this.usS=usS;
         setResizable(false);
-        initComponents();        
+        initComponents(); 
+        contrasena=pfContrasena.getEchoChar();
     }
 
     /**
@@ -57,6 +59,7 @@ public class Registro extends javax.swing.JDialog  {
         dcFechaNacimiento = new com.toedter.calendar.JDateChooser();
         cbxGenero = new javax.swing.JComboBox<>();
         btnRegistrar = new javax.swing.JButton();
+        chbxMostrar = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -67,52 +70,69 @@ public class Registro extends javax.swing.JDialog  {
 
         jPanel1.setBackground(java.awt.SystemColor.window);
 
-        jLabel1.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial Black", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(26, 35, 126));
         jLabel1.setText("Registro");
 
-        jLabel2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel2.setText("Nombre:");
 
-        jLabel3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel3.setText("Correo:");
 
-        jLabel4.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel4.setText("Nombre de Usuario:");
 
-        jLabel5.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel5.setText("Apellido:");
 
-        jLabel6.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel6.setText("Genero:");
 
-        jLabel7.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel7.setText("Fecha de Nacimiento:");
 
+        tfNombre.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tfNombre.setToolTipText("");
         tfNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        tfCorreo.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tfCorreo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        tfApellido.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tfApellido.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel8.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel8.setText("Contraseña:");
 
+        tfUsername.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tfUsername.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        pfContrasena.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         pfContrasena.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        dcFechaNacimiento.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         dcFechaNacimiento.setDateFormatString("yyyy-MM-dd ");
 
+        cbxGenero.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cbxGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Femenino", "Masculino" }));
         cbxGenero.setSelectedIndex(-1);
         cbxGenero.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        btnRegistrar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegistrarActionPerformed(evt);
+            }
+        });
+
+        chbxMostrar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        chbxMostrar.setText("Mostrar Contraseña");
+        chbxMostrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        chbxMostrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chbxMostrarActionPerformed(evt);
             }
         });
 
@@ -121,42 +141,45 @@ public class Registro extends javax.swing.JDialog  {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addGap(60, 60, 60)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(24, 24, 24))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addGap(26, 26, 26))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel5)
-                                        .addComponent(jLabel2))
-                                    .addGap(24, 24, 24)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cbxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(tfCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(14, 14, 14)
-                                    .addComponent(jLabel1))))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel8))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnRegistrar)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(pfContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(60, 60, 60)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(24, 24, 24))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel2))
+                                        .addGap(24, 24, 24))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addGap(26, 26, 26)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel8))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnRegistrar)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(pfContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(chbxMostrar)))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(152, 152, 152)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dcFechaNacimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -183,13 +206,15 @@ public class Registro extends javax.swing.JDialog  {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(cbxGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(dcFechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -197,7 +222,9 @@ public class Registro extends javax.swing.JDialog  {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(pfContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chbxMostrar)
+                .addGap(24, 24, 24)
                 .addComponent(btnRegistrar)
                 .addGap(59, 59, 59))
         );
@@ -238,44 +265,74 @@ public class Registro extends javax.swing.JDialog  {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        if (dcFechaNacimiento.getDate() == null) {
-        JOptionPane.showMessageDialog(this, "Por favor, seleccione una fecha de nacimiento.");
-        return;  // Salimos del método si no hay fecha seleccionada
-        }
-        
-        Date fechaHoy = new Date();
-        Sexo generoElegido=null;
-        if(cbxGenero.getSelectedIndex()==0){
-            generoElegido=femenino;
-        }else if(cbxGenero.getSelectedIndex()==1){
-            generoElegido=masculino;
-        }else{
+        if(dcFechaNacimiento.getDate() == null || tfNombre.getText().trim().isEmpty() || tfApellido.getText().trim().isEmpty()
+           || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()||cbxGenero.getSelectedIndex()==-1
+           || pfContrasena.getPassword().length==0){
             
-        }
+            if(dcFechaNacimiento.getDate()==null)
+                dcFechaNacimiento.getDateEditor().setDate(null);
+            
+            JOptionPane.showMessageDialog(null, "Debes llenar todos los campos",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+        }else{
+            if(DatosGenerales.hayConexion()){
         
-        String password = new String(pfContrasena.getPassword());
-        TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
-        
-        Usuarios nUsuario=null;
-        nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText(),tfCorreo.getText(),
-                password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,generoElegido,tusuario
-                ,DatosGenerales.cambioFecha(fechaHoy));
-        
-        
-       
-       if(usS.nuevoUsuario(nUsuario)){
-            System.out.println("Usuario Agregado con Exito");
-        }
-        else{
-            System.out.println("Error");
+                Date fechaHoy = new Date();
+                Sexo generoElegido=null;
+                if(cbxGenero.getSelectedIndex()==0){
+                    generoElegido=femenino;
+                }else if(cbxGenero.getSelectedIndex()==1){
+                    generoElegido=masculino;
+                }else{
+
+                }
+
+                String password = new String(pfContrasena.getPassword());
+                TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
+
+                Usuarios nUsuario=null;
+                nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText(),tfCorreo.getText(),
+                        password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,generoElegido,tusuario
+                        ,DatosGenerales.cambioFecha(fechaHoy));
+
+
+               System.out.println(nUsuario);
+               if(usS.nuevoUsuario(nUsuario)){
+                    JOptionPane.showMessageDialog(this, "Usuario registrado");                
+                    tfNombre.setText("");
+                    tfApellido.setText("");
+                    tfUsername.setText("");
+                    tfCorreo.setText("");
+                    dcFechaNacimiento.setDate(null);
+                    cbxGenero.setSelectedIndex(-1);
+                    pfContrasena.setText("");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "¡Error al registrar!",
+                            "¡Error!", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "No hay conexion a internet\n"
+                        + "Intente conectarse a una red y vuelva a intentar",
+                            "¡Error!", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void chbxMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbxMostrarActionPerformed
+        // TODO add your handling code here:
+        if(chbxMostrar.isSelected()){
+            pfContrasena.setEchoChar((char)0);
+        }else{
+            pfContrasena.setEchoChar(contrasena);
+        }
+    }//GEN-LAST:event_chbxMostrarActionPerformed
      
     
-    @Autowired
     private UsuariosServices usS;
         
-    
+    private char contrasena;
     Sexo femenino=new Sexo(1,"femenino");
     Sexo masculino=new Sexo(2,"masculino");
     
@@ -286,6 +343,7 @@ public class Registro extends javax.swing.JDialog  {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JComboBox<String> cbxGenero;
+    private javax.swing.JCheckBox chbxMostrar;
     private com.toedter.calendar.JDateChooser dcFechaNacimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

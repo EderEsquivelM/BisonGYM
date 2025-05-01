@@ -287,4 +287,20 @@ public class DatosGenerales {
         }
     }
     
+   private static Usuarios infoUsuarios;
+
+    public static Usuarios getInfoUsuarios() {
+        return infoUsuarios;
+    }
+
+    public static void setInfoUsuarios(Usuarios infoUsuarios) {
+        DatosGenerales.infoUsuarios = infoUsuarios;
+    }
+
+   
+
+   
+
+    
+    
 }

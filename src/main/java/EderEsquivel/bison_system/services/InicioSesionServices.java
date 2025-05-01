@@ -24,7 +24,8 @@ public class InicioSesionServices {
     @Autowired
     private TipoUsuarioRepository tipoUsuarioRepository;
 
-    public boolean verificarUsuario(String username, String password, Integer tipoId) {
+   public boolean verificarUsuario(String username, String password, Integer tipoId) {
+    try {
         Optional<TipoUsuario> tipoOpt = tipoUsuarioRepository.findById(tipoId);
         if (tipoOpt.isEmpty()) return false;
 
@@ -35,5 +36,9 @@ public class InicioSesionServices {
                 password,
                 tipoUsuario
         ).isPresent();
+    } catch (Exception e) {
+        System.err.println("Error al verificar el usuario: " + e.getMessage());
+        return false;
     }
+}
 }

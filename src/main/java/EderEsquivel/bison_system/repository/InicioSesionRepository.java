@@ -19,4 +19,5 @@ public interface InicioSesionRepository extends JpaRepository<InicioSesion, Long
         String passwordHash, 
         TipoUsuario idTipoUsuario
     );
+    
 }

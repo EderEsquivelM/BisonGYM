@@ -25,12 +25,38 @@ public class UsuariosServices {
     }
     
     public boolean nuevoUsuario(Usuarios us) {
-        try {
+        try{
             usuariosRep.save(us); 
             return true;  
-        } catch (Exception e) {
+        }catch(Exception e){
+            System.out.println("Error al registrar usuario: "+e.getMessage());
             return false;
         }
     }
+    
+    public Usuarios infoUsuario(String username){
+        return usuariosRep.findByUsername(username);
+       
+    }
+   public Usuarios actualizarUsuario(Usuarios us) {
+        try {
+            return usuariosRep.findById(us.getId())
+                .map(usuarioExistente -> {
+                    usuarioExistente.setNombre(us.getNombre());
+                    usuarioExistente.setApellido(us.getApellido());
+                    usuarioExistente.setFecha_nacimiento(us.getFecha_nacimiento());
+                    usuarioExistente.setUsername(us.getUsername());
+                    usuarioExistente.setCorreo(us.getCorreo());
+                    usuarioExistente.setPassword_hash(us.getPasswordHash());
+                    return usuariosRep.save(usuarioExistente); 
+                })
+                .orElse(null);
+        } catch (Exception e) {
+            System.out.println("Error al actualizar el usuario: " + e.getMessage());
+            return null;
+        }
+    }
+
+    
 
 }

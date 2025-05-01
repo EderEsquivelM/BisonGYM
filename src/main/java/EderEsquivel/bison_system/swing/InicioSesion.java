@@ -5,12 +5,12 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
-import EderEsquivel.bison_system.repository.InicioSesionRepository;
 import EderEsquivel.bison_system.services.InicioSesionServices;
+import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
+import java.util.HashSet;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane; 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,30 +21,26 @@ import org.springframework.web.client.RestTemplate;
  */
 public class InicioSesion extends javax.swing.JFrame {
     
-
-String imagen="/logoSinFondo200x200.png";
-ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
+    private UsuariosServices usS;
+    private InicioSesionServices isS;
+    public String imagen="/logoSinFondo200x200.png";
+    public ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
     /**
      * Creates new form InicioSesion
      */
     
-    public InicioSesion() {        
+    public InicioSesion(UsuariosServices usS,InicioSesionServices isS) {        
         initComponents();
+        this.usS=usS;
+        this.isS=isS;
         contrasena=pfContrasena.getEchoChar();
         setResizable(false);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         logo.setIcon(icon);
-        isS = new InicioSesionServices();
     }
 
-    
-    
-    @Autowired
-    private InicioSesionServices isS;
-    
-    @Autowired
-    private InicioSesionRepository isR;
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,14 +78,16 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("BisonGYM");
 
-        jLabel3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel3.setText("Tipo de usuario");
 
-        jLabel4.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel4.setText("Contraseña:");
 
+        tfUsuario.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tfUsuario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        pfContrasena.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         pfContrasena.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         chbxMostrar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
@@ -116,11 +114,12 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
             }
         });
 
+        cmbTipoUsuario.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cmbTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Usuario", "Administrador" }));
         cmbTipoUsuario.setSelectedIndex(-1);
         cmbTipoUsuario.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel5.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel5.setText("Usuario:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -214,40 +213,41 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:
+        if(cmbTipoUsuario.getSelectedIndex()==-1 || tfUsuario.getText().trim().isEmpty()|| 
+                pfContrasena.getPassword().length==0){
+            JOptionPane.showMessageDialog(null, "Debes llenar todos los campos",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+        }else{
         int op;
-        if (DatosGenerales.hayConexion()) {
-            String usuario = tfUsuario.getText();
-            String password = new String(pfContrasena.getPassword());
-            Integer tuElegido=0;
-            
-            if(cmbTipoUsuario.getSelectedIndex()==0){
-                tuElegido=1;
-            }
-            else if(cmbTipoUsuario.getSelectedIndex()==1){
-                tuElegido=2;
-            }
+            if (DatosGenerales.hayConexion()) {
+                String usuario = tfUsuario.getText();
+                String password = new String(pfContrasena.getPassword());
+                Integer tuElegido=0;
 
-            boolean verificarUsuario = isS.verificarUsuario(usuario, password, tuElegido);
+                if(cmbTipoUsuario.getSelectedIndex()==0){
+                    tuElegido=1;
+                }
+                else if(cmbTipoUsuario.getSelectedIndex()==1){
+                    tuElegido=2;
+                }
+                boolean verificarUsuario = isS.verificarUsuario(usuario, password, tuElegido);
 
-            if (verificarUsuario) {
-                JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
-                // Aquí puedes abrir el siguiente JFrame, etc.
-                MenuGeneral menu=new MenuGeneral();
-                menu.setVisible(true);
-                menu.setLocationRelativeTo(null);
-                this.dispose(); 
-                
+                if (verificarUsuario) {
+                    JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
+                    DatosGenerales.setInfoUsuarios(usS.infoUsuario(usuario));
+                            
+                    MenuGeneral menu=new MenuGeneral(usS);
+                    menu.setVisible(true);
+                    menu.setLocationRelativeTo(null);
+                    this.dispose(); 
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "No existe el usuario",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "No existe el usuario",
-                    "!Error!", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            op = JOptionPane.showConfirmDialog(this,
-                "No hay conexión a internet\n¿Quieres utilizar el modo offline?",
-                "Sin conexión", JOptionPane.YES_NO_OPTION,
-                JOptionPane.INFORMATION_MESSAGE);
-            if (op == JOptionPane.YES_OPTION) {
-                // Cambiar a modo offline
+                JOptionPane.showMessageDialog(null, "No hay conexion a internet\nIntente reconectarse a una red",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnIngresarActionPerformed
@@ -255,7 +255,7 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
     
     private void lblRegistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRegistrarseMouseClicked
         // TODO add your handling code here:
-        Registro registro = new Registro(this); 
+        Registro registro = new Registro(this,usS); 
             registro.setLocationRelativeTo(null);
             registro.setBackground(Color.white);
             registro.setVisible(true); 
@@ -323,7 +323,7 @@ ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
         return false;
     }
 }
-
+   
     private char contrasena;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
