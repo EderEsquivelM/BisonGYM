@@ -2,6 +2,7 @@ package EderEsquivel.bison_system;
 
 
 import EderEsquivel.bison_system.services.InicioSesionServices;
+import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import EderEsquivel.bison_system.swing.InicioSesion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ public class BisonSystemApplication implements CommandLineRunner {
     @Autowired
     private InicioSesionServices isS;
     
-    
+    @Autowired
+    private MedidasServices mS;
 
     public static void main(String[] args) {
         System.setProperty("java.awt.headless", "false");
@@ -31,7 +33,7 @@ public class BisonSystemApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         java.awt.EventQueue.invokeLater(() -> {
-            new InicioSesion(usS,isS).setVisible(true);
+            new InicioSesion(usS,isS,mS).setVisible(true);
             });
     }
 }

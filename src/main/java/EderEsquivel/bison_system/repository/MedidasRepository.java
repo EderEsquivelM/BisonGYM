@@ -5,6 +5,7 @@
 package EderEsquivel.bison_system.repository;
 
 import EderEsquivel.bison_system.model.Medidas;
+import EderEsquivel.bison_system.model.Usuarios;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author edere
  */
 public interface MedidasRepository extends JpaRepository<Medidas,Long>{
-    
+    Medidas findTopByUsuarioOrderByFechaDesc(Usuarios us);
 }

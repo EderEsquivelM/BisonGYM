@@ -6,6 +6,7 @@ package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
 import EderEsquivel.bison_system.services.InicioSesionServices;
+import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
 import java.util.HashSet;
@@ -23,16 +24,18 @@ public class InicioSesion extends javax.swing.JFrame {
     
     private UsuariosServices usS;
     private InicioSesionServices isS;
+    private MedidasServices mS;
     public String imagen="/logoSinFondo200x200.png";
     public ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
     /**
      * Creates new form InicioSesion
      */
     
-    public InicioSesion(UsuariosServices usS,InicioSesionServices isS) {        
+    public InicioSesion(UsuariosServices usS,InicioSesionServices isS, MedidasServices mS) {        
         initComponents();
         this.usS=usS;
         this.isS=isS;
+        this.mS=mS;
         contrasena=pfContrasena.getEchoChar();
         setResizable(false);
         this.setLocationRelativeTo(null);
@@ -236,7 +239,7 @@ public class InicioSesion extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
                     DatosGenerales.setInfoUsuarios(usS.infoUsuario(usuario));
                             
-                    MenuGeneral menu=new MenuGeneral(usS);
+                    MenuGeneral menu=new MenuGeneral(usS,mS);
                     menu.setVisible(true);
                     menu.setLocationRelativeTo(null);
                     this.dispose(); 

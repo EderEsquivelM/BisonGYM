@@ -4,6 +4,7 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -18,8 +19,9 @@ public class MenuGeneral extends javax.swing.JFrame {
     /**
      * Creates new form MenuGeneral
      */
-    public MenuGeneral(UsuariosServices usS) {
+    public MenuGeneral(UsuariosServices usS,MedidasServices mS) {
         this.usS=usS;
+        this.mS=mS;
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 700);
@@ -40,7 +42,6 @@ public class MenuGeneral extends javax.swing.JFrame {
         menuPrincipal = new javax.swing.JMenuBar();
         menuConfiguracion = new javax.swing.JMenu();
         cbxmiModoOscuro = new javax.swing.JCheckBoxMenuItem();
-        miCerrarSesion = new javax.swing.JMenuItem();
         miSalir = new javax.swing.JMenuItem();
         menuPefil = new javax.swing.JMenu();
         miInformacion = new javax.swing.JMenuItem();
@@ -83,9 +84,6 @@ public class MenuGeneral extends javax.swing.JFrame {
             }
         });
         menuConfiguracion.add(cbxmiModoOscuro);
-
-        miCerrarSesion.setText("Cerrar Sesión");
-        menuConfiguracion.add(miCerrarSesion);
 
         miSalir.setText("Salir");
         menuConfiguracion.add(miSalir);
@@ -214,7 +212,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
         if (ventanaMedidas == null || ventanaMedidas.isClosed()) {
-            ventanaMedidas = new Medidas();
+            ventanaMedidas = new MedidasReg(mS);
             dpFondo.add(ventanaMedidas);
             int x = (dpFondo.getWidth() - ventanaMedidas.getWidth()) / 2;
             int y = (dpFondo.getHeight() - ventanaMedidas.getHeight()) / 2;
@@ -334,25 +332,25 @@ public class MenuGeneral extends javax.swing.JFrame {
         }
         //</editor-fold>
         UsuariosServices usS=null;
+        MedidasServices mS=null;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuGeneral(usS).setVisible(true);
+                new MenuGeneral(usS,mS).setVisible(true);
             }
         });
     }
     
     private Informacion ventanaInformacion;
-    private Medidas ventanaMedidas;
+    private MedidasReg ventanaMedidas;
     private Estadisticas ventanaEstadisticas;
     private GruposMusculares ventanaGM;
     private CategoriasEjercicios ventanaCatEjercicios;
     
     private UsuariosServices usS;
-
-    public UsuariosServices getUsS() {
-        return usS;
-    }
+    private MedidasServices mS;
+    
+    
 
   
     
@@ -367,7 +365,6 @@ public class MenuGeneral extends javax.swing.JFrame {
     private javax.swing.JMenu menuPefil;
     private javax.swing.JMenuBar menuPrincipal;
     private javax.swing.JMenuItem miAnadirEntenamiento;
-    private javax.swing.JMenuItem miCerrarSesion;
     private javax.swing.JMenuItem miEstadiscticas;
     private javax.swing.JMenuItem miGruposMusculares;
     private javax.swing.JMenuItem miInformacion;

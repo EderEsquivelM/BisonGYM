@@ -10,6 +10,7 @@ import EderEsquivel.bison_system.model.TipoUsuario;
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.repository.UsuariosRepository;
 import EderEsquivel.bison_system.services.UsuariosServices;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -293,7 +294,7 @@ public class Registro extends javax.swing.JDialog  {
                 Usuarios nUsuario=null;
                 nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText(),tfCorreo.getText(),
                         password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,generoElegido,tusuario
-                        ,DatosGenerales.cambioFecha(fechaHoy));
+                        ,LocalDate.now());
 
 
                System.out.println(nUsuario);

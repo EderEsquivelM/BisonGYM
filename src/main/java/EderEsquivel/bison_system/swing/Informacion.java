@@ -261,13 +261,13 @@ public class Informacion extends javax.swing.JInternalFrame {
     
     public void editable(boolean estado){
         tfNombre.setEditable(estado);
-            tfApellido.setEditable(estado);
-            tfCorreo.setEditable(estado);
-            tfUsername.setEditable(estado);
-            dcFechaNac.setEnabled(estado);
-            dcFechaNac.setEnabled(estado);
-            pfContrasena.setEditable(estado);
-            btnAplicar.setEnabled(estado);
+        tfApellido.setEditable(estado);
+        tfCorreo.setEditable(estado);
+        tfUsername.setEditable(estado);
+        dcFechaNac.setEnabled(estado);
+        dcFechaNac.setEnabled(estado);
+        pfContrasena.setEditable(estado);
+        btnAplicar.setEnabled(estado);
     }
     
     private char contrasena;

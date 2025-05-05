@@ -24,7 +24,7 @@ import java.time.LocalDate;
 public class Medidas {
     @Id
     @Column(name="id_medida")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_medida;
     
     @ManyToOne
