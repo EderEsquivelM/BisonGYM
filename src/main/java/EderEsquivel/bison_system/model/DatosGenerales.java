@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -240,30 +241,36 @@ public class DatosGenerales {
     }};
     
     public static List<Musculos> obtenerMusculosDeZona(int idZona) {
-        return musculosMap.values().stream()
-            .filter(m -> m.getId_zona().getId_zona() == idZona)
-            .collect(Collectors.toList());
+        List<Musculos> musculosDeZona = new ArrayList<>();
+
+        for (Musculos m : musculosMap.values()) {
+            if (m.getId_zona() != null && m.getId_zona().getId_zona() == idZona) {
+                musculosDeZona.add(m);
+            }
+        }
+
+        return musculosDeZona;
     }
-    
+
     public static List<Ejercicios> obtenerEjerciciosPorZona(int idZona) {
-    // Obtener músculos de la zona una sola vez
-    List<Musculos> musculosDeZona = obtenerMusculosDeZona(idZona);
-    
-    // Convertir a Set para búsquedas más eficientes (O(1) vs O(n) de List)
-    Set<Musculos> musculosSet = new HashSet<>(musculosDeZona);
-    
-    return ejerciciosMap.values().stream()
-        .filter(e -> {
+        List<Musculos> musculosDeZona = obtenerMusculosDeZona(idZona);
+        Set<Musculos> musculosSet = new HashSet<>(musculosDeZona);
+        List<Ejercicios> ejerciciosFiltrados = new ArrayList<>();
+
+        for (Ejercicios e : ejerciciosMap.values()) {
             Musculos principal = e.getMusculoPrincipal();
-            Musculos secundario = e.getMusculoSecundario();
-            
-            // Verificar músculo principal y secundario en una sola operación
-            return musculosSet.contains(principal) || 
-                  (secundario != null && musculosSet.contains(secundario));
-        })
-        .sorted(Comparator.comparing(Ejercicios::getNombre))
-        .collect(Collectors.toList());
+            if (principal != null && musculosSet.contains(principal)) {
+                ejerciciosFiltrados.add(e);
+            }
+        }
+
+        // Ordenar alfabéticamente por nombre
+        ejerciciosFiltrados.sort(Comparator.comparing(Ejercicios::getNombre));
+
+        return ejerciciosFiltrados;
     }
+
+
     
     public static boolean hayConexion() {
         try {

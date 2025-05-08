@@ -4,6 +4,7 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.model.DatosGenerales;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
@@ -124,6 +125,11 @@ public class MenuGeneral extends javax.swing.JFrame {
         menuEntrenamientos.setText("Entrenamientos");
 
         miAnadirEntenamiento.setText("Añadir");
+        miAnadirEntenamiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAnadirEntenamientoActionPerformed(evt);
+            }
+        });
         menuEntrenamientos.add(miAnadirEntenamiento);
 
         menuPrincipal.add(menuEntrenamientos);
@@ -305,6 +311,30 @@ public class MenuGeneral extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_miVerEjerciciosActionPerformed
 
+    private void miAnadirEntenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAnadirEntenamientoActionPerformed
+        // TODO add your handling code here:
+        if (ventanaEntrenamientos == null || ventanaEntrenamientos.isClosed()) {
+            ventanaEntrenamientos = new Entrenamientos();
+            dpFondo.add(ventanaEntrenamientos);
+            int x = (dpFondo.getWidth() - ventanaEntrenamientos.getWidth()) / 2;
+            int y = (dpFondo.getHeight() - ventanaEntrenamientos.getHeight()) / 2;
+            ventanaEntrenamientos.setLocation(x, y);
+            ventanaEntrenamientos.setVisible(true);
+        } else {
+            try {
+           
+                ventanaEntrenamientos.setIcon(false); // Restaurar si está minimizada
+                int x = (dpFondo.getWidth() - ventanaEntrenamientos.getWidth()) / 2;
+                int y = (dpFondo.getHeight() - ventanaEntrenamientos.getHeight()) / 2;
+                ventanaEntrenamientos.setLocation(x, y);
+                ventanaEntrenamientos.setSelected(true); // Darle foco
+                ventanaEntrenamientos.toFront(); // Al frente
+            } catch (java.beans.PropertyVetoException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_miAnadirEntenamientoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -346,6 +376,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private Estadisticas ventanaEstadisticas;
     private GruposMusculares ventanaGM;
     private CategoriasEjercicios ventanaCatEjercicios;
+    private Entrenamientos ventanaEntrenamientos;
     
     private UsuariosServices usS;
     private MedidasServices mS;

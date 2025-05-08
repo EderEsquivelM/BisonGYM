@@ -21,6 +21,8 @@ public class BisonSystemApplication implements CommandLineRunner {
     
     @Autowired
     private MedidasServices mS;
+    
+    
 
     public static void main(String[] args) {
         System.setProperty("java.awt.headless", "false");

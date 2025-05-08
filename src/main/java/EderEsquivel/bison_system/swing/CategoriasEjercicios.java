@@ -106,23 +106,32 @@ public class CategoriasEjercicios extends javax.swing.JInternalFrame {
 
     private void btnVerEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerEjerciciosActionPerformed
         // TODO add your handling code here:
-        int idZonaSelecionada=cbxZonas.getSelectedIndex()+1;
-        listaEjercicios=DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
-        if(!listaEjercicios.isEmpty()){
+        int selectedIndex = cbxZonas.getSelectedIndex();
+
+        // Validar que se haya seleccionado una zona
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una zona anatómica.",
+                    "Zona no seleccionada", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int idZonaSelecionada = selectedIndex + 1;
+        listaEjercicios = DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
+
+        if (!listaEjercicios.isEmpty()) {
             java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
             Ejercicio listEjercicios = new Ejercicio((Frame) ventanaPadre);
             listEjercicios.setLocationRelativeTo(this);
             listEjercicios.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "No hay ejercicios registrados para esta zona.",
+                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
         }
-        else{
-            JOptionPane.showMessageDialog(null, "No seleccionaste una categoria",
-                    "!Error!", JOptionPane.ERROR_MESSAGE);
-        }
-         
         
     }//GEN-LAST:event_btnVerEjerciciosActionPerformed
 
-    public static List<Ejercicios> listaEjercicios;
+    public static List<Ejercicios> listaEjercicios= new ArrayList<>();
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVerEjercicios;
     private javax.swing.JComboBox<String> cbxZonas;

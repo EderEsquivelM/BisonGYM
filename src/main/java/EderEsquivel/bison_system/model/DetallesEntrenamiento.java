@@ -33,14 +33,10 @@ public class DetallesEntrenamiento {
     @JoinColumn(name="id_ejercicio")
     private Ejercicios id_ejer;
     
-    private Integer ordenEjercicio;
-    private String notas;
 
     public DetallesEntrenamiento(Entrenamientos id_entren, Ejercicios id_ejer, Integer ordenEjercicio, String notas) {
         this.id_entren = id_entren;
         this.id_ejer = id_ejer;
-        this.ordenEjercicio = ordenEjercicio;
-        this.notas = notas;
     }
 
     public DetallesEntrenamiento() {
@@ -70,21 +66,6 @@ public class DetallesEntrenamiento {
         this.id_ejer = id_ejer;
     }
 
-    public Integer getOrdenEjercicio() {
-        return ordenEjercicio;
-    }
-
-    public void setOrdenEjercicio(Integer ordenEjercicio) {
-        this.ordenEjercicio = ordenEjercicio;
-    }
-
-    public String getNotas() {
-        return notas;
-    }
-
-    public void setNotas(String notas) {
-        this.notas = notas;
-    }
-    
+   
     
 }

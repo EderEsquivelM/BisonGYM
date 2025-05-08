@@ -24,6 +24,12 @@ public class InicioSesionServices {
     @Autowired
     private TipoUsuarioRepository tipoUsuarioRepository;
 
+    public InicioSesionServices(InicioSesionRepository isRep, TipoUsuarioRepository tipoUsuarioRepository) {
+        this.isRep = isRep;
+        this.tipoUsuarioRepository = tipoUsuarioRepository;
+    }
+    
+    
    public boolean verificarUsuario(String username, String password, Integer tipoId) {
     try {
         Optional<TipoUsuario> tipoOpt = tipoUsuarioRepository.findById(tipoId);

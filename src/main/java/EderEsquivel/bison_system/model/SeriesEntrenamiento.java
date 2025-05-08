@@ -31,13 +31,11 @@ public class SeriesEntrenamiento {
     
     private Integer numero_serie;
     private double peso_usado;
-    private String notas;
 
     public SeriesEntrenamiento(DetallesEntrenamiento detEntrenamiento, Integer numero_serie, double peso_usado, String notas) {
         this.detEntrenamiento = detEntrenamiento;
         this.numero_serie = numero_serie;
         this.peso_usado = peso_usado;
-        this.notas = notas;
     }
 
     public SeriesEntrenamiento() {
@@ -75,14 +73,4 @@ public class SeriesEntrenamiento {
         this.peso_usado = peso_usado;
     }
 
-    public String getNotas() {
-        return notas;
-    }
-
-    public void setNotas(String notas) {
-        this.notas = notas;
-    }
-    
-    
-    
 }

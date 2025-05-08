@@ -96,8 +96,6 @@ CREATE TABLE detalles_entrenamiento (
     id_detalle INT AUTO_INCREMENT PRIMARY KEY,
     id_entrenamiento INT NOT NULL,
     id_ejercicio INT NOT NULL,
-    orden_ejercicio INT,
-    notas TEXT,
     FOREIGN KEY (id_entrenamiento) REFERENCES entrenamientos(id_entrenamiento) ON DELETE CASCADE,
     FOREIGN KEY (id_ejercicio) REFERENCES ejercicios(id_ejercicio)
 );
@@ -108,7 +106,6 @@ CREATE TABLE series_entrenamiento (
     numero_serie INT NOT NULL,
     repeticiones INT NOT NULL,
     peso_usado DECIMAL(10, 2) NOT NULL,
-    notas VARCHAR(255),
     FOREIGN KEY (id_detalle_entrenamiento) REFERENCES detalles_entrenamiento(id_detalle) ON DELETE CASCADE
 );
 
