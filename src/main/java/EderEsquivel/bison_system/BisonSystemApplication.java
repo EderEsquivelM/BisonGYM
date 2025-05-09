@@ -1,6 +1,7 @@
 package EderEsquivel.bison_system;
 
 
+import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.InicioSesionServices;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
@@ -22,6 +23,8 @@ public class BisonSystemApplication implements CommandLineRunner {
     @Autowired
     private MedidasServices mS;
     
+    @Autowired
+    private EntrenamientosServices eS;
     
 
     public static void main(String[] args) {
@@ -35,7 +38,7 @@ public class BisonSystemApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         java.awt.EventQueue.invokeLater(() -> {
-            new InicioSesion(usS,isS,mS).setVisible(true);
+            new InicioSesion(usS,isS,mS,eS).setVisible(true);
             });
     }
 }
