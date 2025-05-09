@@ -30,11 +30,13 @@ public class SeriesEntrenamiento {
     private DetallesEntrenamiento detEntrenamiento;
     
     private Integer numero_serie;
+    private Integer repeticiones;
     private double peso_usado;
 
-    public SeriesEntrenamiento(DetallesEntrenamiento detEntrenamiento, Integer numero_serie, double peso_usado, String notas) {
+    public SeriesEntrenamiento(DetallesEntrenamiento detEntrenamiento, Integer numero_serie,Integer repeticiones, double peso_usado) {
         this.detEntrenamiento = detEntrenamiento;
         this.numero_serie = numero_serie;
+        this.repeticiones =repeticiones;
         this.peso_usado = peso_usado;
     }
 
@@ -72,5 +74,15 @@ public class SeriesEntrenamiento {
     public void setPeso_usado(double peso_usado) {
         this.peso_usado = peso_usado;
     }
+
+    public Integer getRepeticiones() {
+        return repeticiones;
+    }
+
+    public void setRepeticiones(Integer repeticiones) {
+        this.repeticiones = repeticiones;
+    }
+    
+    
 
 }

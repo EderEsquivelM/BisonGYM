@@ -5,6 +5,7 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
@@ -20,9 +21,10 @@ public class MenuGeneral extends javax.swing.JFrame {
     /**
      * Creates new form MenuGeneral
      */
-    public MenuGeneral(UsuariosServices usS,MedidasServices mS) {
+    public MenuGeneral(UsuariosServices usS,MedidasServices mS,EntrenamientosServices eS) {
         this.usS=usS;
         this.mS=mS;
+        this.eS=eS;
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 700);
@@ -314,7 +316,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private void miAnadirEntenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAnadirEntenamientoActionPerformed
         // TODO add your handling code here:
         if (ventanaEntrenamientos == null || ventanaEntrenamientos.isClosed()) {
-            ventanaEntrenamientos = new Entrenamientos();
+            ventanaEntrenamientos = new EntrenamientosIngreso(eS);
             dpFondo.add(ventanaEntrenamientos);
             int x = (dpFondo.getWidth() - ventanaEntrenamientos.getWidth()) / 2;
             int y = (dpFondo.getHeight() - ventanaEntrenamientos.getHeight()) / 2;
@@ -363,10 +365,11 @@ public class MenuGeneral extends javax.swing.JFrame {
         //</editor-fold>
         UsuariosServices usS=null;
         MedidasServices mS=null;
+        EntrenamientosServices eS=null;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuGeneral(usS,mS).setVisible(true);
+                new MenuGeneral(usS,mS,eS).setVisible(true);
             }
         });
     }
@@ -376,10 +379,11 @@ public class MenuGeneral extends javax.swing.JFrame {
     private Estadisticas ventanaEstadisticas;
     private GruposMusculares ventanaGM;
     private CategoriasEjercicios ventanaCatEjercicios;
-    private Entrenamientos ventanaEntrenamientos;
+    private EntrenamientosIngreso ventanaEntrenamientos;
     
     private UsuariosServices usS;
     private MedidasServices mS;
+    private EntrenamientosServices eS;
     
     
 

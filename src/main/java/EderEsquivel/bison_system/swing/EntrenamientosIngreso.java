@@ -5,12 +5,20 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.model.DetallesEntrenamiento;
 import EderEsquivel.bison_system.model.Ejercicios;
+import EderEsquivel.bison_system.model.SeriesEntrenamiento;
+import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
+import EderEsquivel.bison_system.services.EntrenamientosServices;
 import static EderEsquivel.bison_system.swing.CategoriasEjercicios.listaEjercicios;
+import java.awt.Frame;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,12 +26,15 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author edere
  */
-public class Entrenamientos extends javax.swing.JInternalFrame {
+public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
     
     /**
      * Creates new form Entrenamientos
      */
-    public Entrenamientos() {
+    public EntrenamientosIngreso(EntrenamientosServices eS) {
+        listaEjerciciosSeleccionados=new ArrayList<>();
+        seriesPorEjercicio = new HashMap<>();
+        this.eS=eS;
         initComponents();
         this.setResizable(false);
         for (ZonasAnatomicas zona : DatosGenerales.zonasAnatomicasMap.values()) {
@@ -31,6 +42,8 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
         }
         cbxCategoria.setSelectedIndex(-1);
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,6 +62,9 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TEjerciciosS = new javax.swing.JTable();
         btnEliminar = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
+        btnDE = new javax.swing.JButton();
+        btnCD = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -80,16 +96,9 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.Integer.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, true
-            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(TEjerciciosS);
@@ -102,6 +111,27 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
+            }
+        });
+
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        btnDE.setText("Detalles de ejercicio");
+        btnDE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDEActionPerformed(evt);
+            }
+        });
+
+        btnCD.setText("Cargar datos");
+        btnCD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCDActionPerformed(evt);
             }
         });
 
@@ -125,8 +155,15 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
                                     .addComponent(cbxEjercicio, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
-                        .addComponent(btnEliminar)))
-                .addContainerGap(241, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCD)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnEliminar)
+                                .addGap(28, 28, 28)
+                                .addComponent(btnModificar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDE)))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,17 +179,20 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnEliminar)
-                .addGap(52, 52, 52))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnModificar)
+                    .addComponent(btnDE))
+                .addGap(18, 18, 18)
+                .addComponent(btnCD)
+                .addGap(11, 11, 11))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,6 +278,11 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
                     break; // Solo elimina la primera coincidencia
                 }
             }
+             // Eliminar también del mapa de series
+            if (seriesPorEjercicio.containsKey(nombreEjercicio)) {
+                seriesPorEjercicio.remove(nombreEjercicio);
+            }
+            
 
             // Eliminar del modelo de la tabla
             model.removeRow(filaSeleccionada);
@@ -245,12 +290,135 @@ public class Entrenamientos extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
-    
-    public static List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
 
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+        int filaSeleccionada = TEjerciciosS.getSelectedRow();
+
+        if (filaSeleccionada != -1) {
+            DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
+
+            // Pedir nuevo número de series
+            String input = JOptionPane.showInputDialog(this, "Ingrese el nuevo número de series:");
+            if (input == null || input.trim().isEmpty()) return;
+
+            int nuevasSeries;
+            try {
+                nuevasSeries = Integer.parseInt(input.trim());
+                if (nuevasSeries <= 0) throw new NumberFormatException();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Número inválido.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Actualizar valor en la tabla
+            model.setValueAt(nuevasSeries, filaSeleccionada, 1); // columna 1 = Series
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecciona una fila para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+
+
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnDEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDEActionPerformed
+        // TODO add your handling code here:
+        int filaSeleccionada = TEjerciciosS.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un ejercicio de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String nombreEjercicio = (String) TEjerciciosS.getValueAt(filaSeleccionada, 0);
+        int series = (Integer) TEjerciciosS.getValueAt(filaSeleccionada, 1);
+
+        List<SeriesEntrenamiento> detallesSeries = new ArrayList<>();
+
+        for (int i = 0; i < series; i++) {
+            String repStr = JOptionPane.showInputDialog(this, "Serie " + (i + 1) + " - Repeticiones:");
+            if (repStr == null) return;
+
+            String pesoStr = JOptionPane.showInputDialog(this, "Serie " + (i + 1) + " - Peso (kg):");
+            if (pesoStr == null) return;
+
+            try {
+                int reps = Integer.parseInt(repStr.trim());
+                double peso = Double.parseDouble(pesoStr.trim());
+                detallesSeries.add(new SeriesEntrenamiento(null,i+1,reps, peso));
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Entrada inválida. Intenta de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // Guardar en el mapa
+        seriesPorEjercicio.put(nombreEjercicio, detallesSeries);
+
+        // Confirmación
+        JOptionPane.showMessageDialog(this, "Series guardadas para el ejercicio: " + nombreEjercicio);
+    }//GEN-LAST:event_btnDEActionPerformed
+
+    private void btnCDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCDActionPerformed
+        // TODO add your handling code here:
+         if (verificarSeries(seriesPorEjercicio)&& !listaEjerciciosSeleccionados.isEmpty() ) {
+             JOptionPane.showMessageDialog(this, "Series guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+             java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
+             EntrenamientoDetalles eD = new EntrenamientoDetalles((Frame) ventanaPadre,eS);
+             eD.setLocationRelativeTo(this);
+             eD.setVisible(true);
+        } else {
+             if(listaEjerciciosSeleccionados.isEmpty())
+                JOptionPane.showMessageDialog(this, "No hay ejercicios seleccionados", "Error", JOptionPane.ERROR_MESSAGE);
+            else
+                JOptionPane.showMessageDialog(this, "Faltan datos en algunas series.\n Revisa los campos número de serie, peso usado o ejercicio.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_btnCDActionPerformed
+    
+    
+    public boolean verificarSeries(Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio) {
+        if (seriesPorEjercicio == null || seriesPorEjercicio.isEmpty()) {
+        return false;
+        }
+
+        for (Map.Entry<String, List<SeriesEntrenamiento>> entry : seriesPorEjercicio.entrySet()) {
+            String ejercicio = entry.getKey();
+            List<SeriesEntrenamiento> series = entry.getValue();
+
+            // Verificar si hay series para el ejercicio
+            if (series == null || series.isEmpty()) {
+                System.out.println("No hay series para el ejercicio: " + ejercicio);
+                return false;
+            }
+
+            // Verificar que cada serie tenga los datos completos
+            for (int i = 0; i < series.size(); i++) {
+                SeriesEntrenamiento s = series.get(i);
+
+                // Mensajes de depuración para ver los datos de cada serie
+                System.out.println("Validando serie " + (i + 1) + " para ejercicio: " + ejercicio);
+                System.out.println("Número de serie: " + s.getNumero_serie());
+                System.out.println("Peso usado: " + s.getPeso_usado());
+                System.out.println("Detalle entrenamiento: " + s.getDetEntrenamiento());
+
+                if (s.getNumero_serie() == null || s.getPeso_usado() <= 0) {
+                    System.out.println("Datos incompletos en '" + ejercicio + "', serie " + (i + 1));
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
+    public static Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
+    private EntrenamientosServices eS;
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TEjerciciosS;
+    private javax.swing.JButton btnCD;
+    private javax.swing.JButton btnDE;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSC;
     private javax.swing.JButton btnSE;
     private javax.swing.JComboBox<String> cbxCategoria;
