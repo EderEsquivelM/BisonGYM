@@ -110,5 +110,7 @@ CREATE TABLE series_entrenamiento (
 );
 
 
-
+CREATE VIEW  vw_inicioSesion AS
+SELECT id_usuario,username, password_hash,id_t_usuario
+FROM usuarios;
 
