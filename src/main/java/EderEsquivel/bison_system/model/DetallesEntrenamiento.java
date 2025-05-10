@@ -34,7 +34,7 @@ public class DetallesEntrenamiento {
     private Ejercicios id_ejer;
     
 
-    public DetallesEntrenamiento(Entrenamientos id_entren, Ejercicios id_ejer, Integer ordenEjercicio, String notas) {
+    public DetallesEntrenamiento(Entrenamientos id_entren, Ejercicios id_ejer) {
         this.id_entren = id_entren;
         this.id_ejer = id_ejer;
     }

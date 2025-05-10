@@ -22,7 +22,7 @@ import jakarta.persistence.Table;
 public class SeriesEntrenamiento {
     @Id
     @Column(name="id_serie")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_serie;
     
     @ManyToOne
