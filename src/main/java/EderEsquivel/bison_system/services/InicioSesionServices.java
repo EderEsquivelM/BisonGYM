@@ -31,20 +31,20 @@ public class InicioSesionServices {
     
     
    public boolean verificarUsuario(String username, String password, Integer tipoId) {
-    try {
-        Optional<TipoUsuario> tipoOpt = tipoUsuarioRepository.findById(tipoId);
-        if (tipoOpt.isEmpty()) return false;
+        try {
+            Optional<TipoUsuario> tipoOpt = tipoUsuarioRepository.findById(tipoId);
+            if (tipoOpt.isEmpty()) return false;
 
-        TipoUsuario tipoUsuario = tipoOpt.get();
+            TipoUsuario tipoUsuario = tipoOpt.get();
 
-        return isRep.findByUsernameAndPasswordHashAndIdTipoUsuario(
-                username,
-                password,
-                tipoUsuario
-        ).isPresent();
-    } catch (Exception e) {
-        System.err.println("Error al verificar el usuario: " + e.getMessage());
-        return false;
+            return isRep.findByUsernameAndPasswordHashAndIdTipoUsuario(
+                    username,
+                    password,
+                    tipoUsuario
+            ).isPresent();
+        } catch (Exception e) {
+            System.err.println("Error al verificar el usuario: " + e.getMessage());
+            return false;
+        }
     }
-}
 }

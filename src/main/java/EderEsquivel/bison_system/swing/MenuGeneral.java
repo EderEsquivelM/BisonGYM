@@ -5,8 +5,12 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.model.DetallesEntrenamiento;
+import EderEsquivel.bison_system.model.SeriesEntrenamiento;
+import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.MedidasServices;
+import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -21,10 +25,13 @@ public class MenuGeneral extends javax.swing.JFrame {
     /**
      * Creates new form MenuGeneral
      */
-    public MenuGeneral(UsuariosServices usS,MedidasServices mS,EntrenamientosServices eS) {
+    public MenuGeneral(UsuariosServices usS,MedidasServices mS,EntrenamientosServices eS,DetallesEntrenamientoServices deS,
+            SeriesEntrenamientoServices seS) {
         this.usS=usS;
         this.mS=mS;
         this.eS=eS;
+        this.deS=deS;
+        this.seS=seS;
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 700);
@@ -316,7 +323,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private void miAnadirEntenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAnadirEntenamientoActionPerformed
         // TODO add your handling code here:
         if (ventanaEntrenamientos == null || ventanaEntrenamientos.isClosed()) {
-            ventanaEntrenamientos = new EntrenamientosIngreso(eS);
+            ventanaEntrenamientos = new EntrenamientosIngreso(eS,deS,seS);
             dpFondo.add(ventanaEntrenamientos);
             int x = (dpFondo.getWidth() - ventanaEntrenamientos.getWidth()) / 2;
             int y = (dpFondo.getHeight() - ventanaEntrenamientos.getHeight()) / 2;
@@ -366,10 +373,12 @@ public class MenuGeneral extends javax.swing.JFrame {
         UsuariosServices usS=null;
         MedidasServices mS=null;
         EntrenamientosServices eS=null;
+        DetallesEntrenamientoServices deS=null;
+        SeriesEntrenamientoServices seS=null;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuGeneral(usS,mS,eS).setVisible(true);
+                new MenuGeneral(usS,mS,eS,deS,seS).setVisible(true);
             }
         });
     }
@@ -384,6 +393,8 @@ public class MenuGeneral extends javax.swing.JFrame {
     private UsuariosServices usS;
     private MedidasServices mS;
     private EntrenamientosServices eS;
+    private DetallesEntrenamientoServices deS;
+    private SeriesEntrenamientoServices seS;
     
     
 

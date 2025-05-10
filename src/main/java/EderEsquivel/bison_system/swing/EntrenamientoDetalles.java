@@ -5,10 +5,19 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.model.DetallesEntrenamiento;
+import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.Entrenamientos;
+import EderEsquivel.bison_system.model.SeriesEntrenamiento;
 import EderEsquivel.bison_system.model.Usuarios;
+import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
+import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -16,13 +25,23 @@ import java.time.LocalDate;
  */
 public class EntrenamientoDetalles extends javax.swing.JDialog {
 
-    EntrenamientosServices eS;
+    private EntrenamientosServices eS;
+    private DetallesEntrenamientoServices deS;
+    private SeriesEntrenamientoServices seS;
+    public  List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
+    public  Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
     /**
      * Creates new form EntrenamientoDetalles
      */
-    public EntrenamientoDetalles(java.awt.Frame parent ,EntrenamientosServices eS) {
+    public EntrenamientoDetalles(java.awt.Frame parent ,EntrenamientosServices eS,DetallesEntrenamientoServices deS,
+            SeriesEntrenamientoServices seS,List<Ejercicios> listaEjerciciosSeleccionados ,
+            Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio) {
         super(parent,ModalityType.APPLICATION_MODAL);
         this.eS=eS;
+        this.deS=deS;
+        this.seS=seS;
+        this.seriesPorEjercicio=seriesPorEjercicio;
+        this.listaEjerciciosSeleccionados=listaEjerciciosSeleccionados;
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(this);
@@ -155,6 +174,24 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         Entrenamientos nE=new Entrenamientos(us,LocalDate.now(),nombre
         ,descripcion,duracion,observaciones);
         nE=eS.nuevoEntrenamiento(nE);
+        
+        DetallesEntrenamiento nDE;
+        for(Ejercicios ej:listaEjerciciosSeleccionados){
+            nDE=deS.nuevoDE(new DetallesEntrenamiento(nE,ej));
+            Integer numS=0;
+            for(SeriesEntrenamiento se:seriesPorEjercicio.get(ej.getNombre())){
+                numS++;
+                if(seS.nuevaSerie(new SeriesEntrenamiento(nDE,numS,se.getRepeticiones(),
+                se.getPeso_usado()))){
+                    System.out.println("Se ingreso correctamente");
+                    this.dispose();
+                }   
+                else{
+                    System.out.println("ne we");
+                }
+            }
+        }
+        
         
     }//GEN-LAST:event_btnGuardarActionPerformed
 

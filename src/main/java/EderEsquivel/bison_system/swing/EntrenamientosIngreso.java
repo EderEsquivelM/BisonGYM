@@ -10,7 +10,9 @@ import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.SeriesEntrenamiento;
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
+import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
+import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import static EderEsquivel.bison_system.swing.CategoriasEjercicios.listaEjercicios;
 import java.awt.Frame;
 import java.time.LocalDate;
@@ -31,10 +33,11 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
     /**
      * Creates new form Entrenamientos
      */
-    public EntrenamientosIngreso(EntrenamientosServices eS) {
-        listaEjerciciosSeleccionados=new ArrayList<>();
-        seriesPorEjercicio = new HashMap<>();
+    public EntrenamientosIngreso(EntrenamientosServices eS,DetallesEntrenamientoServices deS,
+            SeriesEntrenamientoServices seS) {
         this.eS=eS;
+        this.deS=deS;
+        this.seS=seS;
         initComponents();
         this.setResizable(false);
         for (ZonasAnatomicas zona : DatosGenerales.zonasAnatomicasMap.values()) {
@@ -265,30 +268,29 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int filaSeleccionada = TEjerciciosS.getSelectedRow();
 
-        if (filaSeleccionada != -1) {
-            DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
-            String nombreEjercicio = (String) model.getValueAt(filaSeleccionada, 0); // Suponiendo que la columna 0 es el nombre del ejercicio
-
-            // Eliminar de la listaEjerciciosSeleccionados usando Iterator
-            Iterator<Ejercicios> iterator = listaEjerciciosSeleccionados.iterator();
-            while (iterator.hasNext()) {
-                Ejercicios ej = iterator.next();
-                if (ej.getNombre().equals(nombreEjercicio)) {
-                    iterator.remove();
-                    break; // Solo elimina la primera coincidencia
-                }
-            }
-             // Eliminar también del mapa de series
-            if (seriesPorEjercicio.containsKey(nombreEjercicio)) {
-                seriesPorEjercicio.remove(nombreEjercicio);
-            }
-            
-
-            // Eliminar del modelo de la tabla
-            model.removeRow(filaSeleccionada);
-        } else {
+        if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+
+        DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
+        String nombreEjercicio = (String) model.getValueAt(filaSeleccionada, 0);
+
+        // Buscar y eliminar con for normal
+        for (int i = 0; i < listaEjerciciosSeleccionados.size(); i++) {
+            if (listaEjerciciosSeleccionados.get(i).getNombre().equals(nombreEjercicio)) {
+                listaEjerciciosSeleccionados.remove(i);
+                break;
+            }
+        }
+
+        // Eliminar del mapa
+        if (seriesPorEjercicio.containsKey(nombreEjercicio)) {
+            seriesPorEjercicio.remove(nombreEjercicio);
+        }
+
+        // Eliminar de la tabla
+        model.removeRow(filaSeleccionada);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -360,11 +362,19 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
     private void btnCDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCDActionPerformed
         // TODO add your handling code here:
          if (verificarSeries(seriesPorEjercicio)&& !listaEjerciciosSeleccionados.isEmpty() ) {
-             JOptionPane.showMessageDialog(this, "Series guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-             java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
-             EntrenamientoDetalles eD = new EntrenamientoDetalles((Frame) ventanaPadre,eS);
-             eD.setLocationRelativeTo(this);
-             eD.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Series guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
+            EntrenamientoDetalles eD = new EntrenamientoDetalles((Frame) ventanaPadre,eS,deS,seS,
+                     listaEjerciciosSeleccionados,seriesPorEjercicio);
+            eD.setLocationRelativeTo(this);
+            eD.setVisible(true);
+            cbxCategoria.setSelectedIndex(-1);
+            cbxEjercicio.setSelectedIndex(-1);
+            DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
+            model.setRowCount(0); 
+            listaEjerciciosSeleccionados.clear();
+            seriesPorEjercicio.clear();
+             
         } else {
              if(listaEjerciciosSeleccionados.isEmpty())
                 JOptionPane.showMessageDialog(this, "No hay ejercicios seleccionados", "Error", JOptionPane.ERROR_MESSAGE);
@@ -375,43 +385,44 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnCDActionPerformed
     
     
-    public boolean verificarSeries(Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio) {
-        if (seriesPorEjercicio == null || seriesPorEjercicio.isEmpty()) {
-        return false;
-        }
+    private boolean verificarSeries(Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio) {
+        for (Ejercicios ejercicio : listaEjerciciosSeleccionados) {
+            String nombre = ejercicio.getNombre();
 
-        for (Map.Entry<String, List<SeriesEntrenamiento>> entry : seriesPorEjercicio.entrySet()) {
-            String ejercicio = entry.getKey();
-            List<SeriesEntrenamiento> series = entry.getValue();
-
-            // Verificar si hay series para el ejercicio
+            List<SeriesEntrenamiento> series = seriesPorEjercicio.get(nombre);
             if (series == null || series.isEmpty()) {
-                System.out.println("No hay series para el ejercicio: " + ejercicio);
+                JOptionPane.showMessageDialog(this,
+                    "Faltan series para el ejercicio: " + nombre,
+                    "Error de validación", JOptionPane.WARNING_MESSAGE);
                 return false;
             }
 
-            // Verificar que cada serie tenga los datos completos
-            for (int i = 0; i < series.size(); i++) {
-                SeriesEntrenamiento s = series.get(i);
-
-                // Mensajes de depuración para ver los datos de cada serie
-                System.out.println("Validando serie " + (i + 1) + " para ejercicio: " + ejercicio);
-                System.out.println("Número de serie: " + s.getNumero_serie());
-                System.out.println("Peso usado: " + s.getPeso_usado());
-                System.out.println("Detalle entrenamiento: " + s.getDetEntrenamiento());
-
-                if (s.getNumero_serie() == null || s.getPeso_usado() <= 0) {
-                    System.out.println("Datos incompletos en '" + ejercicio + "', serie " + (i + 1));
-                    return false;
+            // Obtener el número de series esperadas desde la tabla
+            int seriesEsperadas = 0;
+            for (int i = 0; i < TEjerciciosS.getRowCount(); i++) {
+                if (TEjerciciosS.getValueAt(i, 0).equals(nombre)) {
+                    seriesEsperadas = (Integer) TEjerciciosS.getValueAt(i, 1);
+                    break;
                 }
+            }
+
+            if (series.size() != seriesEsperadas) {
+                JOptionPane.showMessageDialog(this,
+                    "El número de series ingresadas para " + nombre + " no coincide con las esperadas (" + seriesEsperadas + ").",
+                    "Error de validación", JOptionPane.WARNING_MESSAGE);
+                return false;
             }
         }
         return true;
     }
 
-    public static List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
-    public static Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
+
+    public  List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
+    public  Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
+    
     private EntrenamientosServices eS;
+    private DetallesEntrenamientoServices deS;
+    private SeriesEntrenamientoServices seS;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TEjerciciosS;

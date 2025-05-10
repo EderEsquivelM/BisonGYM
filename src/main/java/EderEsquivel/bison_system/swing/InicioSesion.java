@@ -5,9 +5,13 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.model.DetallesEntrenamiento;
+import EderEsquivel.bison_system.model.SeriesEntrenamiento;
+import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.InicioSesionServices;
 import EderEsquivel.bison_system.services.MedidasServices;
+import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
 import java.util.HashSet;
@@ -27,18 +31,24 @@ public class InicioSesion extends javax.swing.JFrame {
     private InicioSesionServices isS;
     private MedidasServices mS;
     private EntrenamientosServices eS;
+    private DetallesEntrenamientoServices deS;
+    private SeriesEntrenamientoServices seS;
+    
     public String imagen="/logoSinFondo200x200.png";
     public ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
     /**
      * Creates new form InicioSesion
      */
     
-    public InicioSesion(UsuariosServices usS,InicioSesionServices isS, MedidasServices mS,EntrenamientosServices eS) {        
+    public InicioSesion(UsuariosServices usS,InicioSesionServices isS, MedidasServices mS,EntrenamientosServices eS,
+    DetallesEntrenamientoServices deS,SeriesEntrenamientoServices seS) {        
         initComponents();
         this.usS=usS;
         this.isS=isS;
         this.mS=mS;
         this.eS=eS;
+        this.deS=deS;
+        this.seS=seS;
         contrasena=pfContrasena.getEchoChar();
         setResizable(false);
         this.setLocationRelativeTo(null);
@@ -242,7 +252,7 @@ public class InicioSesion extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
                     DatosGenerales.setInfoUsuarios(usS.infoUsuario(usuario));
                             
-                    MenuGeneral menu=new MenuGeneral(usS,mS,eS);
+                    MenuGeneral menu=new MenuGeneral(usS,mS,eS,deS,seS);
                     menu.setVisible(true);
                     menu.setLocationRelativeTo(null);
                     this.dispose(); 
@@ -309,26 +319,6 @@ public class InicioSesion extends javax.swing.JFrame {
             }
         });
     }
-    
-    
-   private Boolean verificarUsuarioConServidor(String username, String password, Integer tipoUsuario) {
-    RestTemplate restTemplate = new RestTemplate();
-    String url = "http://localhost:8080/api/vw_iniciosesion/{username}/{password}/{tipoUsuario}";
-
-    try {
-        ResponseEntity<Boolean> response = restTemplate.getForEntity(
-            url, 
-            Boolean.class, 
-            username, 
-            password, 
-            tipoUsuario
-        );
-        return response.getBody();
-    } catch (Exception e) {
-        e.printStackTrace();
-        return false;
-    }
-}
    
     private char contrasena;
     // Variables declaration - do not modify//GEN-BEGIN:variables
