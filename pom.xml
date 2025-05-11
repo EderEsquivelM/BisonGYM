@@ -76,12 +76,19 @@
             <version>2.2.0</version>
             <type>jar</type>
         </dependency>
+        
         <dependency>
-            <groupId>com.ardikars.jxnet</groupId>
-            <artifactId>jxnet-context</artifactId>
-            <version>1.5.5.RC5</version>
-            <type>jar</type>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>1.0.24</version>
+        </dependency>
+        
     </dependencies>
 
     <build>
