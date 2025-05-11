@@ -378,23 +378,23 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         } else {
              if(listaEjerciciosSeleccionados.isEmpty())
                 JOptionPane.showMessageDialog(this, "No hay ejercicios seleccionados", "Error", JOptionPane.ERROR_MESSAGE);
-            else
-                JOptionPane.showMessageDialog(this, "Faltan datos en algunas series.\n Revisa los campos número de serie, peso usado o ejercicio.", "Error", JOptionPane.ERROR_MESSAGE);
+           
         }
         
     }//GEN-LAST:event_btnCDActionPerformed
     
     
     private boolean verificarSeries(Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio) {
+        List<String> ejerciciosConSeriesIncompletas = new ArrayList<>();
+
         for (Ejercicios ejercicio : listaEjerciciosSeleccionados) {
             String nombre = ejercicio.getNombre();
-
             List<SeriesEntrenamiento> series = seriesPorEjercicio.get(nombre);
+
+            // Validar si hay series para el ejercicio
             if (series == null || series.isEmpty()) {
-                JOptionPane.showMessageDialog(this,
-                    "Faltan series para el ejercicio: " + nombre,
-                    "Error de validación", JOptionPane.WARNING_MESSAGE);
-                return false;
+                ejerciciosConSeriesIncompletas.add(nombre + " (sin series)");
+                continue;
             }
 
             // Obtener el número de series esperadas desde la tabla
@@ -406,13 +406,20 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
                 }
             }
 
+            // Validar si el número de series ingresadas coincide con las esperadas
             if (series.size() != seriesEsperadas) {
-                JOptionPane.showMessageDialog(this,
-                    "El número de series ingresadas para " + nombre + " no coincide con las esperadas (" + seriesEsperadas + ").",
-                    "Error de validación", JOptionPane.WARNING_MESSAGE);
-                return false;
+                ejerciciosConSeriesIncompletas.add(nombre + " (esperadas: " + seriesEsperadas + ", ingresadas: " + series.size() + ")");
             }
         }
+
+        // Mostrar el listado de ejercicios incompletos si hay alguno
+        if (!ejerciciosConSeriesIncompletas.isEmpty()) {
+            String mensaje = "Los siguientes ejercicios tienen problemas con las series:\n\n" +
+                             String.join("\n", ejerciciosConSeriesIncompletas);
+            JOptionPane.showMessageDialog(this, mensaje, "Error de validación", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
         return true;
     }
 
