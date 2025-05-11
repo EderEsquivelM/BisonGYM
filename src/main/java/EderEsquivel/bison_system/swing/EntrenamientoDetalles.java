@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -183,7 +184,7 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
                 numS++;
                 if(seS.nuevaSerie(new SeriesEntrenamiento(nDE,numS,se.getRepeticiones(),
                 se.getPeso_usado()))){
-                    System.out.println("Se ingreso correctamente");
+                    JOptionPane.showMessageDialog(this, "Entrenamineto guardado\ncorrectamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();
                 }   
                 else{
