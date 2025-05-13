@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package EderEsquivel.bison_system.model;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +32,7 @@ public class Usuarios {
     @Column(name = "password_hash")
     private String passwordHash; 
     
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    
     private LocalDate fecha_nacimiento;
     private boolean activo;
     @ManyToOne
@@ -44,7 +43,7 @@ public class Usuarios {
     @JoinColumn(name="id_t_usuario")
     private TipoUsuario tipoUsuario;
     
-   @JsonFormat(pattern = "yyyy-MM-dd")
+   
     private LocalDate fecha_creacion;
 
     public Usuarios(String nombre, String apellido, String username,String correo , String passwordHash, LocalDate fecha_nacimiento, boolean activo,Sexo sexo, TipoUsuario tipoUsuario, LocalDate fecha_creacion) {
