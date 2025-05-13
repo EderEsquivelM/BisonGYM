@@ -254,11 +254,14 @@ public class Registro extends javax.swing.JDialog  {
            || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()||cbxGenero.getSelectedIndex()==-1
            || pfContrasena.getPassword().length==0){
             
-            if(dcFechaNacimiento.getDate()==null)
-                dcFechaNacimiento.getDateEditor().setDate(null);
-            
             JOptionPane.showMessageDialog(null, "Debes llenar todos los campos",
                         "¡Error!", JOptionPane.ERROR_MESSAGE);
+            
+            
+        }else if(!correoValido(tfCorreo.getText().trim())){
+               JOptionPane.showMessageDialog(null, "El correo ingresado no es válido.",
+        "¡Error!", JOptionPane.ERROR_MESSAGE);
+               
         }else{
             if(DatosGenerales.hayConexion()){
         
@@ -317,7 +320,12 @@ public class Registro extends javax.swing.JDialog  {
             pfContrasena.setEchoChar(contrasena);
         }
     }//GEN-LAST:event_chbxMostrarActionPerformed
-     
+    
+    public boolean correoValido(String correo) {
+        String regex = "^[\\w-\\.]+@([\\w-]+\\.)+(com|org|net|edu|gob|mx)$";
+        return correo.matches(regex);
+    }
+
     
     private UsuariosServices usS;
         
