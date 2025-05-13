@@ -75,9 +75,9 @@ public class InicioSesion extends javax.swing.JFrame {
         chbxMostrar = new javax.swing.JCheckBox();
         btnIngresar = new javax.swing.JButton();
         logo = new javax.swing.JLabel();
-        lblRegistrarse = new javax.swing.JLabel();
         cmbTipoUsuario = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
+        btnRegistrarse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -123,13 +123,6 @@ public class InicioSesion extends javax.swing.JFrame {
             }
         });
 
-        lblRegistrarse.setText("Registrarse");
-        lblRegistrarse.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblRegistrarseMouseClicked(evt);
-            }
-        });
-
         cmbTipoUsuario.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cmbTipoUsuario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Usuario", "Administrador" }));
         cmbTipoUsuario.setSelectedIndex(-1);
@@ -138,6 +131,15 @@ public class InicioSesion extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel5.setText("Usuario:");
 
+        btnRegistrarse.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        btnRegistrarse.setText("Crear cuenta");
+        btnRegistrarse.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "¿Eres nuevo?", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 3, 10))); // NOI18N
+        btnRegistrarse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -145,6 +147,11 @@ public class InicioSesion extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnIngresar)
@@ -158,16 +165,14 @@ public class InicioSesion extends javax.swing.JFrame {
                                     .addComponent(tfUsuario)
                                     .addComponent(pfContrasena, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                                     .addComponent(cmbTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chbxMostrar)
-                            .addComponent(lblRegistrarse))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(chbxMostrar))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(53, 53, 53)
+                                .addComponent(btnRegistrarse, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(33, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -198,8 +203,8 @@ public class InicioSesion extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIngresar)
-                    .addComponent(lblRegistrarse))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addComponent(btnRegistrarse))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -269,20 +274,20 @@ public class InicioSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     
-    private void lblRegistrarseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRegistrarseMouseClicked
-        // TODO add your handling code here:
-        Registro registro = new Registro(this,usS); 
-            registro.setLocationRelativeTo(null);
-            registro.setBackground(Color.white);
-            registro.setVisible(true); 
-    }//GEN-LAST:event_lblRegistrarseMouseClicked
-
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
        dispose(); // Cierra la ventana
        System.exit(0);
         
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
+        // TODO add your handling code here:
+        Registro registro = new Registro(this,usS); 
+        registro.setLocationRelativeTo(null);
+        registro.setBackground(Color.white);
+        registro.setVisible(true);
+    }//GEN-LAST:event_btnRegistrarseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -323,6 +328,7 @@ public class InicioSesion extends javax.swing.JFrame {
     private char contrasena;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
+    private javax.swing.JButton btnRegistrarse;
     private javax.swing.JCheckBox chbxMostrar;
     private javax.swing.JComboBox<String> cmbTipoUsuario;
     private javax.swing.JLabel jLabel1;
@@ -330,7 +336,6 @@ public class InicioSesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblRegistrarse;
     private javax.swing.JLabel logo;
     private javax.swing.JPasswordField pfContrasena;
     private javax.swing.JTextField tfUsuario;
