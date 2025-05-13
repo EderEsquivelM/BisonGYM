@@ -25,13 +25,9 @@ public class UsuariosServices {
     }
     
     public boolean nuevoUsuario(Usuarios us) {
-        try{
-            usuariosRep.save(us); 
-            return true;  
-        }catch(Exception e){
-            System.out.println("Error al registrar usuario: "+e.getMessage());
-            return false;
-        }
+            usuariosRep.save(us);
+            return true;
+            
     }
     
     public Usuarios infoUsuario(String username){
