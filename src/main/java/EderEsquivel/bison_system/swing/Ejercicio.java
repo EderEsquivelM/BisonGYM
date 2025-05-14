@@ -78,6 +78,7 @@ public class Ejercicio extends javax.swing.JDialog {
         });
 
         lblTituloEjercicio.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        lblTituloEjercicio.setForeground(new java.awt.Color(26, 35, 126));
         lblTituloEjercicio.setText("jLabel1");
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N

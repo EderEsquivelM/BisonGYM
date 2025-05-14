@@ -53,6 +53,7 @@ public class CategoriasEjercicios extends javax.swing.JInternalFrame {
         cbxZonas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(26, 35, 126));
         jLabel1.setText("Zonas Anatomicas");
 
         btnVerEjercicios.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
