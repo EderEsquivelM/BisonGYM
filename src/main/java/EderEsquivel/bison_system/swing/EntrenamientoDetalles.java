@@ -4,7 +4,7 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.DetallesEntrenamiento;
 import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.Entrenamientos;
@@ -72,14 +72,19 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel1.setText("Nombre del entrenamiento:");
 
+        jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel2.setText("Descripcion:");
 
+        jLabel3.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel3.setText("Duracion:");
 
+        jLabel4.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel4.setText("Observaciones:");
 
+        btnGuardar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,11 +93,15 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         });
 
         taObservaciones.setColumns(20);
+        taObservaciones.setLineWrap(true);
         taObservaciones.setRows(5);
+        taObservaciones.setWrapStyleWord(true);
         jScrollPane1.setViewportView(taObservaciones);
 
         taDescripcion.setColumns(20);
+        taDescripcion.setLineWrap(true);
         taDescripcion.setRows(5);
+        taDescripcion.setWrapStyleWord(true);
         jScrollPane2.setViewportView(taDescripcion);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
