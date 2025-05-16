@@ -2,8 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package EderEsquivel.bison_system.model;
+package EderEsquivel.bison_system;
 
+import EderEsquivel.bison_system.model.Dificultades;
+import EderEsquivel.bison_system.model.Ejercicios;
+import EderEsquivel.bison_system.model.Musculos;
+import EderEsquivel.bison_system.model.Usuarios;
+import EderEsquivel.bison_system.model.ZonasAnatomicas;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
