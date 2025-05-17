@@ -5,8 +5,10 @@
 package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.DatosGenerales;
-import EderEsquivel.bison_system.entidadesGraficas.EntrenamientoPorMes;
+import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSL;
+import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSD;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
+import EderEsquivel.bison_system.services.GraficasServices;
 import java.awt.Dimension;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,12 +25,13 @@ import org.jfree.data.category.DefaultCategoryDataset;
  * @author edere
  */
 public class Estadisticas extends javax.swing.JInternalFrame {
-     private EntrenamientosServices eS;
+     private GraficasServices gS;
+     public ChartPanel chartPanel=null;
     /**
      * Creates new form Perfil
      */
-    public Estadisticas(EntrenamientosServices eS) {
-        this.eS=eS;
+    public Estadisticas(GraficasServices gS) {
+        this.gS=gS;
         initComponents();
         this.setResizable(false);
     }
@@ -37,11 +40,12 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         // Crear dataset con datos reales
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        int xd=cbxGraficas.getSelectedIndex();
-        switch(xd){
+        int gSelect=cbxGraficas.getSelectedIndex();
+        
+        switch(gSelect){
             case 0: 
-                List<EntrenamientoPorMes> listEntrenamiento = new ArrayList<>();
-                listEntrenamiento = eS.EntrenamientosPorMes(
+                List<DatosGraficaSL> listEntrenamiento = new ArrayList<>();
+                listEntrenamiento = gS.EntrenamientosPorMes(
                     DatosGenerales.getInfoUsuarios().getId(),
                     DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate())
@@ -50,8 +54,8 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(this, "No hay datos",
                 "¡Error!", JOptionPane.ERROR_MESSAGE);
                 }else{
-                    for (EntrenamientoPorMes em : listEntrenamiento) {
-                    dataset.addValue(em.getTotal(), "Veces por mes", em.getMes());
+                    for (DatosGraficaSL em : listEntrenamiento) {
+                    dataset.addValue(em.getDato(), "Veces por mes", em.getCampo());
                     }
                     JFreeChart barChart = ChartFactory.createBarChart(
                         "Entrenamientos por mes", // Título
@@ -65,26 +69,112 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                     );
 
                     // Crear panel del gráfico y establecer tamaño reducido
-                    ChartPanel chartPanel = new ChartPanel(barChart);
-                    int width = jpGrafica.getWidth();
-                    int height = jpGrafica.getHeight() ;
-                    chartPanel.setPreferredSize(new Dimension(width, height));
-
-                    // Mostrar gráfico en el panel
-                    jpGrafica.removeAll();
-                    jpGrafica.setLayout(new java.awt.BorderLayout());
-                    jpGrafica.add(chartPanel, java.awt.BorderLayout.CENTER);
-                    jpGrafica.revalidate();
-                    jpGrafica.repaint();
+                    chartPanel = new ChartPanel(barChart);
+                    
                 }
                 break;
                 
             case 1:
+                List<DatosGraficaSD> listPeso=new ArrayList<>();
+                listPeso=gS.evolucionPesoCargado(DatosGenerales.getInfoUsuarios().getId(), 
+                        DatosGenerales.ejerciciosMap.get(5).getId_ejericio()
+                                , DatosGenerales.cambioFecha(dcFechaI.getDate()),
+                    DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                if (listPeso.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay datos",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    DefaultCategoryDataset datasetLinea = new DefaultCategoryDataset();
+                    for (DatosGraficaSD ep : listPeso) {
+                        datasetLinea.addValue(ep.getDato(), "Peso Usado", ep.getCampo());
+                    }
+
+                    JFreeChart lineChart = ChartFactory.createLineChart(
+                        "Evolución del Peso Usado",     // Título
+                        "Fecha",                        // Eje X
+                        "Peso (kg)",                    // Eje Y
+                        datasetLinea,
+                        PlotOrientation.VERTICAL,
+                        true,                           // incluir leyenda
+                        true,                           // tooltips
+                        false                           // URLs
+                    );
+
+                    chartPanel = new ChartPanel(lineChart);
+                    
+                }
+                break;
                 
+            case 2:
+                List<DatosGraficaSD> listPesoU=new ArrayList<>();
+                listPesoU=gS.evolucionPesoUsuario(DatosGenerales.getInfoUsuarios().getId(),
+                  DatosGenerales.cambioFecha(dcFechaI.getDate()),
+                    DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                if (listPesoU.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay datos",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    DefaultCategoryDataset datasetLinea = new DefaultCategoryDataset();
+                    for (DatosGraficaSD ep : listPesoU) {
+                        datasetLinea.addValue(ep.getDato(), "Kg", ep.getCampo());
+                    }
+
+                    JFreeChart lineChart = ChartFactory.createLineChart(
+                        "Evolución del Peso del Usuario",     // Título
+                        "Fecha",                        // Eje X
+                        "Peso (kg)",                    // Eje Y
+                        datasetLinea,
+                        PlotOrientation.VERTICAL,
+                        true,                           // incluir leyenda
+                        true,                           // tooltips
+                        false                           // URLs
+                    );
+
+                   chartPanel = new ChartPanel(lineChart);
+                   
+                }
+                break;
+                
+            case 3:
+                List<DatosGraficaSL> listPGC=new ArrayList<>();
+                listPGC=gS.evolucionPGC(DatosGenerales.getInfoUsuarios().getId(),
+                  DatosGenerales.cambioFecha(dcFechaI.getDate()),
+                    DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                if (listPGC.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay datos",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    DefaultCategoryDataset datasetLinea = new DefaultCategoryDataset();
+                    for (DatosGraficaSL ep : listPGC) {
+                        datasetLinea.addValue(ep.getDato(), "%", ep.getCampo());
+                    }
+
+                    JFreeChart lineChart = ChartFactory.createLineChart(
+                        "Evolución del porcentaje de grasa corporal del Usuario",     // Título
+                        "Fecha",                        // Eje X
+                        "Porcentaje Grasa Corporal",                    // Eje Y
+                        datasetLinea,
+                        PlotOrientation.VERTICAL,
+                        true,                           // incluir leyenda
+                        true,                           // tooltips
+                        false                           // URLs
+                    );
+
+                   chartPanel = new ChartPanel(lineChart);
+                   
+                }
                 break;
         }
-       
+        if (chartPanel != null) {
+            jpGrafica.remove(chartPanel);
+        }
+        
 
+        jpGrafica.removeAll();
+        jpGrafica.setLayout(new java.awt.BorderLayout());
+        jpGrafica.add(chartPanel, java.awt.BorderLayout.CENTER);
+        jpGrafica.revalidate();
+        jpGrafica.repaint();
         
     }
 
@@ -118,7 +208,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         jPanel1.setBackground(java.awt.SystemColor.window);
 
         cbxGraficas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        cbxGraficas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenamiento por mes" }));
+        cbxGraficas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenamiento por mes", "Evolucion peso por ejecicio", "Peso de usuario", "Porcentaje de grasa corporal", "Ejercicios hechos por dificultad", "Zonas musculares entrenadas" }));
         cbxGraficas.setSelectedIndex(-1);
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
@@ -150,23 +240,20 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(cbxGraficas, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                    .addComponent(cbxGraficas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dcFechaI, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(dcFechaF, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 216, Short.MAX_VALUE))))
+                    .addComponent(jLabel3)
+                    .addComponent(dcFechaF, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(83, 83, 83))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(285, 285, 285)
                 .addComponent(btnSG)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 356, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +283,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         );
         jpGraficaLayout.setVerticalGroup(
             jpGraficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 409, Short.MAX_VALUE)
+            .addGap(0, 500, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -212,9 +299,8 @@ public class Estadisticas extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpGrafica, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jpGrafica, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -222,11 +308,11 @@ public class Estadisticas extends javax.swing.JInternalFrame {
 
     private void btnSGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSGActionPerformed
         // TODO add your handling code here:
-        if(cbxGraficas.getSelectedIndex()==0){
+        
             mostrarGrafica();
-        }
+        
     }//GEN-LAST:event_btnSGActionPerformed
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSG;
