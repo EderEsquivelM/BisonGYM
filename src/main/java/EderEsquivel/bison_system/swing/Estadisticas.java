@@ -17,8 +17,11 @@ import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
@@ -26,7 +29,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
  */
 public class Estadisticas extends javax.swing.JInternalFrame {
      private GraficasServices gS;
-     public ChartPanel chartPanel=null;
+     public ChartPanel chartPanel=new ChartPanel(null);
     /**
      * Creates new form Perfil
      */
@@ -164,6 +167,65 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                    
                 }
                 break;
+            case 4:
+                List<DatosGraficaSL> listDificultad=new ArrayList<>();
+                listDificultad=gS.ejerciciosHechosDificultad(DatosGenerales.getInfoUsuarios().getId(),
+                  DatosGenerales.cambioFecha(dcFechaI.getDate()),
+                    DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                if (listDificultad.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay datos",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    DefaultPieDataset datasetPastel = new DefaultPieDataset();
+
+                    for (DatosGraficaSL ep : listDificultad) {
+                        datasetPastel.setValue(ep.getCampo(), ep.getDato());
+                    }
+
+                    JFreeChart pieChart = ChartFactory.createPieChart(
+                        "Ejercicios por Dificultad",  // Título
+                        datasetPastel,                // Dataset
+                        true,                         // Leyenda
+                        true,                         // Tooltips
+                        false                         // URLs
+                    );
+                    PiePlot plot = (PiePlot) pieChart.getPlot();
+                    plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1}"));
+                    chartPanel = new ChartPanel(pieChart);
+                   
+                }
+                break;
+                
+            case 5:
+                List<DatosGraficaSL> listZonas=new ArrayList<>();
+                listZonas=gS.zonasMEntrenadas(DatosGenerales.getInfoUsuarios().getId(),
+                  DatosGenerales.cambioFecha(dcFechaI.getDate()),
+                    DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                if (listZonas.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "No hay datos",
+                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    DefaultCategoryDataset datasetBarras = new DefaultCategoryDataset();
+
+                    for (DatosGraficaSL ep : listZonas) {
+                        datasetBarras.addValue(ep.getDato(), "Cantidad", ep.getCampo());
+                    }
+
+                    JFreeChart barChart = ChartFactory.createBarChart(
+                        "Zonas Más Entrenadas",       // Título
+                        "Zona Anatómica",             // Eje X
+                        "Cantidad de Ejercicios",     // Eje Y
+                        datasetBarras,
+                        PlotOrientation.HORIZONTAL,   // Orientación horizontal
+                        true,                         // Leyenda
+                        true,                         // Tooltips
+                        false                         // URLs
+                    );
+
+                    chartPanel = new ChartPanel(barChart);
+                }
+                break;
+
         }
         if (chartPanel != null) {
             jpGrafica.remove(chartPanel);
@@ -241,7 +303,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(cbxGraficas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dcFechaI, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -251,9 +313,9 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                     .addComponent(dcFechaF, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(83, 83, 83))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(285, 285, 285)
+                .addGap(275, 275, 275)
                 .addComponent(btnSG)
-                .addGap(0, 356, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,9 +330,9 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                     .addComponent(dcFechaI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dcFechaF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbxGraficas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(btnSG)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGap(15, 15, 15))
         );
 
         jpGrafica.setBackground(java.awt.SystemColor.window);
