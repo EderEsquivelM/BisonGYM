@@ -4,7 +4,7 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.time.LocalDate;

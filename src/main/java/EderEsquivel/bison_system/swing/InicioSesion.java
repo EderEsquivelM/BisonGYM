@@ -4,7 +4,9 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.CamposVaciosException;
+import EderEsquivel.bison_system.DatosGenerales;
+import EderEsquivel.bison_system.UsuarioException;
 import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.InicioSesionServices;
@@ -226,51 +228,44 @@ public class InicioSesion extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_chbxMostrarActionPerformed
-
+    
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        // TODO add your handling code here:
-        if (cmbTipoUsuario.getSelectedIndex() == -1 || tfUsuario.getText().trim().isEmpty()
-        || pfContrasena.getPassword().length == 0) {
-        JOptionPane.showMessageDialog(null, "Debes llenar todos los campos",
-                "¡Error!", JOptionPane.ERROR_MESSAGE);
-        } else {
-            if (DatosGenerales.hayConexion()) {
-                String usuario = tfUsuario.getText();
-                String password = new String(pfContrasena.getPassword());
-                Integer tuElegido = 0;
-
-                if (cmbTipoUsuario.getSelectedIndex() == 0) {
-                    tuElegido = 1;
-                } else if (cmbTipoUsuario.getSelectedIndex() == 1) {
-                    tuElegido = 2;
-                }
-
-                try {
-                    boolean verificarUsuario = isS.verificarUsuario(usuario, password, tuElegido);
-
-                    if (verificarUsuario) {
-                        JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
-                        DatosGenerales.setInfoUsuarios(usS.infoUsuario(usuario));
-
-                        MenuGeneral menu = new MenuGeneral(usS, mS, eS, deS, seS);
-                        menu.setVisible(true);
-                        menu.setLocationRelativeTo(null);
-                        this.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "No existe el usuario",
-                                "¡Error!", JOptionPane.ERROR_MESSAGE);
-                    }
-                }catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null,
-                            "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
-                            "¡Error!", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                }
-
-            } else {
-                JOptionPane.showMessageDialog(null, "No hay conexión a internet\nIntente reconectarse a una red",
-                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+        // TODO add your handling code here:t
+        try {
+            if (cmbTipoUsuario.getSelectedIndex() == -1 || tfUsuario.getText().trim().isEmpty()
+                    || pfContrasena.getPassword().length == 0) {
+                throw new CamposVaciosException("Debes llenar todos los campos.");
             }
+
+            if (!DatosGenerales.hayConexion()) {
+                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
+            }
+
+            String usuario = tfUsuario.getText();
+            String password = new String(pfContrasena.getPassword());
+            Integer tuElegido = (cmbTipoUsuario.getSelectedIndex() == 0) ? 1 : 2;
+
+            boolean verificarUsuario = isS.verificarUsuario(usuario, password, tuElegido);
+
+            if (!verificarUsuario) {
+                throw new UsuarioException("No existe el usuario.");
+            }
+
+            JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
+            DatosGenerales.setInfoUsuarios(usS.infoUsuario(usuario));
+
+            MenuGeneral menu = new MenuGeneral(usS, mS, eS, deS, seS);
+            menu.setVisible(true);
+            menu.setLocationRelativeTo(null);
+            this.dispose();
+
+        } catch (CamposVaciosException | UsuarioException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
+                    "¡Error!", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
 
     }//GEN-LAST:event_btnIngresarActionPerformed
