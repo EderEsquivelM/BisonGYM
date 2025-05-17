@@ -71,8 +71,8 @@ public class GraficasServices {
         for (Object[] row : results) {
             String fecha = (String) row[0];
             Number pesoNumber = (Number) row[1];
-            double pesoUsado = pesoNumber.doubleValue();
-            lista.add(new DatosGraficaSD(fecha, pesoUsado));
+            double peso= pesoNumber.doubleValue();
+            lista.add(new DatosGraficaSD(fecha, peso));
         }
         return lista;
     }
@@ -89,9 +89,46 @@ public class GraficasServices {
         for (Object[] row : results) {
             String fecha = (String) row[0];
             Number pesoNumber = (Number) row[1];
-            long pesoUsado = pesoNumber.longValue();
-            lista.add(new DatosGraficaSL(fecha, pesoUsado));
+            long pgc = pesoNumber.longValue();
+            lista.add(new DatosGraficaSL(fecha, pgc));
         }
         return lista;
     }
+    
+    public List<DatosGraficaSL> ejerciciosHechosDificultad(Long idUsuario,LocalDate fechaInicio,LocalDate fechaFin){
+        List<Object[]> results = entityManager.createNativeQuery(
+                    "SELECT * FROM sp_dificultad_por_usuario(:idUsuario, :fechaInicio, :fechaFin)")
+                    .setParameter("idUsuario", idUsuario)
+                    .setParameter("fechaInicio", fechaInicio)
+                    .setParameter("fechaFin", fechaFin)
+                    .getResultList();
+        
+        List<DatosGraficaSL> lista = new ArrayList<>();
+        for (Object[] row : results) {
+            String dificultad = (String) row[0];
+            Number pesoNumber = (Number) row[1];
+            long cantEjercicio = pesoNumber.longValue();
+            lista.add(new DatosGraficaSL(dificultad, cantEjercicio));
+        }
+        return lista;
+    }
+    
+    public List<DatosGraficaSL> zonasMEntrenadas(Long idUsuario,LocalDate fechaInicio,LocalDate fechaFin){
+        List<Object[]> results = entityManager.createNativeQuery(
+                    "SELECT * FROM sp_zonas_entrenadas_usuario(:idUsuario, :fechaInicio, :fechaFin)")
+                    .setParameter("idUsuario", idUsuario)
+                    .setParameter("fechaInicio", fechaInicio)
+                    .setParameter("fechaFin", fechaFin)
+                    .getResultList();
+        
+        List<DatosGraficaSL> lista = new ArrayList<>();
+        for (Object[] row : results) {
+            String zona = (String) row[0];
+            Number numZonasEntre = (Number) row[1];
+            long cantZonaEntre = numZonasEntre.longValue();
+            lista.add(new DatosGraficaSL(zona, cantZonaEntre));
+        }
+        return lista;
+    }
+    
 }
