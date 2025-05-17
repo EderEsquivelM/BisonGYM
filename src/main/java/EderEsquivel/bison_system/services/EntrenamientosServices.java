@@ -32,23 +32,4 @@ public class EntrenamientosServices {
         return eR.save(entr);
     }
     
-    @PersistenceContext
-    private EntityManager entityManager;
-    
-    public List<EntrenamientoPorMes> EntrenamientosPorMes(Long idUsuario, LocalDate fechaInicio, LocalDate fechaFin) {
-        List<Object[]> results = entityManager.createNativeQuery("SELECT * FROM sp_entrenamientos_fechas(:id, :fi, :ff)")
-                .setParameter("id", idUsuario)
-                .setParameter("fi", fechaInicio)
-                .setParameter("ff", fechaFin)
-                .getResultList();
-
-        List<EntrenamientoPorMes> lista = new ArrayList<>();
-        for (Object[] row : results) {
-            String mes = (String) row[0];
-            Number totalNumber = (Number) row[1]; 
-            long total = totalNumber.longValue();
-            lista.add(new EntrenamientoPorMes(mes, total));
-        }
-        return lista;
-    }
 }
