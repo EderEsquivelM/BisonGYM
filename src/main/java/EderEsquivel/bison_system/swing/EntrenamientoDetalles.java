@@ -4,6 +4,7 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.DetallesEntrenamiento;
 import EderEsquivel.bison_system.model.Ejercicios;
@@ -69,6 +70,7 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         taObservaciones = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         taDescripcion = new javax.swing.JTextArea();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -84,6 +86,10 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel4.setText("Observaciones:");
 
+        tfNombre.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+
+        sDuracion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+
         btnGuardar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -93,16 +99,21 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         });
 
         taObservaciones.setColumns(20);
+        taObservaciones.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         taObservaciones.setLineWrap(true);
         taObservaciones.setRows(5);
         taObservaciones.setWrapStyleWord(true);
         jScrollPane1.setViewportView(taObservaciones);
 
         taDescripcion.setColumns(20);
+        taDescripcion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         taDescripcion.setLineWrap(true);
         taDescripcion.setRows(5);
         taDescripcion.setWrapStyleWord(true);
         jScrollPane2.setViewportView(taDescripcion);
+
+        jLabel5.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel5.setText("Minutos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -117,7 +128,10 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(sDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5))
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -141,7 +155,9 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sDuracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addGap(10, 10, 10)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -172,32 +188,53 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
-        Integer duracion=(Integer)sDuracion.getValue();
-        String nombre=tfNombre.getText();
-        String descripcion=taDescripcion.getText();
-        String observaciones=taObservaciones.getText();
-        Usuarios us=DatosGenerales.getInfoUsuarios();
-        Entrenamientos nE=new Entrenamientos(us,LocalDate.now(),nombre
-        ,descripcion,duracion,observaciones);
-        nE=eS.nuevoEntrenamiento(nE);
-        
-        DetallesEntrenamiento nDE;
-        for(Ejercicios ej:listaEjerciciosSeleccionados){
-            nDE=deS.nuevoDE(new DetallesEntrenamiento(nE,ej));
-            Integer numS=0;
-            for(SeriesEntrenamiento se:seriesPorEjercicio.get(ej.getNombre())){
-                numS++;
-                if(seS.nuevaSerie(new SeriesEntrenamiento(nDE,numS,se.getRepeticiones(),
-                se.getPeso_usado()))){
-                    JOptionPane.showMessageDialog(this, "Entrenamineto guardado\ncorrectamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                    this.dispose();
-                }   
-                else{
-                    System.out.println("ne we");
+        try {
+            // Verificación de duración (spinner)
+            int duracion = (Integer) sDuracion.getValue();
+            if (duracion <= 0) {
+                throw new CamposVaciosException("La duración debe ser mayor a 0.");
+            }
+
+            // Verificación de conexión
+            if (!DatosGenerales.hayConexion()) {
+                throw new Exception("Sin conexión a internet.");
+            }
+
+            // Recolección de datos
+            String nombre = tfNombre.getText().trim();
+            String descripcion = taDescripcion.getText().trim();
+            String observaciones = taObservaciones.getText().trim();
+            Usuarios us = DatosGenerales.getInfoUsuarios();
+
+            // Crear entrenamiento
+            Entrenamientos nE = new Entrenamientos(us, LocalDate.now(), nombre, descripcion, duracion, observaciones);
+            nE = eS.nuevoEntrenamiento(nE); // guardar en BD
+
+            // Guardar detalles y series
+            for (Ejercicios ej : listaEjerciciosSeleccionados) {
+                DetallesEntrenamiento nDE = deS.nuevoDE(new DetallesEntrenamiento(nE, ej));
+
+                List<SeriesEntrenamiento> series = seriesPorEjercicio.get(ej.getNombre());
+                if (series != null) {
+                    int numS = 0;
+                    for (SeriesEntrenamiento se : series) {
+                        numS++;
+                        SeriesEntrenamiento nuevaSerie = new SeriesEntrenamiento(nDE, numS, se.getRepeticiones(), se.getPeso_usado());
+                        seS.nuevaSerie(nuevaSerie);
+                    }
                 }
             }
+
+            JOptionPane.showMessageDialog(this, "Entrenamiento guardado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+
+        } catch (CamposVaciosException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al guardar el entrenamiento.", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -211,6 +248,7 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
