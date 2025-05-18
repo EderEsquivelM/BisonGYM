@@ -9,6 +9,7 @@ import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.UsuarioException;
 import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
+import EderEsquivel.bison_system.services.GraficasServices;
 import EderEsquivel.bison_system.services.InicioSesionServices;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
@@ -30,15 +31,16 @@ public class InicioSesion extends javax.swing.JFrame {
     private EntrenamientosServices eS;
     private DetallesEntrenamientoServices deS;
     private SeriesEntrenamientoServices seS;
-    
-    public String imagen="/logoSinFondo200x200.png";
-    public ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
+    private GraficasServices gS;
+    private char contrasena;
+    private String imagen="/logoSinFondo200x200.png";
+    private ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
     /**
      * Creates new form InicioSesion
      */
     
     public InicioSesion(UsuariosServices usS,InicioSesionServices isS, MedidasServices mS,EntrenamientosServices eS,
-    DetallesEntrenamientoServices deS,SeriesEntrenamientoServices seS) {        
+    DetallesEntrenamientoServices deS,SeriesEntrenamientoServices seS,GraficasServices gS) {        
         initComponents();
         this.usS=usS;
         this.isS=isS;
@@ -46,6 +48,7 @@ public class InicioSesion extends javax.swing.JFrame {
         this.eS=eS;
         this.deS=deS;
         this.seS=seS;
+        this.gS=gS;
         contrasena=pfContrasena.getEchoChar();
         setResizable(false);
         this.setLocationRelativeTo(null);
@@ -254,7 +257,7 @@ public class InicioSesion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
             DatosGenerales.setInfoUsuarios(usS.infoUsuario(usuario));
 
-            MenuGeneral menu = new MenuGeneral(usS, mS, eS, deS, seS);
+            MenuGeneral menu = new MenuGeneral(usS, mS, eS, deS, seS,gS);
             menu.setVisible(true);
             menu.setLocationRelativeTo(null);
             this.dispose();
@@ -322,7 +325,6 @@ public class InicioSesion extends javax.swing.JFrame {
         });
     }
    
-    private char contrasena;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnRegistrarse;
