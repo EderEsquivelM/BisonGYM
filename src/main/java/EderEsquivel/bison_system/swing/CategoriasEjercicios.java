@@ -4,8 +4,9 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.DatosGenerales;
-import static EderEsquivel.bison_system.model.DatosGenerales.obtenerEjerciciosPorZona;
+import EderEsquivel.bison_system.CamposVaciosException;
+import EderEsquivel.bison_system.DatosGenerales;
+import static EderEsquivel.bison_system.DatosGenerales.obtenerEjerciciosPorZona;
 import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.Musculos;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
@@ -24,13 +25,16 @@ public class CategoriasEjercicios extends javax.swing.JInternalFrame {
     /**
      * Creates new form CategoriasEjercicios
      */
+    
+    public static List<Ejercicios> listaEjercicios= new ArrayList<>();
+    
     public CategoriasEjercicios() {
         initComponents();
+        
         for (ZonasAnatomicas zona : DatosGenerales.zonasAnatomicasMap.values()) {
             cbxZonas.addItem(zona.getNombre_zona());
         }
         cbxZonas.setSelectedIndex(-1);
-        
     }
 
     /**
@@ -110,31 +114,32 @@ public class CategoriasEjercicios extends javax.swing.JInternalFrame {
 
     private void btnVerEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerEjerciciosActionPerformed
         // TODO add your handling code here:
-        int selectedIndex = cbxZonas.getSelectedIndex();
-
-        // Validar que se haya seleccionado una zona
-        if (selectedIndex == -1) {
-            JOptionPane.showMessageDialog(this, "Por favor selecciona una zona anatómica.",
-                    "Zona no seleccionada", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int idZonaSelecionada = selectedIndex + 1;
-        listaEjercicios = DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
-
-        if (!listaEjercicios.isEmpty()) {
+        try{
+            if(cbxZonas.getSelectedIndex()==-1){
+                throw new CamposVaciosException("Selecciona una zona anatomica");
+            }
+            
+            int idZonaSelecionada =cbxZonas.getSelectedIndex()+ 1;
+            listaEjercicios = DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
+            
+            if (!listaEjercicios.isEmpty()) {
             java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
             Ejercicio listEjercicios = new Ejercicio((Frame) ventanaPadre);
             listEjercicios.setLocationRelativeTo(this);
             listEjercicios.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "No hay ejercicios registrados para esta zona.",
-                    "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
-        }
-        
+            }else{
+                throw new Exception("No hay ejercicios registrados para esta zona");
+            }
+        }catch(CamposVaciosException ex){
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!", JOptionPane.WARNING_MESSAGE);
+
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Sin resultados", JOptionPane.INFORMATION_MESSAGE);
+            }
     }//GEN-LAST:event_btnVerEjerciciosActionPerformed
 
-    public static List<Ejercicios> listaEjercicios= new ArrayList<>();
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVerEjercicios;
