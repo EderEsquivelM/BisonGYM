@@ -284,37 +284,36 @@ public class Registro extends javax.swing.JDialog  {
                 throw new Exception("El usuario '"+tfUsername.getText() +"'\nya esta registrado");
             }
             
-            if(DatosGenerales.hayConexion()){
-        
-                Date fechaHoy = new Date();
-                Sexo generoElegido=null;
-                if(cbxGenero.getSelectedIndex()==0){
-                    generoElegido=femenino;
-                }else if(cbxGenero.getSelectedIndex()==1){
-                    generoElegido=masculino;
-                }
-                
-                String password = new String(pfContrasena.getPassword());
-                TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
-
-                Usuarios nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText(),tfCorreo.getText(),
-                        password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,generoElegido,tusuario
-                        ,LocalDate.now());
-                if(usS.nuevoUsuario(nUsuario)){
-                         JOptionPane.showMessageDialog(this, "Usuario registrado");                
-                         tfNombre.setText("");
-                         tfApellido.setText("");
-                         tfUsername.setText("");
-                         tfCorreo.setText("");
-                         dcFechaNacimiento.setDate(null);
-                         cbxGenero.setSelectedIndex(-1);
-                         pfContrasena.setText("");
-                }else{
-                    throw new UsuarioException("Usuario no registrado");
-                }
-            }else{
+            if (!DatosGenerales.hayConexion()) {
                 throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
             }
+
+            Date fechaHoy = new Date();
+            Sexo generoElegido=null;
+            if(cbxGenero.getSelectedIndex()==0){
+                generoElegido=femenino;
+            }else if(cbxGenero.getSelectedIndex()==1){
+                generoElegido=masculino;
+            }
+                
+            String password = new String(pfContrasena.getPassword());
+            TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
+            Usuarios nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText()
+                    ,tfCorreo.getText(),password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,
+                    generoElegido,tusuario,LocalDate.now());
+            if(usS.nuevoUsuario(nUsuario)){
+                JOptionPane.showMessageDialog(this, "Usuario registrado");                
+                tfNombre.setText("");
+                tfApellido.setText("");
+                tfUsername.setText("");
+                tfCorreo.setText("");
+                dcFechaNacimiento.setDate(null);
+                cbxGenero.setSelectedIndex(-1);
+                pfContrasena.setText("");
+            }else{
+                throw new UsuarioException("Usuario no registrado");
+             }
+            
         }catch(CamposVaciosException | UsuarioException ex){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
