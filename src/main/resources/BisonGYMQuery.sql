@@ -23,11 +23,11 @@ CREATE TABLE usuarios (
     password_hash VARCHAR(255) NOT NULL,
     fecha_nacimiento DATE,
     id_sexo INT,
-    id_rol INT DEFAULT 1,
+    id_t_usuario INT DEFAULT 1,
     fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
     activo BOOL,
     FOREIGN KEY (id_sexo) REFERENCES sexo(id_sexo) ON DELETE SET NULL,
-    FOREIGN KEY (id_rol) REFERENCES tipo_usuarios(id_t_usuario)
+    FOREIGN KEY (id_t_usuario) REFERENCES tipo_usuarios(id_t_usuario)
 );
 
 -- Tabla de medidas
@@ -113,4 +113,93 @@ CREATE TABLE series_entrenamiento (
 CREATE VIEW  vw_inicioSesion AS
 SELECT id_usuario,username, password_hash,id_t_usuario
 FROM usuarios;
+
+
+-- Entrenamientos en cierto rango de Fechas
+DELIMITER //
+CREATE PROCEDURE sp_EntrenamientosFechas(IN p_id_usuario LONG, IN p_fecha_inicio DATE, IN p_fecha_fin DATE	)
+BEGIN
+	SELECT DATE_FORMAT(fecha, '%Y-%m') AS mes, COUNT(*) AS total
+	FROM entrenamientos
+	WHERE id_usuario = p_id_usuario
+	AND fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+	GROUP BY mes
+	ORDER BY mes;
+END //
+DELIMITER ;
+
+
+-- Evolucion de peso usado
+DELIMITER //
+CREATE PROCEDURE sp_evolucion_peso_cargado(IN p_id_usuario LONG,IN p_id_ejercicio INT,IN p_fecha_inicio DATE,IN p_fecha_fin DATE)
+BEGIN
+	SELECT e.fecha, se.peso_usado
+	FROM series_entrenamiento se
+	JOIN detalles_entrenamiento de ON se.id_detalle_entrenamiento = de.id_detalle
+	JOIN entrenamientos e ON de.id_entrenamiento = e.id_entrenamiento
+	WHERE e.id_usuario = p_id_usuario
+	AND de.id_ejercicio = p_id_ejercicio
+	AND e.fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+	ORDER BY e.fecha;
+END //
+DELIMITER ;
+
+
+ 
+ 
+ -- Peso y grasa entre ciertas fechas
+ DELIMITER //
+
+CREATE PROCEDURE sp_evolucion_peso(IN p_id_usuario LONG,IN p_fecha_inicio DATE,IN p_fecha_fin DATE)
+BEGIN
+    SELECT fecha, peso
+    FROM medidas
+    WHERE id_usuario = p_id_usuario
+      AND fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+    ORDER BY fecha;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE sp_evolucion_grasa(IN p_id_usuario LONG,IN p_fecha_inicio DATE,IN p_fecha_fin DATE)
+BEGIN
+    SELECT fecha, porcentaje_grasa
+    FROM medidas
+    WHERE id_usuario = p_id_usuario
+      AND fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+    ORDER BY fecha;
+END //
+DELIMITER ;
+ 
+ -- Dificultades de ejecicios
+DELIMITER //
+CREATE PROCEDURE sp_dificultad_por_usuario(IN p_id_usuario LONG,IN p_fecha_inicio DATE,IN p_fecha_fin DATE)
+BEGIN
+    SELECT d.nivel, COUNT(*) AS total
+    FROM entrenamientos e
+    JOIN detalles_entrenamiento de ON e.id_entrenamiento = de.id_entrenamiento
+    JOIN ejercicios ej ON de.id_ejercicio = ej.id_ejercicio
+    JOIN dificultades d ON ej.id_dificultad = d.id_dificultad
+    WHERE e.id_usuario = p_id_usuario
+      AND DATE(e.fecha) BETWEEN p_fecha_inicio AND p_fecha_fin
+    GROUP BY d.nivel;
+END //
+DELIMITER ;
+
+-- Zonas Entrenadas por usuarios 
+DELIMITER //
+CREATE PROCEDURE sp_zonas_entrenadas_usuario(IN p_id_usuario LONG,IN p_fecha_inicio DATE,IN p_fecha_fin DATE)
+BEGIN
+    SELECT za.nombre_zona, COUNT(*) AS frecuencia
+    FROM entrenamientos e
+    JOIN detalles_entrenamiento de ON e.id_entrenamiento = de.id_entrenamiento
+    JOIN ejercicios ej ON de.id_ejercicio = ej.id_ejercicio
+    JOIN musculos m ON ej.id_musculo_principal = m.id_musculo
+    JOIN zonas_anatomicas za ON m.id_zona = za.id_zona
+    WHERE e.id_usuario = p_id_usuario
+      AND DATE(e.fecha) BETWEEN p_fecha_inicio AND p_fecha_fin
+    GROUP BY za.nombre_zona
+    ORDER BY frecuencia DESC;
+END //
+DELIMITER ;
 
