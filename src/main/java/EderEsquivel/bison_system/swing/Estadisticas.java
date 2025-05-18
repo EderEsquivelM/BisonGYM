@@ -7,8 +7,11 @@ package EderEsquivel.bison_system.swing;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSL;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSD;
+import EderEsquivel.bison_system.model.Ejercicios;
+import EderEsquivel.bison_system.model.ZonasAnatomicas;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.GraficasServices;
+import static EderEsquivel.bison_system.swing.CategoriasEjercicios.listaEjercicios;
 import java.awt.Dimension;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ import org.jfree.data.general.DefaultPieDataset;
 public class Estadisticas extends javax.swing.JInternalFrame {
      private GraficasServices gS;
      public ChartPanel chartPanel=new ChartPanel(null);
+     public Ejercicios ejercicioSelect;
     /**
      * Creates new form Perfil
      */
@@ -37,6 +41,12 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         this.gS=gS;
         initComponents();
         this.setResizable(false);
+        for (ZonasAnatomicas zona : DatosGenerales.zonasAnatomicasMap.values()) {
+            cbxCategoria.addItem(zona.getNombre_zona());
+        }
+        cbxCategoria.setSelectedIndex(-1);
+        cbxCategoria.setVisible(false);
+        cbxEjercicio.setVisible(false);
     }
     
     private void mostrarGrafica() {
@@ -249,7 +259,6 @@ public class Estadisticas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCalendar1 = new com.toedter.calendar.JCalendar();
         jPanel1 = new javax.swing.JPanel();
         cbxGraficas = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
@@ -258,6 +267,8 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         btnSG = new javax.swing.JButton();
+        cbxCategoria = new javax.swing.JComboBox<>();
+        cbxEjercicio = new javax.swing.JComboBox<>();
         jpGrafica = new javax.swing.JPanel();
 
         setBackground(java.awt.SystemColor.window);
@@ -272,6 +283,11 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         cbxGraficas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cbxGraficas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenamiento por mes", "Evolucion peso por ejecicio", "Peso de usuario", "Porcentaje de grasa corporal", "Ejercicios hechos por dificultad", "Zonas musculares entrenadas" }));
         cbxGraficas.setSelectedIndex(-1);
+        cbxGraficas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxGraficasActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel1.setText("Selecciona una grafica");
@@ -294,6 +310,20 @@ public class Estadisticas extends javax.swing.JInternalFrame {
             }
         });
 
+        cbxCategoria.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        cbxCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCategoriaActionPerformed(evt);
+            }
+        });
+
+        cbxEjercicio.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        cbxEjercicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxEjercicioActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -301,21 +331,28 @@ public class Estadisticas extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(cbxGraficas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dcFechaI, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(dcFechaF, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(83, 83, 83))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbxEjercicio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(399, 399, 399))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(cbxGraficas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dcFechaI, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(dcFechaF, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(83, 83, 83))))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(275, 275, 275)
+                .addGap(295, 295, 295)
                 .addComponent(btnSG)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,9 +367,13 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                     .addComponent(dcFechaI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(dcFechaF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbxGraficas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxEjercicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSG)
-                .addGap(15, 15, 15))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jpGrafica.setBackground(java.awt.SystemColor.window);
@@ -374,14 +415,52 @@ public class Estadisticas extends javax.swing.JInternalFrame {
             mostrarGrafica();
         
     }//GEN-LAST:event_btnSGActionPerformed
+
+    private void cbxCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCategoriaActionPerformed
+        // TODO add your handling code here:
+        cbxEjercicio.removeAllItems();
+        int idZonaSelecionada=cbxCategoria.getSelectedIndex()+1;
+        listaEjercicios=DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
+        for (Ejercicios ejercicio : listaEjercicios) {
+            cbxEjercicio.addItem(ejercicio.getNombre());
+        }
+        cbxEjercicio.setSelectedIndex(-1);
+        
+    }//GEN-LAST:event_cbxCategoriaActionPerformed
+
+    private void cbxGraficasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxGraficasActionPerformed
+        // TODO add your handling code here:
+        if(cbxGraficas.getSelectedIndex()!=1){
+            cbxCategoria.setVisible(false);
+            cbxEjercicio.setVisible(false);
+            cbxCategoria.setSelectedIndex(-1);
+            cbxEjercicio.setSelectedIndex(-1);
+        }
+        else{
+            cbxCategoria.setVisible(true);
+            cbxEjercicio.setVisible(true);
+
+        }
+    }//GEN-LAST:event_cbxGraficasActionPerformed
+
+    private void cbxEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxEjercicioActionPerformed
+        // TODO add your handling code here:
+        String ejercicioSeleccionado = (String) cbxEjercicio.getSelectedItem();
+
+        for(Ejercicios ej:DatosGenerales.ejerciciosMap.values()){
+            if(ej.getNombre()== ejercicioSeleccionado)
+                ejercicioSelect=ej;
+        }
+    }//GEN-LAST:event_cbxEjercicioActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSG;
+    private javax.swing.JComboBox<String> cbxCategoria;
+    private javax.swing.JComboBox<String> cbxEjercicio;
     private javax.swing.JComboBox<String> cbxGraficas;
     private com.toedter.calendar.JDateChooser dcFechaF;
     private com.toedter.calendar.JDateChooser dcFechaI;
-    private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
