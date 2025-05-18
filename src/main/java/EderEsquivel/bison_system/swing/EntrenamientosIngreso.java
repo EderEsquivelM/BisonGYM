@@ -4,6 +4,7 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.DetallesEntrenamiento;
 import EderEsquivel.bison_system.model.Ejercicios;
@@ -228,95 +229,132 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
 
     private void btnSCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSCActionPerformed
         // TODO add your handling code here:
-        cbxEjercicio.removeAllItems();
-        int idZonaSelecionada=cbxCategoria.getSelectedIndex()+1;
-        listaEjercicios=DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
-        for (Ejercicios ejercicio : listaEjercicios) {
-            cbxEjercicio.addItem(ejercicio.getNombre());
+        try{
+            if(cbxCategoria.getSelectedIndex()==-1){
+                throw new CamposVaciosException("Debes seleccionar un grupo muscular");
+            }else{
+                cbxEjercicio.removeAllItems();
+                int idZonaSelecionada=cbxCategoria.getSelectedIndex()+1;
+                listaEjercicios=DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
+                for (Ejercicios ejercicio : listaEjercicios) {
+                    cbxEjercicio.addItem(ejercicio.getNombre());
+                }
+                cbxEjercicio.setSelectedIndex(-1);
+            }  
+        }catch(CamposVaciosException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"¡Error!", 
+                    JOptionPane.WARNING_MESSAGE);
         }
-        cbxEjercicio.setSelectedIndex(-1);
+        
     }//GEN-LAST:event_btnSCActionPerformed
 
     private void btnSEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSEActionPerformed
         // TODO add your handling code here:
-        String ejercicioSeleccionado = (String) cbxEjercicio.getSelectedItem();
-
-        // Verificar si ya fue agregado
-        boolean yaAgregado = false;
-        for (Ejercicios ej : listaEjerciciosSeleccionados) {
-            if (ej.getNombre().equals(ejercicioSeleccionado)) {
-                yaAgregado = true;
-                break;
+        try {   
+            if(cbxEjercicio.getSelectedIndex() == -1){
+                throw new CamposVaciosException("Debes seleccionar un ejercicio");
             }
-        }
 
-        if (yaAgregado) {
-            JOptionPane.showMessageDialog(this, "Este ejercicio ya ha sido agregado.",
-                    "Ejercicio duplicado", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+            String ejercicioSeleccionado=(String) cbxEjercicio.getSelectedItem();
 
-        // Pedir número de series
-        String input = JOptionPane.showInputDialog(this, "Ingrese el número de series para el ejercicio " + ejercicioSeleccionado);
-        if (input == null || input.trim().isEmpty()) return; // Cancelado o vacío
-
-        int series;
-        try {
-            series = Integer.parseInt(input.trim());
-            if (series <= 0) throw new NumberFormatException();
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Por favor ingrese un número válido de series.",
-                    "Entrada inválida", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Buscar y agregar el ejercicio correspondiente
-        for (Ejercicios ej : DatosGenerales.ejerciciosMap.values()) {
-            if (ej.getNombre().equals(ejercicioSeleccionado)) {
-                listaEjerciciosSeleccionados.add(ej);
-                break;
+            // Verificar si ya fue agregado
+            for (Ejercicios ej : listaEjerciciosSeleccionados) {
+                if(ej.getNombre().equals(ejercicioSeleccionado)){
+                    JOptionPane.showMessageDialog(this,
+                            "Este ejercicio ya ha sido agregado.",
+                            "Ejercicio duplicado",
+                            JOptionPane.WARNING_MESSAGE);
+                    return; // Salir del método si ya existe
+                }
             }
-        }
 
-        // Agregar a la tabla
-        DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
-        model.addRow(new Object[]{ejercicioSeleccionado, series});
+            // Pedir número de series
+            String input = JOptionPane.showInputDialog(this,
+                    "Ingrese el número de series para el ejercicio " + ejercicioSeleccionado);
+            if (input == null || input.trim().isEmpty()) return; // Cancelado o vacío
+
+            int series;
+            try {
+                series = Integer.parseInt(input.trim());
+                if (series <= 0) throw new NumberFormatException();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Por favor ingrese un número válido de series.",
+                        "Entrada inválida",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Buscar y agregar el ejercicio correspondiente
+            for (Ejercicios ej : DatosGenerales.ejerciciosMap.values()) {
+                if (ej.getNombre().equals(ejercicioSeleccionado)) {
+                    listaEjerciciosSeleccionados.add(ej);
+                    break;
+                }
+            }
+
+            // Agregar a la tabla
+            DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
+            model.addRow(new Object[]{ejercicioSeleccionado, series});
+
+        } catch (CamposVaciosException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "¡Error!",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnSEActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        int filaSeleccionada = TEjerciciosS.getSelectedRow();
+        try {
+            int filaSeleccionada = TEjerciciosS.getSelectedRow();
 
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona una fila para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
-        String nombreEjercicio = (String) model.getValueAt(filaSeleccionada, 0);
-
-        // Buscar y eliminar con for normal
-        for (int i = 0; i < listaEjerciciosSeleccionados.size(); i++) {
-            if (listaEjerciciosSeleccionados.get(i).getNombre().equals(nombreEjercicio)) {
-                listaEjerciciosSeleccionados.remove(i);
-                break;
+            // Validación con excepción personalizada
+            if (filaSeleccionada == -1) {
+                throw new CamposVaciosException("Selecciona una fila para eliminar.");
             }
-        }
 
-        // Eliminar del mapa
-        if (seriesPorEjercicio.containsKey(nombreEjercicio)) {
+            DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
+            String nombreEjercicio = (String) model.getValueAt(filaSeleccionada, 0);
+
+            // Eliminar de la lista
+            for (int i = 0; i < listaEjerciciosSeleccionados.size(); i++) {
+                if (listaEjerciciosSeleccionados.get(i).getNombre().equals(nombreEjercicio)) {
+                    listaEjerciciosSeleccionados.remove(i);
+                    break;
+                }
+            }
+
+            // Eliminar del mapa
             seriesPorEjercicio.remove(nombreEjercicio);
-        }
 
-        // Eliminar de la tabla
-        model.removeRow(filaSeleccionada);
+            // Eliminar de la tabla
+            model.removeRow(filaSeleccionada);
+
+        } catch (CamposVaciosException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrió un error inesperado al intentar eliminar el ejercicio.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
-        int filaSeleccionada = TEjerciciosS.getSelectedRow();
+        try {
+            int filaSeleccionada = TEjerciciosS.getSelectedRow();
 
-        if (filaSeleccionada != -1) {
+            if (filaSeleccionada == -1) {
+                throw new CamposVaciosException("Selecciona una fila para modificar.");
+            }
+
             DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
 
             // Pedir nuevo número de series
@@ -326,80 +364,135 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             int nuevasSeries;
             try {
                 nuevasSeries = Integer.parseInt(input.trim());
-                if (nuevasSeries <= 0) throw new NumberFormatException();
+                if (nuevasSeries <= 0) {
+                    throw new NumberFormatException();
+                }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Número inválido.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Número inválido. Ingrese un entero mayor a cero.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Actualizar valor en la tabla
-            model.setValueAt(nuevasSeries, filaSeleccionada, 1); // columna 1 = Series
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecciona una fila para modificar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
+            // Actualizar el valor en la tabla
+            model.setValueAt(nuevasSeries, filaSeleccionada, 1); // Columna 1 = Series
 
+        } catch (CamposVaciosException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrió un error inesperado al modificar la fila.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
 
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnDEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDEActionPerformed
         // TODO add your handling code here:
-        int filaSeleccionada = TEjerciciosS.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona un ejercicio de la tabla.", "Advertencia", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        try {
+            int filaSeleccionada = TEjerciciosS.getSelectedRow();
 
-        String nombreEjercicio = (String) TEjerciciosS.getValueAt(filaSeleccionada, 0);
-        int series = (Integer) TEjerciciosS.getValueAt(filaSeleccionada, 1);
-
-        List<SeriesEntrenamiento> detallesSeries = new ArrayList<>();
-
-        for (int i = 0; i < series; i++) {
-            String repStr = JOptionPane.showInputDialog(this, "Serie " + (i + 1) + " - Repeticiones:");
-            if (repStr == null) return;
-
-            String pesoStr = JOptionPane.showInputDialog(this, "Serie " + (i + 1) + " - Peso (kg):");
-            if (pesoStr == null) return;
-
-            try {
-                int reps = Integer.parseInt(repStr.trim());
-                double peso = Double.parseDouble(pesoStr.trim());
-                detallesSeries.add(new SeriesEntrenamiento(null,i+1,reps, peso));
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Entrada inválida. Intenta de nuevo.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+            if (filaSeleccionada == -1) {
+                throw new CamposVaciosException("Selecciona un ejercicio de la tabla.");
             }
+
+            String nombreEjercicio = (String) TEjerciciosS.getValueAt(filaSeleccionada, 0);
+            int series = (Integer) TEjerciciosS.getValueAt(filaSeleccionada, 1);
+
+            List<SeriesEntrenamiento> detallesSeries = new ArrayList<>();
+
+            for (int i = 0; i < series; i++) {
+                String repStr = JOptionPane.showInputDialog(this, "Serie " + (i + 1) + " - Repeticiones:");
+                if (repStr == null || repStr.trim().isEmpty()) return;
+
+                String pesoStr = JOptionPane.showInputDialog(this, "Serie " + (i + 1) + " - Peso (kg):");
+                if (pesoStr == null || pesoStr.trim().isEmpty()) return;
+
+                try {
+                    int reps = Integer.parseInt(repStr.trim());
+                    double peso = Double.parseDouble(pesoStr.trim());
+
+                    if (reps <= 0 || peso <= 0) {
+                        throw new NumberFormatException();
+                    }
+
+                    detallesSeries.add(new SeriesEntrenamiento(null, i + 1, reps, peso));
+
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(this,
+                            "Entrada inválida. Asegúrate de ingresar números válidos para repeticiones y peso.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            // Guardar en el mapa
+            seriesPorEjercicio.put(nombreEjercicio, detallesSeries);
+
+            // Confirmación
+            JOptionPane.showMessageDialog(this,
+                    "Series guardadas correctamente para el ejercicio: " + nombreEjercicio,
+                    "Confirmación",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (CamposVaciosException ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrió un error al guardar las series.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
-
-        // Guardar en el mapa
-        seriesPorEjercicio.put(nombreEjercicio, detallesSeries);
-
-        // Confirmación
-        JOptionPane.showMessageDialog(this, "Series guardadas para el ejercicio: " + nombreEjercicio);
     }//GEN-LAST:event_btnDEActionPerformed
 
     private void btnCDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCDActionPerformed
         // TODO add your handling code here:
-         if (verificarSeries(seriesPorEjercicio)&& !listaEjerciciosSeleccionados.isEmpty() ) {
+        try {
+            if (listaEjerciciosSeleccionados.isEmpty()) {
+                throw new CamposVaciosException("No hay ejercicios seleccionados.");
+            }
+
+            if (!verificarSeries(seriesPorEjercicio)) {
+            }
+
+            if (!DatosGenerales.hayConexion()) {
+                throw new Exception("Sin conexión a internet.");
+            }
+
             JOptionPane.showMessageDialog(this, "Series guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
             java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
-            EntrenamientoDetalles eD = new EntrenamientoDetalles((Frame) ventanaPadre,eS,deS,seS,
-                     listaEjerciciosSeleccionados,seriesPorEjercicio);
+            EntrenamientoDetalles eD = new EntrenamientoDetalles((Frame) ventanaPadre, eS, deS, seS,
+                    listaEjerciciosSeleccionados, seriesPorEjercicio);
             eD.setLocationRelativeTo(this);
             eD.setVisible(true);
+
+            // Resetear interfaz
             cbxCategoria.setSelectedIndex(-1);
             cbxEjercicio.setSelectedIndex(-1);
             DefaultTableModel model = (DefaultTableModel) TEjerciciosS.getModel();
-            model.setRowCount(0); 
+            model.setRowCount(0);
             listaEjerciciosSeleccionados.clear();
             seriesPorEjercicio.clear();
-             
-        } else {
-             if(listaEjerciciosSeleccionados.isEmpty())
-                JOptionPane.showMessageDialog(this, "No hay ejercicios seleccionados", "Error", JOptionPane.ERROR_MESSAGE);
-           
+
+        } catch (CamposVaciosException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            // Muestra el mensaje real del error
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
         }
-        
     }//GEN-LAST:event_btnCDActionPerformed
     
     
