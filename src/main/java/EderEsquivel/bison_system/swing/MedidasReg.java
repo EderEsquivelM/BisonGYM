@@ -4,7 +4,8 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.CamposVaciosException;
+import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.model.Medidas;
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ public class MedidasReg extends javax.swing.JInternalFrame{
     public MedidasReg(MedidasServices mS) {
         this.mS=mS;
         initComponents();
+        taIMC.setEditable(false);
         this.setResizable(false);
         if(mS.buscarMedidaUsuario(DatosGenerales.getInfoUsuarios())==null){
             pesoS= JOptionPane.showInputDialog(this,"Ingresa tu peso");
@@ -130,6 +132,15 @@ public class MedidasReg extends javax.swing.JInternalFrame{
         jLabel4.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel4.setText("Porcentaje de grasa:");
 
+        tfPeso.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfPeso.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        tfAltura.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfAltura.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        tfPG.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfPG.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         btnEditar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -153,7 +164,9 @@ public class MedidasReg extends javax.swing.JInternalFrame{
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         taIMC.setColumns(20);
+        taIMC.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         taIMC.setRows(5);
+        taIMC.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane1.setViewportView(taIMC);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -171,18 +184,18 @@ public class MedidasReg extends javax.swing.JInternalFrame{
                                 .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
                             .addComponent(jLabel5))
                         .addGap(38, 38, 38)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfPG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfAltura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfPeso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblIMC)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
+                            .addComponent(tfPeso)
+                            .addComponent(tfAltura)
+                            .addComponent(tfPG)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(95, 95, 95)
                         .addComponent(btnEditar)
                         .addGap(53, 53, 53)
                         .addComponent(btnAplicar)))
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addContainerGap(100, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -215,7 +228,7 @@ public class MedidasReg extends javax.swing.JInternalFrame{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
                     .addComponent(btnAplicar))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -239,16 +252,40 @@ public class MedidasReg extends javax.swing.JInternalFrame{
 
     private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
         // TODO add your handling code here:
-        double peso = Double.parseDouble(tfPeso.getText());
-        double altura = Double.parseDouble(tfAltura.getText());
-        int porcentajeGrasa = Integer.parseInt(tfPG.getText());
-        
-        Medidas nuevaMedida = new Medidas(DatosGenerales.getInfoUsuarios(), LocalDate.now(), peso, altura, porcentajeGrasa);
-        nuevaMedida = mS.actualizarMedida(nuevaMedida);
-        
-        mostrarInformacion(nuevaMedida);
+        try {
+            // Intentar parsear valores y validar que no sean negativos
+            double peso = Double.parseDouble(tfPeso.getText());
+            double altura = Double.parseDouble(tfAltura.getText());
+            int porcentajeGrasa = Integer.parseInt(tfPG.getText());
 
-        editable(false);
+            if (peso < 0) {
+                throw new CamposVaciosException("El peso no puede ser negativo.");
+            }
+            if (altura < 0) {
+                throw new CamposVaciosException("La altura no puede ser negativa.");
+            }
+            if (porcentajeGrasa < 0) {
+                throw new CamposVaciosException("El porcentaje de grasa no puede ser negativo.");
+            }
+            if(!DatosGenerales.hayConexion()){
+                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
+               
+            }
+            // Si pasa la validación, crear la medida y actualizar
+            Medidas nuevaMedida = new Medidas(DatosGenerales.getInfoUsuarios(), LocalDate.now(), peso, altura, porcentajeGrasa);
+            nuevaMedida = mS.actualizarMedida(nuevaMedida);
+
+            mostrarInformacion(nuevaMedida);
+            editable(false);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor ingresa valores numéricos válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (CamposVaciosException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
     }//GEN-LAST:event_btnAplicarActionPerformed
 
 
