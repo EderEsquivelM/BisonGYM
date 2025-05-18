@@ -4,12 +4,14 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -217,24 +219,73 @@ public class Informacion extends javax.swing.JInternalFrame {
 
     private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
         // TODO add your handling code here:
-        Usuarios us=DatosGenerales.getInfoUsuarios();
-        us.setNombre(tfNombre.getText());
-        us.setApellido(tfApellido.getText());
-        us.setCorreo(tfCorreo.getText());
-        us.setFecha_nacimiento(DatosGenerales.cambioFecha(dcFechaNac.getDate()));
-        us.setUsername(tfUsername.getText());
-        String password=new String(pfContrasena.getPassword());
-        us.setPassword_hash(password);
+        try {
         
-        DatosGenerales.setInfoUsuarios(usS.actualizarUsuario(us));
-        if(DatosGenerales.getInfoUsuarios()!=null){
-            System.out.println("Bien");
-            editable(false);
-            mostrarInfo();
-        }else{
-            System.out.println("Mal");
-        }
-        
+            // Validar campos obligatorios
+            if(dcFechaNac.getDate() == null || tfNombre.getText().trim().isEmpty() || tfApellido.getText().trim().isEmpty()
+               || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()|| pfContrasena.getPassword().length==0){
+                throw new CamposVaciosException("Debes llenar todos los campos");
+            }
+
+            // Validar longitud de username
+            if(tfUsername.getText().length() < 5){
+                throw new CamposVaciosException("La longitud del username debe ser mínimo 5 caracteres");
+            }
+
+            // Validar longitud de correo (parece que querías validar contraseña, aquí corrijo para correo)
+            if(tfCorreo.getText().length() < 8){
+               throw new CamposVaciosException("La longitud del correo debe ser mínimo 8 caracteres");
+            }
+            
+            if (!DatosGenerales.hayConexion()) {
+                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
+            }
+            
+            Usuarios usActual = DatosGenerales.getInfoUsuarios();
+
+            // Verificar que el correo no esté registrado por otro usuario
+            if(usS.correoVerificar(tfCorreo.getText().trim())) {
+                // Aquí asumimos que correoVerificar solo dice si existe en la BD
+                // Si el correo es distinto al actual, entonces error
+                if(!tfCorreo.getText().trim().equalsIgnoreCase(usActual.getCorreo())) {
+                    throw new Exception("El correo '"+ tfCorreo.getText() +"' ya está registrado");
+                }
+            }
+
+            // Verificar que el username no esté registrado por otro usuario
+            if(usS.usernameVerificar(tfUsername.getText().trim())) {
+                if(!tfUsername.getText().trim().equalsIgnoreCase(usActual.getUsername())) {
+                    throw new Exception("El usuario '"+ tfUsername.getText() +"' ya está registrado");
+                }
+            }
+
+            // Actualizamos el objeto usuario con los nuevos datos
+            usActual.setNombre(tfNombre.getText());
+            usActual.setApellido(tfApellido.getText());
+            usActual.setCorreo(tfCorreo.getText().trim());
+            usActual.setFecha_nacimiento(DatosGenerales.cambioFecha(dcFechaNac.getDate()));
+            usActual.setUsername(tfUsername.getText().trim());
+            String password = new String(pfContrasena.getPassword());
+            usActual.setPassword_hash(password);
+
+            if(usS.actualizarUsuario(usActual)){
+                JOptionPane.showMessageDialog(this, "Usuario actualizado", "Actualizado",
+                           JOptionPane.INFORMATION_MESSAGE);
+                editable(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar el usuario", "Error",
+                           JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch(CamposVaciosException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
+                    "¡Error!", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } 
         
     }//GEN-LAST:event_btnAplicarActionPerformed
 
