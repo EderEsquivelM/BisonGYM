@@ -34,24 +34,21 @@ public class UsuariosServices {
         return usuariosRep.findByUsername(username);
        
     }
-   public Usuarios actualizarUsuario(Usuarios us) {
-        try {
-            return usuariosRep.findById(us.getId())
-                .map(usuarioExistente -> {
-                    usuarioExistente.setNombre(us.getNombre());
-                    usuarioExistente.setApellido(us.getApellido());
-                    usuarioExistente.setFecha_nacimiento(us.getFecha_nacimiento());
-                    usuarioExistente.setUsername(us.getUsername());
-                    usuarioExistente.setCorreo(us.getCorreo());
-                    usuarioExistente.setPassword_hash(us.getPasswordHash());
-                    return usuariosRep.save(usuarioExistente); 
-                })
-                .orElse(null);
-        } catch (Exception e) {
-            System.out.println("Error al actualizar el usuario: " + e.getMessage());
-            return null;
-        }
-    }
+    public boolean actualizarUsuario(Usuarios us) {
+        return usuariosRep.findById(us.getId())
+            .map(usuarioExistente -> {
+                usuarioExistente.setNombre(us.getNombre());
+                usuarioExistente.setApellido(us.getApellido());
+                usuarioExistente.setFecha_nacimiento(us.getFecha_nacimiento());
+                usuarioExistente.setUsername(us.getUsername());
+                usuarioExistente.setCorreo(us.getCorreo());
+                usuarioExistente.setPassword_hash(us.getPasswordHash());
+                usuariosRep.save(usuarioExistente);
+                return true;
+            })
+            .orElse(false);
+   }
+
 
     public boolean usernameVerificar(String username){
         return usuariosRep.existsByUsername(username);
