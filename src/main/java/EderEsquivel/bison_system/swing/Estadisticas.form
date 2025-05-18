@@ -130,7 +130,7 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="6">
                 <StringItem index="0" value="Entrenamiento por mes"/>
-                <StringItem index="1" value="Evolucion peso por ejecicio"/>
+                <StringItem index="1" value="Evolucion peso por ejercicio"/>
                 <StringItem index="2" value="Peso de usuario"/>
                 <StringItem index="3" value="Porcentaje de grasa corporal"/>
                 <StringItem index="4" value="Ejercicios hechos por dificultad"/>

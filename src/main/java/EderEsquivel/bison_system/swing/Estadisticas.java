@@ -4,18 +4,17 @@
  */
 package EderEsquivel.bison_system.swing;
 
+import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSL;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSD;
 import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
-import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.GraficasServices;
 import static EderEsquivel.bison_system.swing.CategoriasEjercicios.listaEjercicios;
-import java.awt.Dimension;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -47,6 +46,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         cbxCategoria.setSelectedIndex(-1);
         cbxCategoria.setVisible(false);
         cbxEjercicio.setVisible(false);
+        cbxGraficas.setSelectedIndex(-1);
     }
     
     private void mostrarGrafica() {
@@ -89,11 +89,11 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 
             case 1:
                 List<DatosGraficaSD> listPeso=new ArrayList<>();
+                Integer idEjercicio=obtenerIDEjercicio(cbxEjercicio.getSelectedItem().toString());
                 listPeso=gS.evolucionPesoCargado(DatosGenerales.getInfoUsuarios().getId(), 
-                        DatosGenerales.ejerciciosMap.get(5).getId_ejericio()
-                                , DatosGenerales.cambioFecha(dcFechaI.getDate()),
+                        idEjercicio, DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate()));
-                if (listPeso.isEmpty()) {
+                if (listPeso.size()<=1) {
                     JOptionPane.showMessageDialog(this, "No hay datos",
                         "¡Error!", JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -123,7 +123,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 listPesoU=gS.evolucionPesoUsuario(DatosGenerales.getInfoUsuarios().getId(),
                   DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate()));
-                if (listPesoU.isEmpty()) {
+                if (listPesoU.size()<=1) {
                     JOptionPane.showMessageDialog(this, "No hay datos",
                         "¡Error!", JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -153,7 +153,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 listPGC=gS.evolucionPGC(DatosGenerales.getInfoUsuarios().getId(),
                   DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate()));
-                if (listPGC.isEmpty()) {
+                if (listPGC.size()<=1) {
                     JOptionPane.showMessageDialog(this, "No hay datos",
                         "¡Error!", JOptionPane.ERROR_MESSAGE);
                 } else {
@@ -281,7 +281,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         jPanel1.setBackground(java.awt.SystemColor.window);
 
         cbxGraficas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        cbxGraficas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenamiento por mes", "Evolucion peso por ejecicio", "Peso de usuario", "Porcentaje de grasa corporal", "Ejercicios hechos por dificultad", "Zonas musculares entrenadas" }));
+        cbxGraficas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenamiento por mes", "Evolucion peso por ejercicio", "Peso de usuario", "Porcentaje de grasa corporal", "Ejercicios hechos por dificultad", "Zonas musculares entrenadas" }));
         cbxGraficas.setSelectedIndex(-1);
         cbxGraficas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -411,8 +411,37 @@ public class Estadisticas extends javax.swing.JInternalFrame {
 
     private void btnSGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSGActionPerformed
         // TODO add your handling code here:
-        
-            mostrarGrafica();
+        try{   
+            if(!DatosGenerales.hayConexion()){
+                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
+            }
+            if(cbxGraficas.getSelectedIndex()==-1){
+                throw new CamposVaciosException("Selecciona una tipo de grafica");
+            }
+            if(dcFechaI.getDate()==null || dcFechaF.getDate()==null){
+                throw new CamposVaciosException("Selecciona las fechas");
+            }
+            
+            if(dcFechaF.getDate().before(dcFechaI.getDate())){
+                throw new Exception("La fecha de fin debe ser despues de la fecha de inicio\nSelecciona de nuevo");
+            }
+            
+             if(cbxGraficas.getSelectedIndex()==1){
+                 if(cbxCategoria.getSelectedIndex()==-1 || cbxEjercicio.getSelectedIndex()==-1){
+                     throw new CamposVaciosException("Selecciona una ejercicio");
+                 }
+             } 
+             
+             mostrarGrafica();
+        }catch(CamposVaciosException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
+                    JOptionPane.ERROR_MESSAGE);
+
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+           
         
     }//GEN-LAST:event_btnSGActionPerformed
 
@@ -453,6 +482,15 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_cbxEjercicioActionPerformed
     
+    public static Integer obtenerIDEjercicio(String nombreEjercicio) {
+    for (Map.Entry<Integer, Ejercicios> entry : DatosGenerales.ejerciciosMap.entrySet()) {
+        Ejercicios ejercicio = entry.getValue();
+        if (ejercicio.getNombre().equalsIgnoreCase(nombreEjercicio)) {
+            return entry.getKey();
+        }
+    }
+    return null; 
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSG;
