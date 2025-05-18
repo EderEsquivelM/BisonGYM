@@ -53,6 +53,13 @@ public class UsuariosServices {
         }
     }
 
+    public boolean usernameVerificar(String username){
+        return usuariosRep.existsByUsername(username);
+           
+    }
     
+    public boolean correoVerificar(String correo){
+        return usuariosRep.existsByCorreo(correo);
+    }
 
 }
