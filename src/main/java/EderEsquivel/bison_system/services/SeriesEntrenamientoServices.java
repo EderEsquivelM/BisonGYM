@@ -24,13 +24,8 @@ public class SeriesEntrenamientoServices {
         this.seR = seR;
     }
     
-    public boolean nuevaSerie(SeriesEntrenamiento se){
-        try{
+    public void nuevaSerie(SeriesEntrenamiento se){
             seR.save(se); 
-            return true;  
-        }catch(Exception e){
-            return false;
-        }
     }
     
     
