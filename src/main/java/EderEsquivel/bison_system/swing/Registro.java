@@ -4,7 +4,9 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.DatosGenerales;
+import EderEsquivel.bison_system.CamposVaciosException;
+import EderEsquivel.bison_system.DatosGenerales;
+import EderEsquivel.bison_system.UsuarioException;
 import EderEsquivel.bison_system.model.Sexo;
 import EderEsquivel.bison_system.model.TipoUsuario;
 import EderEsquivel.bison_system.model.Usuarios;
@@ -23,6 +25,10 @@ public class Registro extends javax.swing.JDialog  {
     /**
      * Creates new form Registro
      */
+    private UsuariosServices usS;
+    private char contrasena;
+    private Sexo femenino=new Sexo(1,"femenino");
+    private Sexo masculino=new Sexo(2,"masculino");
     
     public Registro(java.awt.Frame parent,UsuariosServices usS) {
         super(parent, "Registro", true);
@@ -250,19 +256,34 @@ public class Registro extends javax.swing.JDialog  {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-        if(dcFechaNacimiento.getDate() == null || tfNombre.getText().trim().isEmpty() || tfApellido.getText().trim().isEmpty()
-           || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()||cbxGenero.getSelectedIndex()==-1
-           || pfContrasena.getPassword().length==0){
+        try{
+            if(dcFechaNacimiento.getDate() == null || tfNombre.getText().trim().isEmpty() || tfApellido.getText().trim().isEmpty()
+               || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()||cbxGenero.getSelectedIndex()==-1
+               || pfContrasena.getPassword().length==0){
+
+                throw new CamposVaciosException("Debes llenar todos los campos");
+                
+            }
+            if(!correoValido(tfCorreo.getText().trim())){
+                   throw new CamposVaciosException("La dirección de correo electrónico no es válida.");
+            }
             
-            JOptionPane.showMessageDialog(null, "Debes llenar todos los campos",
-                        "¡Error!", JOptionPane.ERROR_MESSAGE);
+            if(tfUsername.getText().length()<5){
+                throw new CamposVaciosException("La longitud del username debe ser\nminimo 5 de caracteres");
+            }
             
+            if(tfCorreo.getText().length()<8){
+               throw new CamposVaciosException("La longitud del la contraseña debe ser\nminimo 8 de caracteres");
+            }
             
-        }else if(!correoValido(tfCorreo.getText().trim())){
-               JOptionPane.showMessageDialog(null, "El correo ingresado no es válido.",
-        "¡Error!", JOptionPane.ERROR_MESSAGE);
-               
-        }else{
+            if(usS.correoVerificar(tfCorreo.getText().trim())){
+                throw new Exception("El correo '"+ tfCorreo.getText()+"'\nya esta registrado");
+            }
+            
+            if(usS.usernameVerificar(tfUsername.getText().trim())){
+                throw new Exception("El usuario '"+tfUsername.getText() +"'\nya esta registrado");
+            }
+            
             if(DatosGenerales.hayConexion()){
         
                 Date fechaHoy = new Date();
@@ -271,20 +292,15 @@ public class Registro extends javax.swing.JDialog  {
                     generoElegido=femenino;
                 }else if(cbxGenero.getSelectedIndex()==1){
                     generoElegido=masculino;
-                }else{
-
                 }
-
+                
                 String password = new String(pfContrasena.getPassword());
                 TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
 
-                Usuarios nUsuario=null;
-                nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText(),tfCorreo.getText(),
+                Usuarios nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText(),tfCorreo.getText(),
                         password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,generoElegido,tusuario
                         ,LocalDate.now());
-
-                try{
-                    if(usS.nuevoUsuario(nUsuario)){
+                if(usS.nuevoUsuario(nUsuario)){
                          JOptionPane.showMessageDialog(this, "Usuario registrado");                
                          tfNombre.setText("");
                          tfApellido.setText("");
@@ -293,23 +309,21 @@ public class Registro extends javax.swing.JDialog  {
                          dcFechaNacimiento.setDate(null);
                          cbxGenero.setSelectedIndex(-1);
                          pfContrasena.setText("");
-                     }
-                     else{
-                         JOptionPane.showMessageDialog(null, "¡Error al registrar!","¡Error!"
-                                 , JOptionPane.ERROR_MESSAGE);
-                     }
-               }catch(Exception ex){
-                   JOptionPane.showMessageDialog(null,
-                            "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
-                            "¡Error!", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-               }
+                }else{
+                    throw new UsuarioException("Usuario no registrado");
+                }
             }else{
-                JOptionPane.showMessageDialog(null, "No hay conexion a internet\n"
-                        + "Intente conectarse a una red y vuelva a intentar",
-                            "¡Error!", JOptionPane.ERROR_MESSAGE);
+                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
             }
-        }
+        }catch(CamposVaciosException | UsuarioException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
+                    "¡Error!", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }         
+        
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void chbxMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbxMostrarActionPerformed
@@ -327,11 +341,7 @@ public class Registro extends javax.swing.JDialog  {
     }
 
     
-    private UsuariosServices usS;
-        
-    private char contrasena;
-    Sexo femenino=new Sexo(1,"femenino");
-    Sexo masculino=new Sexo(2,"masculino");
+    
     
     /**
      * @param args the command line arguments
