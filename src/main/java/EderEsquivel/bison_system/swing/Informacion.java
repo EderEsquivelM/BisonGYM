@@ -30,6 +30,16 @@ public class Informacion extends javax.swing.JInternalFrame {
         mostrarInfo();
         editable(false);
         contrasena=pfContrasena.getEchoChar();
+        if(DatosGenerales.getInfoUsuarios().getTipoUsuario().getId_t_usuario()!=1){
+            dcFechaNac.setVisible(false);
+            jLabel4.setVisible(false);
+            jLabel2.setVisible(false);
+            jLabel3.setVisible(false);
+            jLabel6.setVisible(false);
+            tfNombre.setVisible(false);
+            tfApellido.setVisible(false);
+            tfCorreo.setVisible(false);
+        }
     }
 
     /**
@@ -67,11 +77,15 @@ public class Informacion extends javax.swing.JInternalFrame {
         jPanel1.setBackground(java.awt.SystemColor.window);
 
         tfNombre.setEditable(false);
+        tfNombre.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel2.setText("Nombre:");
 
         tfApellido.setEditable(false);
+        tfApellido.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfApellido.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel3.setText("Apellido:");
@@ -84,8 +98,12 @@ public class Informacion extends javax.swing.JInternalFrame {
         jLabel5.setText("Información");
 
         tfCorreo.setEditable(false);
+        tfCorreo.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfCorreo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         tfUsername.setEditable(false);
+        tfUsername.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfUsername.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel6.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel6.setText("Correo:");
@@ -93,12 +111,16 @@ public class Informacion extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel7.setText("Username:");
 
+        dcFechaNac.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         dcFechaNac.setDateFormatString("yyyy-MM-dd");
 
         jLabel8.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel8.setText("Conteraseña:");
 
-        chbxMostrar.setFont(new java.awt.Font("Verdana", 0, 10)); // NOI18N
+        pfContrasena.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        pfContrasena.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        chbxMostrar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         chbxMostrar.setText("Mostrar Contraseña");
         chbxMostrar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         chbxMostrar.addActionListener(new java.awt.event.ActionListener() {
@@ -206,7 +228,7 @@ public class Informacion extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
