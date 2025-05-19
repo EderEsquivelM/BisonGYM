@@ -264,7 +264,7 @@ public class Registro extends javax.swing.JDialog  {
                 throw new CamposVaciosException("Debes llenar todos los campos");
                 
             }
-            if(!correoValido(tfCorreo.getText().trim())){
+            if(!DatosGenerales.correoValido(tfCorreo.getText().trim())){
                    throw new CamposVaciosException("La dirección de correo electrónico no es válida.");
             }
             
@@ -334,10 +334,7 @@ public class Registro extends javax.swing.JDialog  {
         }
     }//GEN-LAST:event_chbxMostrarActionPerformed
     
-    public boolean correoValido(String correo) {
-        String regex = "^[\\w-\\.]+@([\\w-]+\\.)+(com|org|net|edu|gob|mx)$";
-        return correo.matches(regex);
-    }
+    
 
     
     
