@@ -4,39 +4,60 @@
  */
 package EderEsquivel.bison_system.swing;
 
-import EderEsquivel.bison_system.model.DatosGenerales;
-import EderEsquivel.bison_system.model.DetallesEntrenamiento;
-import EderEsquivel.bison_system.model.SeriesEntrenamiento;
+import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
+import EderEsquivel.bison_system.services.GraficasServices;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
-import java.awt.Color;
 import javax.swing.JOptionPane;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author edere
  */
 public class MenuGeneral extends javax.swing.JFrame {
-
+    
+    private Informacion ventanaInformacion;
+    private MedidasReg ventanaMedidas;
+    private Estadisticas ventanaEstadisticas;
+    private GruposMusculares ventanaGM;
+    private CategoriasEjercicios ventanaCatEjercicios;
+    private EntrenamientosIngreso ventanaEntrenamientos;
+    
+    private UsuariosServices usS;
+    private MedidasServices mS;
+    private EntrenamientosServices eS;
+    private DetallesEntrenamientoServices deS;
+    private SeriesEntrenamientoServices seS;
+    private GraficasServices gS;
     /**
      * Creates new form MenuGeneral
      */
     public MenuGeneral(UsuariosServices usS,MedidasServices mS,EntrenamientosServices eS,DetallesEntrenamientoServices deS,
-            SeriesEntrenamientoServices seS) {
+            SeriesEntrenamientoServices seS,GraficasServices gS) {
         this.usS=usS;
         this.mS=mS;
         this.eS=eS;
         this.deS=deS;
         this.seS=seS;
+        this.gS=gS;
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 700);
         this.setLocationRelativeTo(null);
+        menuUsuarios.setVisible(false);
+       
         
+        if(DatosGenerales.getInfoUsuarios().getTipoUsuario().getId_t_usuario()!=1){
+            miMedidas.setVisible(false);
+            miEstadiscticas.setVisible(false);
+            menuEntrenamientos.setVisible(false);
+            menuEjercicios.setVisible(false);
+            menuUsuarios.setVisible(true);
+            
+        }
     }
 
     /**
@@ -50,18 +71,16 @@ public class MenuGeneral extends javax.swing.JFrame {
 
         dpFondo = new javax.swing.JDesktopPane();
         menuPrincipal = new javax.swing.JMenuBar();
-        menuConfiguracion = new javax.swing.JMenu();
-        cbxmiModoOscuro = new javax.swing.JCheckBoxMenuItem();
-        miSalir = new javax.swing.JMenuItem();
         menuPefil = new javax.swing.JMenu();
         miInformacion = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        miMedidas = new javax.swing.JMenuItem();
         miEstadiscticas = new javax.swing.JMenuItem();
         menuEntrenamientos = new javax.swing.JMenu();
         miAnadirEntenamiento = new javax.swing.JMenuItem();
         menuEjercicios = new javax.swing.JMenu();
         miVerEjercicios = new javax.swing.JMenuItem();
         miGruposMusculares = new javax.swing.JMenuItem();
+        menuUsuarios = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -85,24 +104,10 @@ public class MenuGeneral extends javax.swing.JFrame {
             .addGap(0, 380, Short.MAX_VALUE)
         );
 
-        menuConfiguracion.setText("Configuracion");
-
-        cbxmiModoOscuro.setText("Modo Oscuro");
-        cbxmiModoOscuro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxmiModoOscuroActionPerformed(evt);
-            }
-        });
-        menuConfiguracion.add(cbxmiModoOscuro);
-
-        miSalir.setText("Salir");
-        menuConfiguracion.add(miSalir);
-
-        menuPrincipal.add(menuConfiguracion);
-
         menuPefil.setText("Perfil");
 
         miInformacion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        miInformacion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miInformacion.setText("Informacion");
         miInformacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,16 +116,18 @@ public class MenuGeneral extends javax.swing.JFrame {
         });
         menuPefil.add(miInformacion);
 
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuItem4.setText("Medidas");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        miMedidas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        miMedidas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        miMedidas.setText("Medidas");
+        miMedidas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                miMedidasActionPerformed(evt);
             }
         });
-        menuPefil.add(jMenuItem4);
+        menuPefil.add(miMedidas);
 
         miEstadiscticas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        miEstadiscticas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miEstadiscticas.setText("Estadisticas");
         miEstadiscticas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -133,6 +140,7 @@ public class MenuGeneral extends javax.swing.JFrame {
 
         menuEntrenamientos.setText("Entrenamientos");
 
+        miAnadirEntenamiento.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miAnadirEntenamiento.setText("Añadir");
         miAnadirEntenamiento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,6 +153,7 @@ public class MenuGeneral extends javax.swing.JFrame {
 
         menuEjercicios.setText("Ejercicios");
 
+        miVerEjercicios.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miVerEjercicios.setText("Ejercicios");
         miVerEjercicios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,6 +162,7 @@ public class MenuGeneral extends javax.swing.JFrame {
         });
         menuEjercicios.add(miVerEjercicios);
 
+        miGruposMusculares.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miGruposMusculares.setText("Grupos Musculares");
         miGruposMusculares.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,6 +172,9 @@ public class MenuGeneral extends javax.swing.JFrame {
         menuEjercicios.add(miGruposMusculares);
 
         menuPrincipal.add(menuEjercicios);
+
+        menuUsuarios.setText("Usuarios");
+        menuPrincipal.add(menuUsuarios);
 
         setJMenuBar(menuPrincipal);
 
@@ -196,10 +209,6 @@ public class MenuGeneral extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void cbxmiModoOscuroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxmiModoOscuroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbxmiModoOscuroActionPerformed
-
     private void miInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miInformacionActionPerformed
         // TODO add your handling code here:
          if (ventanaInformacion == null || ventanaInformacion.isClosed()) {
@@ -224,7 +233,7 @@ public class MenuGeneral extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_miInformacionActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void miMedidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMedidasActionPerformed
         // TODO add your handling code here:
         if (ventanaMedidas == null || ventanaMedidas.isClosed()) {
             ventanaMedidas = new MedidasReg(mS);
@@ -246,12 +255,12 @@ public class MenuGeneral extends javax.swing.JFrame {
                 ex.printStackTrace();
             }
         }
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_miMedidasActionPerformed
 
     private void miEstadiscticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEstadiscticasActionPerformed
         // TODO add your handling code here:
          if (ventanaEstadisticas == null || ventanaEstadisticas.isClosed()) {
-            ventanaEstadisticas = new Estadisticas();
+            ventanaEstadisticas = new Estadisticas(gS);
             dpFondo.add(ventanaEstadisticas);
             int x = (dpFondo.getWidth() - ventanaEstadisticas.getWidth()) / 2;
             int y = (dpFondo.getHeight() - ventanaEstadisticas.getHeight()) / 2;
@@ -270,8 +279,10 @@ public class MenuGeneral extends javax.swing.JFrame {
                 ex.printStackTrace();
             }
         }
+         
+        
     }//GEN-LAST:event_miEstadiscticasActionPerformed
-
+ 
     private void miGruposMuscularesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGruposMuscularesActionPerformed
         // TODO add your handling code here:
         if (ventanaGM == null || ventanaGM.isClosed()) {
@@ -375,26 +386,16 @@ public class MenuGeneral extends javax.swing.JFrame {
         EntrenamientosServices eS=null;
         DetallesEntrenamientoServices deS=null;
         SeriesEntrenamientoServices seS=null;
+        GraficasServices gS=null;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuGeneral(usS,mS,eS,deS,seS).setVisible(true);
+                new MenuGeneral(usS,mS,eS,deS,seS,gS).setVisible(true);
             }
         });
     }
     
-    private Informacion ventanaInformacion;
-    private MedidasReg ventanaMedidas;
-    private Estadisticas ventanaEstadisticas;
-    private GruposMusculares ventanaGM;
-    private CategoriasEjercicios ventanaCatEjercicios;
-    private EntrenamientosIngreso ventanaEntrenamientos;
-    
-    private UsuariosServices usS;
-    private MedidasServices mS;
-    private EntrenamientosServices eS;
-    private DetallesEntrenamientoServices deS;
-    private SeriesEntrenamientoServices seS;
+
     
     
 
@@ -402,19 +403,17 @@ public class MenuGeneral extends javax.swing.JFrame {
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBoxMenuItem cbxmiModoOscuro;
     private javax.swing.JDesktopPane dpFondo;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenu menuConfiguracion;
     private javax.swing.JMenu menuEjercicios;
     private javax.swing.JMenu menuEntrenamientos;
     private javax.swing.JMenu menuPefil;
     private javax.swing.JMenuBar menuPrincipal;
+    private javax.swing.JMenu menuUsuarios;
     private javax.swing.JMenuItem miAnadirEntenamiento;
     private javax.swing.JMenuItem miEstadiscticas;
     private javax.swing.JMenuItem miGruposMusculares;
     private javax.swing.JMenuItem miInformacion;
-    private javax.swing.JMenuItem miSalir;
+    private javax.swing.JMenuItem miMedidas;
     private javax.swing.JMenuItem miVerEjercicios;
     // End of variables declaration//GEN-END:variables
 }
