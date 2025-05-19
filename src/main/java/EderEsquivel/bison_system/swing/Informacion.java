@@ -282,12 +282,12 @@ public class Informacion extends javax.swing.JInternalFrame {
             }
 
             // Actualizamos el objeto usuario con los nuevos datos
-            usActual.setNombre(tfNombre.getText());
-            usActual.setApellido(tfApellido.getText());
+            usActual.setNombre(tfNombre.getText().trim());
+            usActual.setApellido(tfApellido.getText().trim());
             usActual.setCorreo(tfCorreo.getText().trim());
             usActual.setFecha_nacimiento(DatosGenerales.cambioFecha(dcFechaNac.getDate()));
             usActual.setUsername(tfUsername.getText().trim());
-            String password = new String(pfContrasena.getPassword());
+            String password = new String(pfContrasena.getPassword()).trim();
             usActual.setPassword_hash(password);
 
             if(usS.actualizarUsuario(usActual)){
@@ -295,8 +295,7 @@ public class Informacion extends javax.swing.JInternalFrame {
                            JOptionPane.INFORMATION_MESSAGE);
                 editable(false);
             } else {
-                JOptionPane.showMessageDialog(this, "No se pudo actualizar el usuario", "Error",
-                           JOptionPane.ERROR_MESSAGE);
+                throw new Exception("No se pudo actualizar el usuario");
             }
 
         } catch(CamposVaciosException ex){
