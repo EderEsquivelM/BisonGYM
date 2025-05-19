@@ -298,8 +298,8 @@ public class Registro extends javax.swing.JDialog  {
                 
             String password = new String(pfContrasena.getPassword());
             TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
-            Usuarios nUsuario=new Usuarios(tfNombre.getText(),tfApellido.getText(),tfUsername.getText()
-                    ,tfCorreo.getText(),password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,
+            Usuarios nUsuario=new Usuarios(tfNombre.getText().trim(),tfApellido.getText().trim(),tfUsername.getText().trim()
+                    ,tfCorreo.getText().trim(),password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,
                     generoElegido,tusuario,LocalDate.now());
             if(usS.nuevoUsuario(nUsuario)){
                 JOptionPane.showMessageDialog(this, "Usuario registrado");                
