@@ -296,7 +296,7 @@ public class Registro extends javax.swing.JDialog  {
                 generoElegido=masculino;
             }
                 
-            String password = new String(pfContrasena.getPassword());
+            String password = new String(pfContrasena.getPassword()).trim();
             TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
             Usuarios nUsuario=new Usuarios(tfNombre.getText().trim(),tfApellido.getText().trim(),tfUsername.getText().trim()
                     ,tfCorreo.getText().trim(),password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,
