@@ -35,6 +35,8 @@ public class InicioSesion extends javax.swing.JFrame {
     private char contrasena;
     private String imagen="/logoSinFondo200x200.png";
     private ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
+    
+    public static boolean modoSinConexion;
     /**
      * Creates new form InicioSesion
      */
@@ -241,9 +243,23 @@ public class InicioSesion extends javax.swing.JFrame {
             }
 
             if (!DatosGenerales.hayConexion()) {
-                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
-            }
+            int opcion = JOptionPane.showConfirmDialog(this, 
+                "No hay conexión a internet.\n¿Deseas continuar en modo sin conexión?", 
+                "Sin conexión", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.WARNING_MESSAGE);
 
+            if (opcion == JOptionPane.YES_OPTION) {
+                modoSinConexion=true;
+                MenuGeneral menu = new MenuGeneral(null, null, null, null, null, null);
+                menu.setVisible(true);
+                menu.setLocationRelativeTo(null);
+                this.dispose();
+                return;
+            } else {
+                return; // Si elige NO, simplemente no continúa
+            }
+        }
             String usuario = tfUsuario.getText();
             String password = new String(pfContrasena.getPassword());
             Integer tuElegido = (cmbTipoUsuario.getSelectedIndex() == 0) ? 1 : 2;
