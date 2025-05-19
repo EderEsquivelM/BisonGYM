@@ -50,14 +50,19 @@ public class MenuGeneral extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         menuUsuarios.setVisible(false);
        
-        
-        if(DatosGenerales.getInfoUsuarios().getTipoUsuario().getId_t_usuario()!=1){
-            miMedidas.setVisible(false);
-            miEstadiscticas.setVisible(false);
+        if(InicioSesion.modoSinConexion){
+            menuPerfil.setVisible(false);
             menuEntrenamientos.setVisible(false);
-            menuEjercicios.setVisible(false);
-            menuUsuarios.setVisible(true);
-            
+            menuUsuarios.setVisible(false);
+        }else{
+            if(DatosGenerales.getInfoUsuarios().getTipoUsuario().getId_t_usuario()!=1){
+                miMedidas.setVisible(false);
+                miEstadiscticas.setVisible(false);
+                menuEntrenamientos.setVisible(false);
+                menuEjercicios.setVisible(false);
+                menuUsuarios.setVisible(true);
+
+            }
         }
     }
 
@@ -72,7 +77,7 @@ public class MenuGeneral extends javax.swing.JFrame {
 
         dpFondo = new javax.swing.JDesktopPane();
         menuPrincipal = new javax.swing.JMenuBar();
-        menuPefil = new javax.swing.JMenu();
+        menuPerfil = new javax.swing.JMenu();
         miInformacion = new javax.swing.JMenuItem();
         miMedidas = new javax.swing.JMenuItem();
         miEstadiscticas = new javax.swing.JMenuItem();
@@ -106,7 +111,7 @@ public class MenuGeneral extends javax.swing.JFrame {
             .addGap(0, 380, Short.MAX_VALUE)
         );
 
-        menuPefil.setText("Perfil");
+        menuPerfil.setText("Perfil");
 
         miInformacion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         miInformacion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
@@ -116,7 +121,7 @@ public class MenuGeneral extends javax.swing.JFrame {
                 miInformacionActionPerformed(evt);
             }
         });
-        menuPefil.add(miInformacion);
+        menuPerfil.add(miInformacion);
 
         miMedidas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         miMedidas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
@@ -126,7 +131,7 @@ public class MenuGeneral extends javax.swing.JFrame {
                 miMedidasActionPerformed(evt);
             }
         });
-        menuPefil.add(miMedidas);
+        menuPerfil.add(miMedidas);
 
         miEstadiscticas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         miEstadiscticas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
@@ -136,9 +141,9 @@ public class MenuGeneral extends javax.swing.JFrame {
                 miEstadiscticasActionPerformed(evt);
             }
         });
-        menuPefil.add(miEstadiscticas);
+        menuPerfil.add(miEstadiscticas);
 
-        menuPrincipal.add(menuPefil);
+        menuPrincipal.add(menuPerfil);
 
         menuEntrenamientos.setText("Entrenamientos");
 
@@ -441,7 +446,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private javax.swing.JDesktopPane dpFondo;
     private javax.swing.JMenu menuEjercicios;
     private javax.swing.JMenu menuEntrenamientos;
-    private javax.swing.JMenu menuPefil;
+    private javax.swing.JMenu menuPerfil;
     private javax.swing.JMenuBar menuPrincipal;
     private javax.swing.JMenu menuUsuarios;
     private javax.swing.JMenuItem miAdministrarU;
