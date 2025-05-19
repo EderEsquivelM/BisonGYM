@@ -25,6 +25,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private GruposMusculares ventanaGM;
     private CategoriasEjercicios ventanaCatEjercicios;
     private EntrenamientosIngreso ventanaEntrenamientos;
+    private AdministradorDeUsuarios ventanaAU;
     
     private UsuariosServices usS;
     private MedidasServices mS;
@@ -81,6 +82,7 @@ public class MenuGeneral extends javax.swing.JFrame {
         miVerEjercicios = new javax.swing.JMenuItem();
         miGruposMusculares = new javax.swing.JMenuItem();
         menuUsuarios = new javax.swing.JMenu();
+        miAdministrarU = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -174,6 +176,15 @@ public class MenuGeneral extends javax.swing.JFrame {
         menuPrincipal.add(menuEjercicios);
 
         menuUsuarios.setText("Usuarios");
+
+        miAdministrarU.setText("Administrar");
+        miAdministrarU.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miAdministrarUActionPerformed(evt);
+            }
+        });
+        menuUsuarios.add(miAdministrarU);
+
         menuPrincipal.add(menuUsuarios);
 
         setJMenuBar(menuPrincipal);
@@ -355,6 +366,30 @@ public class MenuGeneral extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_miAnadirEntenamientoActionPerformed
 
+    private void miAdministrarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAdministrarUActionPerformed
+        // TODO add your handling code here:
+        if (ventanaAU == null || ventanaAU.isClosed()) {
+            ventanaAU = new AdministradorDeUsuarios(usS);
+            dpFondo.add(ventanaAU);
+            int x = (dpFondo.getWidth() - ventanaAU.getWidth()) / 2;
+            int y = (dpFondo.getHeight() - ventanaAU.getHeight()) / 2;
+            ventanaAU.setLocation(x, y);
+            ventanaAU.setVisible(true);
+        } else {
+            try {
+           
+                ventanaAU.setIcon(false); // Restaurar si está minimizada
+                int x = (dpFondo.getWidth() - ventanaAU.getWidth()) / 2;
+                int y = (dpFondo.getHeight() - ventanaAU.getHeight()) / 2;
+                ventanaAU.setLocation(x, y);
+                ventanaAU.setSelected(true); // Darle foco
+                ventanaAU.toFront(); // Al frente
+            } catch (java.beans.PropertyVetoException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_miAdministrarUActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -409,6 +444,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private javax.swing.JMenu menuPefil;
     private javax.swing.JMenuBar menuPrincipal;
     private javax.swing.JMenu menuUsuarios;
+    private javax.swing.JMenuItem miAdministrarU;
     private javax.swing.JMenuItem miAnadirEntenamiento;
     private javax.swing.JMenuItem miEstadiscticas;
     private javax.swing.JMenuItem miGruposMusculares;
