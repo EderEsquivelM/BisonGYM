@@ -8,6 +8,9 @@ import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.services.UsuariosServices;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,13 +21,16 @@ import javax.swing.table.DefaultTableModel;
 public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
     
     private UsuariosServices usS;
-    public Usuarios usuarioMostrar=null;
+    private Usuarios usuarioOriginal;
+    private List<Usuarios> listaUsuarios=new ArrayList();
     /**
      * Creates new form AdministradorDeUsuarios
      */
     public AdministradorDeUsuarios(UsuariosServices usS) {
         this.usS=usS;
         initComponents();
+        listaUsuarios = usS.obtenerTodosUsuarios();
+        listaUsuarios.sort(Comparator.comparing(Usuarios::getId));
         cargarUsuariosEnTabla();
         editarVisibles(false);
     }
@@ -55,6 +61,11 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
         tfUsername = new javax.swing.JTextField();
         tfContrasenia = new javax.swing.JTextField();
         cbActivo = new javax.swing.JCheckBox();
+        btnCancelar = new javax.swing.JButton();
+        cbxFiltro = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        tfFiltro = new javax.swing.JTextField();
+        btnRestaurar = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -75,7 +86,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                 java.lang.Long.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true, true, true
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -86,16 +97,8 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tUsuarios.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(tUsuarios);
-        if (tUsuarios.getColumnModel().getColumnCount() > 0) {
-            tUsuarios.getColumnModel().getColumn(0).setResizable(false);
-            tUsuarios.getColumnModel().getColumn(1).setResizable(false);
-            tUsuarios.getColumnModel().getColumn(2).setResizable(false);
-            tUsuarios.getColumnModel().getColumn(3).setResizable(false);
-            tUsuarios.getColumnModel().getColumn(4).setResizable(false);
-            tUsuarios.getColumnModel().getColumn(5).setResizable(false);
-            tUsuarios.getColumnModel().getColumn(6).setResizable(false);
-        }
 
         btnEditar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnEditar.setText("Editar");
@@ -119,6 +122,11 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
 
         btnAplicar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnAplicar.setText("Aplicar");
+        btnAplicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAplicarActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel5.setText("Correo");
@@ -138,24 +146,51 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
 
         cbActivo.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
 
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        cbxFiltro.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        cbxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Apellido", "Username", "Correo" }));
+        cbxFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxFiltroActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jLabel7.setText("Filtro:");
+
+        tfFiltro.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfFiltro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfFiltroKeyReleased(evt);
+            }
+        });
+
+        btnRestaurar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        btnRestaurar.setText("Restaurar");
+        btnRestaurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestaurarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(242, 242, 242)
-                        .addComponent(btnEditar)
-                        .addGap(70, 70, 70)
-                        .addComponent(btnAplicar)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 251, Short.MAX_VALUE)
                                 .addComponent(jLabel3)
                                 .addGap(132, 132, 132))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -168,12 +203,9 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(tfContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 12, Short.MAX_VALUE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4)
-                                            .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(jLabel4)
+                                    .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(62, 62, 62)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
@@ -181,19 +213,43 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(cbActivo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel6)))
-                        .addGap(28, 28, 28)))
-                .addContainerGap())
+                                .addComponent(jLabel6))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(242, 242, 242)
+                        .addComponent(btnEditar)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnAplicar)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnCancelar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(28, 28, 28))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cbxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(tfFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnRestaurar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addGap(9, 9, 9)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbxFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(tfFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRestaurar))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
-                    .addComponent(btnAplicar))
+                    .addComponent(btnAplicar)
+                    .addComponent(btnCancelar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -215,7 +271,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                             .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cbActivo))
-                        .addContainerGap(22, Short.MAX_VALUE))
+                        .addContainerGap(21, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel6)
@@ -238,7 +294,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-        Usuarios usEditar=null;
+        
         try{
             int fila = tUsuarios.getSelectedRow();
             if(fila == -1){
@@ -248,6 +304,21 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             editarVisibles(true);
             
             
+            String nuevoNombre = (String) tUsuarios.getValueAt(fila, 1);
+            String nuevoApellido = (String) tUsuarios.getValueAt(fila, 2);
+            String nuevoCorreo = (String) tUsuarios.getValueAt(fila, 3);
+            String nuevoUsername = (String) tUsuarios.getValueAt(fila, 4);
+            String nuevaContrasenia = (String) tUsuarios.getValueAt(fila, 5);
+            boolean activo = (boolean) tUsuarios.getValueAt(fila, 6);
+            
+            tUsuarios.setRowSelectionAllowed(false);
+            
+            tfNombre.setText(nuevoNombre);
+            tfApellido.setText(nuevoApellido);
+            tfCorreo.setText(nuevoCorreo);
+            tfUsername.setText(nuevoUsername);
+            tfContrasenia.setText(nuevaContrasenia);
+            cbActivo.setSelected(activo);
             if (!DatosGenerales.hayConexion()) {
                 throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
             }
@@ -262,23 +333,186 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
+        // TODO add your handling code here:
+        Usuarios usuarioEditar;
+        int fila = tUsuarios.getSelectedRow();
+        Long idU = (Long) tUsuarios.getValueAt(fila, 0);
+        usuarioOriginal=usS.buscarUsuarioID(idU);
+        usuarioEditar=usuarioOriginal;
+        try{
+            if(tfNombre.getText().trim().isEmpty() || tfApellido.getText().trim().isEmpty()
+               || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()
+               || tfContrasenia.getText().trim().isEmpty()){
+                throw new CamposVaciosException("No debes dejar campos vacios");
+            
+            }
+            
+            if(!DatosGenerales.correoValido(tfCorreo.getText().trim())){
+                   throw new CamposVaciosException("La dirección de correo electrónico no es válida.");
+            }
+            
+            if(tfUsername.getText().length()<5){
+                throw new CamposVaciosException("La longitud del username debe ser\nminimo 5 de caracteres");
+            }
+            
+            if(tfContrasenia.getText().length()<8){
+               throw new CamposVaciosException("La longitud del la contraseña debe ser\nminimo 8 de caracteres");
+            }
+            
+            // Verificar que el correo no esté registrado por otro usuario
+            if(usS.correoVerificar(tfCorreo.getText().trim())) {
+                // Aquí asumimos que correoVerificar solo dice si existe en la BD
+                // Si el correo es distinto al actual, entonces error
+                if(!tfCorreo.getText().trim().equalsIgnoreCase(usuarioOriginal.getCorreo())) {
+                    throw new Exception("El correo '"+ tfCorreo.getText() +"' ya está registrado");
+                }
+            }
+
+            // Verificar que el username no esté registrado por otro usuario
+            if(usS.usernameVerificar(tfUsername.getText().trim())) {
+                if(!tfUsername.getText().trim().equalsIgnoreCase(usuarioOriginal.getUsername())) {
+                    throw new Exception("El usuario '"+ tfUsername.getText() +"' ya está registrado");
+                }
+            }
+            
+            if (!DatosGenerales.hayConexion()) {
+                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
+            }
+            
+            usuarioEditar.setNombre(tfNombre.getText().trim());
+            usuarioEditar.setApellido(tfApellido.getText().trim());
+            usuarioEditar.setCorreo(tfCorreo.getText().trim());
+            usuarioEditar.setUsername(tfUsername.getText().trim());
+            usuarioEditar.setPassword_hash(tfContrasenia.getText().trim());
+            usuarioEditar.setActivo(cbActivo.isSelected());
+            
+            if(usS.actualizarUsuarioAdmin(usuarioEditar)){
+                JOptionPane.showMessageDialog(this, "Usuario actualizado", "Actualizado",
+                           JOptionPane.INFORMATION_MESSAGE);
+                listaUsuarios = usS.obtenerTodosUsuarios();
+                listaUsuarios.sort(Comparator.comparing(Usuarios::getId));
+                editarVisibles(false);
+                cargarUsuariosEnTabla();
+                tUsuarios.setRowSelectionAllowed(true);
+                
+            }else{
+                throw new Exception("No se pudo actualizar el usuario");
+            }
+        }catch(CamposVaciosException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
+                                       JOptionPane.WARNING_MESSAGE);
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
+                    "¡Error!", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        } 
+        
+    }//GEN-LAST:event_btnAplicarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        usuarioOriginal=null;
+        editarVisibles(false);
+        tUsuarios.setRowSelectionAllowed(true);
+
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void tfFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroKeyReleased
+        // TODO add your handling code here:
+        if(cbxFiltro.getSelectedItem() != null) { // Verificar que hay algo seleccionado
+            filtrarUsuarios();
+        }
+    }//GEN-LAST:event_tfFiltroKeyReleased
+
+    private void btnRestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarActionPerformed
+        // TODO add your handling code here:
+        tfFiltro.setText("");
+        cbxFiltro.setSelectedIndex(0); // Seleccionar primer elemento en lugar de -1
+        cargarUsuariosEnTabla();
+    }//GEN-LAST:event_btnRestaurarActionPerformed
+
+    private void cbxFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxFiltroActionPerformed
+        // TODO add your handling code here
+        if (!tfFiltro.getText().isEmpty() && cbxFiltro.getSelectedItem() != null){
+            filtrarUsuarios();
+        }
+    }//GEN-LAST:event_cbxFiltroActionPerformed
+    
+    
+    
     private void cargarUsuariosEnTabla() {
         DefaultTableModel model = (DefaultTableModel) tUsuarios.getModel();
         model.setRowCount(0); // Limpiar la tabla
 
-        for (Usuarios u : usS.obtenerTodosUsuarios()) {
-            model.addRow(new Object[]{
-                u.getId(),
-                u.getNombre(),
-                u.getApellido(),
-                u.getCorreo(),
-                u.getUsername(),
-                u.getPasswordHash(),
-                u.isActivo()
-            });
+        for (Usuarios u : listaUsuarios) {
+            if (u.getTipoUsuario() != null && u.getTipoUsuario().getId_t_usuario() == 1) {
+                model.addRow(new Object[]{
+                    u.getId(),
+                    u.getNombre(),
+                    u.getApellido(),
+                    u.getCorreo(),
+                    u.getUsername(),
+                    u.getPasswordHash(),
+                    u.isActivo()
+                });
+            }
         }
     }
     
+    private void filtrarUsuarios() {
+        // Verificar que hay un campo seleccionado
+        if(cbxFiltro.getSelectedItem() == null) {
+            return;
+        }
+
+        String textoBusqueda = tfFiltro.getText().trim().toLowerCase();
+        String campoSeleccionado = cbxFiltro.getSelectedItem().toString().toLowerCase();
+
+        if (textoBusqueda.isEmpty()) {
+            cargarUsuariosEnTabla();
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tUsuarios.getModel();
+        model.setRowCount(0);
+        
+        listaUsuarios.sort(Comparator.comparing(Usuarios::getId));
+
+        for (Usuarios u : listaUsuarios) {
+            String valorCampo = "";
+
+            switch (campoSeleccionado) {
+                case "nombre":  // Ahora en minúsculas para coincidir con toLowerCase()
+                    valorCampo = u.getNombre().toLowerCase();
+                    break;
+                case "apellido":
+                    valorCampo = u.getApellido().toLowerCase();
+                    break;
+                case "username":
+                    valorCampo = u.getUsername().toLowerCase();
+                    break;
+                case "correo":
+                    valorCampo = u.getCorreo().toLowerCase();
+                    break;
+                default:  // Caso por defecto por si acaso
+                    valorCampo = u.getNombre().toLowerCase();
+            }
+
+            if (valorCampo.contains(textoBusqueda)) {
+                model.addRow(new Object[]{
+                    u.getId(),
+                    u.getNombre(),
+                    u.getApellido(),
+                    u.getCorreo(),
+                    u.getUsername(),
+                    u.getPasswordHash(),
+                    u.isActivo()
+                });
+            }
+        }
+    }
     private void editarVisibles(boolean b){
         tfNombre.setVisible(b);
         tfApellido.setVisible(b);
@@ -293,24 +527,30 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
         jLabel5.setVisible(b);
         jLabel6.setVisible(b);
         btnAplicar.setEnabled(b);
+        btnCancelar.setVisible(b);
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAplicar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnRestaurar;
     private javax.swing.JCheckBox cbActivo;
+    private javax.swing.JComboBox<String> cbxFiltro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tUsuarios;
     private javax.swing.JTextField tfApellido;
     private javax.swing.JTextField tfContrasenia;
     private javax.swing.JTextField tfCorreo;
+    private javax.swing.JTextField tfFiltro;
     private javax.swing.JTextField tfNombre;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
