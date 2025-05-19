@@ -310,7 +310,10 @@ public class DatosGenerales {
     }
 
    
-
+    public static boolean correoValido(String correo) {
+        String regex = "^[\\w-\\.]+@([\\w-]+\\.)+(com|org|net|edu|gob|mx)$";
+        return correo.matches(regex);
+    }
    
 
     
