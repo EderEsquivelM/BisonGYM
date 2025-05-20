@@ -203,3 +203,48 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Entrenamientos del usuario
+DELIMITER //
+CREATE PROCEDURE sp_entrenamientos_usuario(IN p_id_usuario LONG)
+BEGIN
+    SELECT 
+        e.id_entrenamiento,
+        e.fecha,
+        e.nombre AS nombre_entrenamiento,
+        e.descripcion,
+        e.duracion_minutos,
+        e.observaciones
+    FROM entrenamientos e
+    WHERE e.id_usuario = p_id_usuario
+    ORDER BY e.fecha DESC;
+END //
+DELIMITER ;
+
+-- Detalle de cada entrenamiento
+DELIMITER //
+CREATE PROCEDURE sp_detalles_entrenamiento(IN p_id_entrenamiento LONG)
+BEGIN
+    SELECT 
+        de.id_detalle,
+        de.id_ejercicio
+    FROM detalles_entrenamiento de
+    WHERE de.id_entrenamiento = p_id_entrenamiento
+    ORDER BY de.id_detalle;
+END //
+DELIMITER ;
+-- Informacion del detalle
+DELIMITER //
+CREATE PROCEDURE sp_series_detalle(IN p_id_detalle LONG)
+BEGIN
+    SELECT 
+        s.id_serie,
+        s.numero_serie,
+        s.repeticiones,
+        s.peso_usado
+    FROM series_entrenamiento s
+    WHERE s.id_detalle_entrenamiento = p_id_detalle
+    ORDER BY s.numero_serie;
+END //
+DELIMITER ;
+
+
