@@ -5,23 +5,26 @@
 package EderEsquivel.bison_system;
 
 /**
+ * Excepcion personalizada para verificar campos vacios en el resto del codigo
  *
  * @author edere
  */
 public class CamposVaciosException extends Exception {
 
     /**
-     * Creates a new instance of <code>CamposVaciosException</code> without
-     * detail message.
+     *
+     * Constructo para cuando no se quiera mandar un mensaje personalizado y
+     * solo mandar la excepcion
+     * 
      */
     public CamposVaciosException() {
     }
 
     /**
-     * Constructs an instance of <code>CamposVaciosException</code> with the
-     * specified detail message.
-     *
-     * @param msg the detail message.
+     * @param msg es el mensaje que enviara a un catch
+     * 
+     * Contructor que se utiliza para mandar un mensaje personalizado
+     * 
      */
     public CamposVaciosException(String msg) {
         super(msg);
