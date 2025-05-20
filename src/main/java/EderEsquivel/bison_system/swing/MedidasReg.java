@@ -32,25 +32,32 @@ public class MedidasReg extends javax.swing.JInternalFrame{
         initComponents();
         taIMC.setEditable(false);
         this.setResizable(false);
-        if(mS.buscarMedidaUsuario(DatosGenerales.getInfoUsuarios())==null){
-            pesoS= JOptionPane.showInputDialog(this,"Ingresa tu peso");
-            alturaS= JOptionPane.showInputDialog(this,"Ingresa tu altura");
-            pGCS= JOptionPane.showInputDialog(this,"Ingresa tu porcetaje de grasa corporal");
-            
-            double peso = Double.parseDouble(pesoS);
-            double altura = Double.parseDouble(alturaS);
-            Integer pGC=Integer.parseInt(pGCS);
-            
-            Medidas med=new Medidas(DatosGenerales.getInfoUsuarios(),LocalDate.now(),peso,altura,pGC);
-            med=mS.actualizarMedida(med);
-            mostrarInformacion(med);
-            
+        if(!DatosGenerales.hayConexion()){
+            JOptionPane.showMessageDialog(this,
+                    "No hay conexion a internet",
+                    "¡Sin conexion!", JOptionPane.ERROR_MESSAGE);
         }else{
-            Medidas med=null;
-            med=mS.buscarMedidaUsuario(DatosGenerales.getInfoUsuarios());
-            mostrarInformacion(med);
-            
+            if(mS.buscarMedidaUsuario(DatosGenerales.getInfoUsuarios())==null){
+                pesoS= JOptionPane.showInputDialog(this,"Ingresa tu peso");
+                alturaS= JOptionPane.showInputDialog(this,"Ingresa tu altura en metros");
+                pGCS= JOptionPane.showInputDialog(this,"Ingresa tu porcetaje de grasa corporal");
+
+                double peso = Double.parseDouble(pesoS);
+                double altura = Double.parseDouble(alturaS);
+                Integer pGC=Integer.parseInt(pGCS);
+
+                Medidas med=new Medidas(DatosGenerales.getInfoUsuarios(),LocalDate.now(),peso,altura,pGC);
+                med=mS.actualizarMedida(med);
+                mostrarInformacion(med);
+
+            }else{
+                Medidas med=null;
+                med=mS.buscarMedidaUsuario(DatosGenerales.getInfoUsuarios());
+                mostrarInformacion(med);
+
+            }
         }
+        
        
        editable(false); 
     }

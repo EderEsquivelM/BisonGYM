@@ -9,7 +9,7 @@ import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.UsuarioException;
 import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
-import EderEsquivel.bison_system.services.GraficasServices;
+import EderEsquivel.bison_system.services.DatosDeUsuarioServices;
 import EderEsquivel.bison_system.services.InicioSesionServices;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
@@ -31,7 +31,7 @@ public class InicioSesion extends javax.swing.JFrame {
     private EntrenamientosServices eS;
     private DetallesEntrenamientoServices deS;
     private SeriesEntrenamientoServices seS;
-    private GraficasServices gS;
+    private DatosDeUsuarioServices gS;
     private char contrasena;
     private String imagen="/logoSinFondo200x200.png";
     private ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
@@ -42,7 +42,7 @@ public class InicioSesion extends javax.swing.JFrame {
      */
     
     public InicioSesion(UsuariosServices usS,InicioSesionServices isS, MedidasServices mS,EntrenamientosServices eS,
-    DetallesEntrenamientoServices deS,SeriesEntrenamientoServices seS,GraficasServices gS) {        
+    DetallesEntrenamientoServices deS,SeriesEntrenamientoServices seS,DatosDeUsuarioServices gS) {        
         initComponents();
         this.usS=usS;
         this.isS=isS;

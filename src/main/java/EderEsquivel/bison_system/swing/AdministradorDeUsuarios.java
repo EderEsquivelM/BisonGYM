@@ -29,9 +29,17 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
     public AdministradorDeUsuarios(UsuariosServices usS) {
         this.usS=usS;
         initComponents();
-        listaUsuarios = usS.obtenerTodosUsuarios();
-        listaUsuarios.sort(Comparator.comparing(Usuarios::getId));
-        cargarUsuariosEnTabla();
+        this.setResizable(false);
+        if(!DatosGenerales.hayConexion()){
+            JOptionPane.showMessageDialog(this,
+                    "No hay conexion a internet",
+                    "¡Sin conexion!", JOptionPane.ERROR_MESSAGE);
+        }else{
+            listaUsuarios = usS.obtenerTodosUsuarios();
+            listaUsuarios.sort(Comparator.comparing(Usuarios::getId));
+            cargarUsuariosEnTabla();
+        }
+        
         editarVisibles(false);
     }
 
@@ -201,11 +209,10 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel2))
                                 .addGap(47, 47, 47)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(tfContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(tfContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4)
-                                    .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(tfApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(62, 62, 62)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
@@ -251,10 +258,11 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                     .addComponent(btnAplicar)
                     .addComponent(btnCancelar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel5)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -323,7 +331,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                 throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
             }
         }catch(CamposVaciosException ex){
-            JOptionPane.showConfirmDialog(this, ex.getMessage(),"¡Error!", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,ex.getMessage(),"¡Error!", JOptionPane.ERROR_MESSAGE);       
         }catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                     "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
@@ -380,6 +388,10 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                 throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
             }
             
+            if(!DatosGenerales.hayConexion()){
+            throw new Exception("No hay conexion a internet");
+            }
+            
             usuarioEditar.setNombre(tfNombre.getText().trim());
             usuarioEditar.setApellido(tfApellido.getText().trim());
             usuarioEditar.setCorreo(tfCorreo.getText().trim());
@@ -400,8 +412,10 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                 throw new Exception("No se pudo actualizar el usuario");
             }
         }catch(CamposVaciosException ex){
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
-                                       JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(),
+                    "¡Error!", JOptionPane.ERROR_MESSAGE);
+        
         }catch (Exception ex) {
             JOptionPane.showMessageDialog(this,
                     "Ha ocurrido un error inesperado.\nDetalle: " + ex.getMessage(),
@@ -501,6 +515,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             }
 
             if (valorCampo.contains(textoBusqueda)) {
+                if (u.getTipoUsuario() != null && u.getTipoUsuario().getId_t_usuario() == 1) {
                 model.addRow(new Object[]{
                     u.getId(),
                     u.getNombre(),
@@ -510,6 +525,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
                     u.getPasswordHash(),
                     u.isActivo()
                 });
+                }
             }
         }
     }

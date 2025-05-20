@@ -10,7 +10,7 @@ import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.DetallesEntrenamiento;
 import EderEsquivel.bison_system.model.Entrenamientos;
 import EderEsquivel.bison_system.model.SeriesEntrenamiento;
-import EderEsquivel.bison_system.services.DatosDeUsuario;
+import EderEsquivel.bison_system.services.DatosDeUsuarioServices;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -20,22 +20,25 @@ import javax.swing.table.DefaultTableModel;
  * @author edere
  */
 public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
-    private DatosDeUsuario duS;
+    private DatosDeUsuarioServices duS;
     private List<Entrenamientos> listaEnt;
     private List<DetallesEntrenamiento> listaDE;
     public int fila;
     /**
      * Creates new form EntrenamientosUsuario
      */
-    public EntrenamientosUsuario(DatosDeUsuario duS) {
+    public EntrenamientosUsuario(DatosDeUsuarioServices duS) {
         initComponents();
         this.duS=duS;
         if(!DatosGenerales.hayConexion()){
             JOptionPane.showMessageDialog(this,
                     "No hay conexion a internet",
                     "¡Sin conexion!", JOptionPane.ERROR_MESSAGE);
-        }
+            this.dispose();
+        }else{
             cargarEntrenamientos();
+        }
+           
     }
 
     /**

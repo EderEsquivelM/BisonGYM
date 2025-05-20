@@ -10,7 +10,7 @@ import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSL;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSD;
 import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
-import EderEsquivel.bison_system.services.DatosDeUsuario;
+import EderEsquivel.bison_system.services.DatosDeUsuarioServices;
 import static EderEsquivel.bison_system.swing.CategoriasEjercicios.listaEjercicios;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,13 @@ import org.jfree.data.general.DefaultPieDataset;
  * @author edere
  */
 public class Estadisticas extends javax.swing.JInternalFrame {
-     private DatosDeUsuario gS;
+     private DatosDeUsuarioServices gS;
      public ChartPanel chartPanel=new ChartPanel(null);
      public Ejercicios ejercicioSelect;
     /**
      * Creates new form Perfil
      */
-    public Estadisticas(DatosDeUsuario gS) {
+    public Estadisticas(DatosDeUsuarioServices gS) {
         this.gS=gS;
         initComponents();
         this.setResizable(false);

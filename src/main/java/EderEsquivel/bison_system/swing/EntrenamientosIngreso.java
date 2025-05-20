@@ -76,8 +76,10 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         jPanel1.setBackground(java.awt.SystemColor.window);
 
         cbxCategoria.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        cbxCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         cbxEjercicio.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        cbxEjercicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         btnSC.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnSC.setText("Seleccionar Categoria");
@@ -95,6 +97,7 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             }
         });
 
+        TEjerciciosS.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         TEjerciciosS.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         TEjerciciosS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -464,10 +467,6 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             }
 
             if (!verificarSeries(seriesPorEjercicio)) {
-            }
-
-            if (!DatosGenerales.hayConexion()) {
-                throw new Exception("Sin conexión a internet.");
             }
 
             JOptionPane.showMessageDialog(this, "Series guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);

@@ -87,8 +87,11 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         jLabel4.setText("Observaciones:");
 
         tfNombre.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         sDuracion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        sDuracion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        sDuracion.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         btnGuardar.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnGuardar.setText("Guardar");
@@ -103,6 +106,7 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         taObservaciones.setLineWrap(true);
         taObservaciones.setRows(5);
         taObservaciones.setWrapStyleWord(true);
+        taObservaciones.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane1.setViewportView(taObservaciones);
 
         taDescripcion.setColumns(20);
@@ -110,6 +114,7 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         taDescripcion.setLineWrap(true);
         taDescripcion.setRows(5);
         taDescripcion.setWrapStyleWord(true);
+        taDescripcion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane2.setViewportView(taDescripcion);
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N

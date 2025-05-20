@@ -27,10 +27,15 @@ public class Informacion extends javax.swing.JInternalFrame {
         this.usS=usS;
         initComponents();
         this.setResizable(false);
-        mostrarInfo();
-        editable(false);
-        contrasena=pfContrasena.getEchoChar();
-        if(DatosGenerales.getInfoUsuarios().getTipoUsuario().getId_t_usuario()!=1){
+        if(!DatosGenerales.hayConexion()){
+            JOptionPane.showMessageDialog(this,
+                    "No hay conexion a internet",
+                    "¡Sin conexion!", JOptionPane.ERROR_MESSAGE);
+        }else{
+            mostrarInfo();
+            editable(false);
+            contrasena=pfContrasena.getEchoChar();
+            if(DatosGenerales.getInfoUsuarios().getTipoUsuario().getId_t_usuario()!=1){
             dcFechaNac.setVisible(false);
             jLabel4.setVisible(false);
             jLabel2.setVisible(false);
@@ -39,6 +44,8 @@ public class Informacion extends javax.swing.JInternalFrame {
             tfNombre.setVisible(false);
             tfApellido.setVisible(false);
             tfCorreo.setVisible(false);
+        }
+        
         }
     }
 
@@ -320,15 +327,26 @@ public class Informacion extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_chbxMostrarActionPerformed
 
     public void mostrarInfo(){
-        Usuarios usuario;
-        usuario=DatosGenerales.getInfoUsuarios();
-        Date fechaCambio=Date.from(usuario.getFecha_nacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        tfNombre.setText(usuario.getNombre());
-        tfApellido.setText(usuario.getApellido());
-        tfCorreo.setText(usuario.getCorreo());
-        tfUsername.setText(usuario.getUsername());
-        dcFechaNac.setDate(fechaCambio);
-        pfContrasena.setText(usuario.getPasswordHash());
+        try{
+            if(!DatosGenerales.hayConexion()){
+            JOptionPane.showMessageDialog(this,
+                    "No hay conexion a internet",
+                    "¡Sin conexion!", JOptionPane.ERROR_MESSAGE);
+             }
+            Usuarios usuario;
+            usuario=DatosGenerales.getInfoUsuarios();
+            Date fechaCambio=Date.from(usuario.getFecha_nacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            tfNombre.setText(usuario.getNombre());
+            tfApellido.setText(usuario.getApellido());
+            tfCorreo.setText(usuario.getCorreo());
+            tfUsername.setText(usuario.getUsername());
+            dcFechaNac.setDate(fechaCambio);
+            pfContrasena.setText(usuario.getPasswordHash());
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
+                       JOptionPane.ERROR_MESSAGE);
+        }
+        
         
     }
     
