@@ -57,6 +57,11 @@ public class Ejercicios {
         this.id_dificultad = id_dificultad;
     }
 
+    public Ejercicios(Integer id_ejericio) {
+        this.id_ejericio = id_ejericio;
+    }
+    
+
     public Ejercicios() {
     }
 

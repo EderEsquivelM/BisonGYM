@@ -39,6 +39,12 @@ public class DetallesEntrenamiento {
         this.id_ejer = id_ejer;
     }
 
+    public DetallesEntrenamiento(Long id_detalle, Ejercicios id_ejer) {
+        this.id_detalle = id_detalle;
+        this.id_ejer = id_ejer;
+    }
+    
+    
     public DetallesEntrenamiento() {
     }
 

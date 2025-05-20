@@ -45,6 +45,17 @@ public class Entrenamientos {
         this.observaciones = observaciones;
     }
 
+    public Entrenamientos(Long id_entrenamiento, LocalDate fecha, String nombre, String descripcion, Integer duracion_minutos, String observaciones) {
+        this.id_entrenamiento = id_entrenamiento;
+        this.fecha = fecha;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.duracion_minutos = duracion_minutos;
+        this.observaciones = observaciones;
+    }
+    
+    
+
     
 
     public Entrenamientos() {
