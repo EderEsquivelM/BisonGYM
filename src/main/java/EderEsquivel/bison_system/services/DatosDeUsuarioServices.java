@@ -4,8 +4,13 @@
  */
 package EderEsquivel.bison_system.services;
 
+import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSL;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSD;
+import EderEsquivel.bison_system.model.DetallesEntrenamiento;
+import EderEsquivel.bison_system.model.Ejercicios;
+import EderEsquivel.bison_system.model.Entrenamientos;
+import EderEsquivel.bison_system.model.SeriesEntrenamiento;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
@@ -18,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @author edere
  */
 @Service
-public class GraficasServices {
+public class DatosDeUsuarioServices {
     @PersistenceContext
     private EntityManager entityManager;
     
@@ -129,6 +134,56 @@ public class GraficasServices {
             lista.add(new DatosGraficaSL(zona, cantZonaEntre));
         }
         return lista;
+    }
+    
+    public List<Entrenamientos> entrenamientosUsuario(Long idUsuario){
+        List<Object[]> result=entityManager.createNativeQuery(
+                "SELECT * FROM obtener_entrenamientos_usuario(:idUsuario)")
+                .setParameter("idUsuario", idUsuario).getResultList();
+        
+        List<Entrenamientos> listaE=new ArrayList<>();
+        for(Object[] row:result){
+            Long idEntre=(Long) row[0];
+            LocalDate fecha = row[1] != null
+                ? ((java.sql.Date) row[1]).toLocalDate()
+                : null;
+            String nombEntre=(String) row[2];
+            String descripcion=(String) row[3];
+            Integer duracion=(Integer) row[4];
+            String obs=(String) row[5];
+            listaE.add(new Entrenamientos(idEntre,fecha,nombEntre,descripcion,duracion,obs));
+        }
+        return listaE;   
+       
+    }
+    
+    public List<DetallesEntrenamiento> detallesEntreUsuario(Long idEntrenamiento){
+        List<Object[]> result=entityManager.createNativeQuery(
+                "SELECT * FROM obtener_detalles_entrenamiento(:idEntrenamieto)")
+                .setParameter("idEntrenamieto", idEntrenamiento).getResultList();
+        
+        List<DetallesEntrenamiento> listaDE=new ArrayList<>();
+        for(Object[] row: result){
+            Long idDetalle=(Long) row[0];
+            Integer idEjercicio=(Integer) row[1];
+            listaDE.add(new DetallesEntrenamiento(idDetalle,DatosGenerales.ejerciciosMap.get(idEjercicio)));
+        }
+        return listaDE;
+    }
+    
+    public List<SeriesEntrenamiento> SeriesEntreUsuario(Long idDetalleS){
+        List<Object[]> result=entityManager.createNativeQuery(
+                "SELECT * FROM obtener_series_detalle(:idDetalleS)")
+                .setParameter("idDetalleS", idDetalleS).getResultList();
+        
+        List<SeriesEntrenamiento> listaSE=new ArrayList<>();
+        for(Object[] row: result){
+            Integer numSerie=(Integer) row[0];
+            Integer rep=(Integer) row[1];
+            Double pesoUsado=(Double) row[2];
+            listaSE.add(new SeriesEntrenamiento(numSerie,rep,pesoUsado));
+        }
+        return listaSE;
     }
     
 }
