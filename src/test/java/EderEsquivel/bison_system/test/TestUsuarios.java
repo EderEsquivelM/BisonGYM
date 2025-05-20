@@ -37,8 +37,9 @@ public class TestUsuarios {
     void setUp() {
         MockitoAnnotations.openMocks(this); 
         us = new Usuarios(
-            "prueba", "1", "usuario1", "usuario1@gmail.com", "12345", LocalDate.now(), true,
-            new Sexo(1, "Femenino"), new TipoUsuario(1, "usuario"), LocalDate.now()
+            "prueba", "1", "usuario1", "usuario1@gmail.com", "12345", 
+                LocalDate.now(), true,new Sexo(1, "Femenino"), 
+                new TipoUsuario(1, "usuario"), LocalDate.now()
         );
     }
 
