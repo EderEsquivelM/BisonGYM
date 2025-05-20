@@ -254,51 +254,79 @@ public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tEjerciciosMouseClicked
     
     private void cargarEntrenamientos() {
-        DefaultTableModel model = (DefaultTableModel) tEntrenamientos.getModel();
-        model.setRowCount(0); // Limpiar la tabla
-        
-        listaEnt=duS.entrenamientosUsuario(DatosGenerales.getInfoUsuarios().getId());
-        for (Entrenamientos ent:listaEnt) {
-                model.addRow(new Object[]{
-                    ent.getFecha().toString(),
-                    ent.getNombre(),
-                    ent.getDescripcion(),
-                    ent.getDuracion_minutos(),
-                    ent.getObservaciones()
-                });
+        try{
+            if(!DatosGenerales.hayConexion()){
+                throw new Exception("No hay conexion a internet");
+            }
+            DefaultTableModel model = (DefaultTableModel) tEntrenamientos.getModel();
+            model.setRowCount(0); // Limpiar la tabla
+
+            listaEnt=duS.entrenamientosUsuario(DatosGenerales.getInfoUsuarios().getId());
+            for (Entrenamientos ent:listaEnt) {
+                    model.addRow(new Object[]{
+                        ent.getFecha().toString(),
+                        ent.getNombre(),
+                        ent.getDescripcion(),
+                        ent.getDuracion_minutos(),
+                        ent.getObservaciones()
+                    });
+
+            }
             
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
+                       JOptionPane.ERROR_MESSAGE);
         }
+        
     }
 
     private void cargarEjercicio(int idEnt){
-        DefaultTableModel model = (DefaultTableModel) tEjercicios.getModel();
-        model.setRowCount(0);
+        try{
+            if(!DatosGenerales.hayConexion()){
+                throw new Exception("No hay conexion a internet");
+            }
+            DefaultTableModel model = (DefaultTableModel) tEjercicios.getModel();
+            model.setRowCount(0);
         
-        listaDE=duS.detallesEntreUsuario(listaEnt.get(idEnt).getId_entrenamiento());
+            listaDE=duS.detallesEntreUsuario(listaEnt.get(idEnt).getId_entrenamiento());
    
-        for(DetallesEntrenamiento detalle: listaDE){
-            model.addRow(new Object[]{ 
-                detalle.getId_ejer().getNombre()
-            });
+            for(DetallesEntrenamiento detalle: listaDE){
+                model.addRow(new Object[]{ 
+                    detalle.getId_ejer().getNombre()
+                });
 
+            }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
+                       JOptionPane.ERROR_MESSAGE);
         }
         
     }
     
     private void cargarDetalles(int idEjer){
-        DefaultTableModel model = (DefaultTableModel) tSeries.getModel();
-        model.setRowCount(0);
+        try{
+            if(!DatosGenerales.hayConexion()){
+                throw new Exception("No hay conexion a internet");
+            }
+            DefaultTableModel model = (DefaultTableModel) tSeries.getModel();
+             model.setRowCount(0);
         
-        Long id = listaDE.get(idEjer).getId_detalle();
-        List<SeriesEntrenamiento> listaDS=duS.SeriesEntreUsuario(id);
-        
-        for(SeriesEntrenamiento se:listaDS){
-            model.addRow(new Object[]{
-                    se.getNumero_serie(),
-                    se.getRepeticiones(),
-                    se.getPeso_usado()
-            });
+            Long id = listaDE.get(idEjer).getId_detalle();
+            List<SeriesEntrenamiento> listaDS=duS.SeriesEntreUsuario(id);
+
+            for(SeriesEntrenamiento se:listaDS){
+                model.addRow(new Object[]{
+                        se.getNumero_serie(),
+                        se.getRepeticiones(),
+                        se.getPeso_usado()
+                });
+             }
+        }catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
+                       JOptionPane.ERROR_MESSAGE);
         }
+        
+        
         
         
     }
