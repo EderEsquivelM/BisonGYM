@@ -40,6 +40,14 @@ public class SeriesEntrenamiento {
         this.peso_usado = peso_usado;
     }
 
+    public SeriesEntrenamiento(Integer numero_serie, Integer repeticiones, double peso_usado) {
+        this.numero_serie = numero_serie;
+        this.repeticiones = repeticiones;
+        this.peso_usado = peso_usado;
+    }
+    
+    
+
     public SeriesEntrenamiento() {
     }
 
