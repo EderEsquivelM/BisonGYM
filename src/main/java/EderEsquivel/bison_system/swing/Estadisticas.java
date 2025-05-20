@@ -10,7 +10,7 @@ import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSL;
 import EderEsquivel.bison_system.entidadesGraficas.DatosGraficaSD;
 import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
-import EderEsquivel.bison_system.services.GraficasServices;
+import EderEsquivel.bison_system.services.DatosDeUsuario;
 import static EderEsquivel.bison_system.swing.CategoriasEjercicios.listaEjercicios;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,13 @@ import org.jfree.data.general.DefaultPieDataset;
  * @author edere
  */
 public class Estadisticas extends javax.swing.JInternalFrame {
-     private GraficasServices gS;
+     private DatosDeUsuario gS;
      public ChartPanel chartPanel=new ChartPanel(null);
      public Ejercicios ejercicioSelect;
     /**
      * Creates new form Perfil
      */
-    public Estadisticas(GraficasServices gS) {
+    public Estadisticas(DatosDeUsuario gS) {
         this.gS=gS;
         initComponents();
         this.setResizable(false);
@@ -103,7 +103,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                     }
 
                     JFreeChart lineChart = ChartFactory.createLineChart(
-                        "Evolución del Peso Usado",     // Título
+                        "Evolución del Peso Usado en "+cbxEjercicio.getSelectedItem().toString(),     // Título
                         "Fecha",                        // Eje X
                         "Peso (kg)",                    // Eje Y
                         datasetLinea,
@@ -283,6 +283,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         cbxGraficas.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cbxGraficas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenamiento por mes", "Evolucion peso por ejercicio", "Peso de usuario", "Porcentaje de grasa corporal", "Ejercicios hechos por dificultad", "Zonas musculares entrenadas" }));
         cbxGraficas.setSelectedIndex(-1);
+        cbxGraficas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cbxGraficas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxGraficasActionPerformed(evt);
@@ -292,8 +293,10 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
         jLabel1.setText("Selecciona una grafica");
 
+        dcFechaI.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         dcFechaI.setDateFormatString("yyyy-MM-dd ");
 
+        dcFechaF.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         dcFechaF.setDateFormatString("yyyy-MM-dd");
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
@@ -311,6 +314,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         });
 
         cbxCategoria.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        cbxCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cbxCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxCategoriaActionPerformed(evt);
@@ -318,6 +322,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         });
 
         cbxEjercicio.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        cbxEjercicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cbxEjercicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxEjercicioActionPerformed(evt);
@@ -386,7 +391,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         );
         jpGraficaLayout.setVerticalGroup(
             jpGraficaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addGap(0, 330, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -412,9 +417,6 @@ public class Estadisticas extends javax.swing.JInternalFrame {
     private void btnSGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSGActionPerformed
         // TODO add your handling code here:
         try{   
-            if(!DatosGenerales.hayConexion()){
-                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
-            }
             if(cbxGraficas.getSelectedIndex()==-1){
                 throw new CamposVaciosException("Selecciona una tipo de grafica");
             }
@@ -426,12 +428,19 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 throw new Exception("La fecha de fin debe ser despues de la fecha de inicio\nSelecciona de nuevo");
             }
             
+            if(dcFechaF.getDate().equals(dcFechaI.getDate())){
+                throw new Exception("Las fechas no deben ser las mismas\nSelecciona de nuevo");
+            }
+            
              if(cbxGraficas.getSelectedIndex()==1){
                  if(cbxCategoria.getSelectedIndex()==-1 || cbxEjercicio.getSelectedIndex()==-1){
                      throw new CamposVaciosException("Selecciona una ejercicio");
                  }
              } 
              
+             if(!DatosGenerales.hayConexion()){
+                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
+            }
              mostrarGrafica();
         }catch(CamposVaciosException ex){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
