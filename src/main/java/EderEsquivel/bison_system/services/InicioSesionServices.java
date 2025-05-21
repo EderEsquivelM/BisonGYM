@@ -64,5 +64,4 @@ public class InicioSesionServices {
                 tipoUsuario
         ).isPresent();
     }
-
 }

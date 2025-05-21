@@ -38,5 +38,4 @@ public class EntrenamientosServices {
     public Entrenamientos nuevoEntrenamiento(Entrenamientos entr){
         return eR.save(entr);
     }
-    
 }

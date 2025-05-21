@@ -57,7 +57,5 @@ public class MedidasServices {
     public Medidas actualizarMedida(Medidas med){
         mR.save(med);
         return mR.findTopByUsuarioOrderByFechaDesc(med.getUsuario());
-    }
-    
-    
+    }   
 }

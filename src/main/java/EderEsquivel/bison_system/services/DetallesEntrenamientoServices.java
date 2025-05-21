@@ -42,6 +42,4 @@ public class DetallesEntrenamientoServices {
     public DetallesEntrenamiento nuevoDE(DetallesEntrenamiento dE){
         return deR.save(dE);
     }
-    
-    
 }

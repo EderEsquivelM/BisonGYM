@@ -39,5 +39,4 @@ public class SeriesEntrenamientoServices {
     public void nuevaSerie(SeriesEntrenamiento se){
             seR.save(se); 
     }
-
 }

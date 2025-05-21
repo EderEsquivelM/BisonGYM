@@ -303,6 +303,5 @@ public class DatosDeUsuarioServices {
             listaSE.add(new SeriesEntrenamiento(numSerie,rep,pesoUsado));
         }
         return listaSE;
-    }
-    
+    } 
 }
