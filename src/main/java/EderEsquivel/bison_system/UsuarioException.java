@@ -6,22 +6,24 @@ package EderEsquivel.bison_system;
 
 /**
  *
+ * Excepcion personalizada para verificar datos de usuario en todo el codigo
+ * 
  * @author edere
  */
 public class UsuarioException extends Exception {
 
     /**
-     * Creates a new instance of <code>UsuarioException</code> without detail
-     * message.
+     * Constructo para cuando no se quiera mandar un mensaje personalizado y
+     * solo mandar la excepcion
      */
     public UsuarioException() {
     }
 
     /**
-     * Constructs an instance of <code>UsuarioException</code> with the
-     * specified detail message.
-     *
-     * @param msg the detail message.
+     * @param msg es el mensaje que enviara a un catch
+     * 
+     * Contructor que se utiliza para mandar un mensaje personalizado
+     * 
      */
     public UsuarioException(String msg) {
         super(msg);
