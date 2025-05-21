@@ -12,24 +12,44 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
- *
+ *Clase que reprsenta un musculo del cuerpo humano.
+ * 
  * @author edere
  */
 @Entity
 @Table(name="musculos")
 public class Musculos {
+    /**
+     * ID del musculo.
+     */
     @Id
     @Column(name="id_musculo")
     private Integer id;
-    
+    /**
+     * Nombre del musculo.
+     */
     private String nombre;
     
+    /**
+     * Relaciona {@link ZonasAnatomicas} con el musculo.
+     */
     @ManyToOne
     @JoinColumn(name="id_zona")
     private ZonasAnatomicas id_zona;
     
+    /**
+     * Funcion del musculo.
+     */
     private String funcion;
 
+    /**
+     *Constructor que inicializa un musculo.
+     * 
+     * @param id
+     * @param nombre
+     * @param id_zona
+     * @param funcion
+     */
     public Musculos(Integer id, String nombre, ZonasAnatomicas id_zona, String funcion) {
         this.id = id;
         this.nombre = nombre;
@@ -37,11 +57,12 @@ public class Musculos {
         this.funcion = funcion;
     }
 
+    /**
+     *Constructor vacio.
+     */
     public Musculos() {
     }
 
-    
-    
     public Integer getId() {
         return id;
     }
@@ -50,7 +71,6 @@ public class Musculos {
         this.id = id;
     }
 
-    
     public String getNombre() {
         return nombre;
     }
@@ -74,7 +94,5 @@ public class Musculos {
     public void setFuncion(String funcion) {
         this.funcion = funcion;
     }
-    
-    
-    
+
 }

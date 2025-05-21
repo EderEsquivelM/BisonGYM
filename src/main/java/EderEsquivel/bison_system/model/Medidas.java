@@ -15,27 +15,61 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 /**
- *
+ *Clase que representa las medidas corporales de un usuario.
+ * 
  * @author edere
  */
 
 @Entity
 @Table(name="medidas")
 public class Medidas {
+    
+    /**
+     * ID de la medida
+     * 
+     * Se genera automaticamente.
+     */
     @Id
     @Column(name="id_medida")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_medida;
     
+    /**
+     * Relaciona {@link Usuarios} con una medida.
+     */
     @ManyToOne
     @JoinColumn(name="id_usuario")
     private Usuarios usuario;
     
+    /**
+     * Fecha en la que se registro la medida.
+     */
     private LocalDate fecha;
+    
+    /**
+     * Peso del usuario.
+     */
     private double peso;
+    
+    /**
+     * Altura del usuario
+     */
     private double altura;
+    
+    /**
+     * Porcentaje de grasa corporal del usuario.
+     */
     private Integer porcentaje_grasa;
 
+    /**
+     *Constructor que inicializa una nueva medida con un usuario.
+     * 
+     * @param usuario
+     * @param fecha
+     * @param peso
+     * @param altura
+     * @param porcentaje_grasa
+     */
     public Medidas(Usuarios usuario, LocalDate fecha, double peso, double altura, Integer porcentaje_grasa) {
         this.usuario = usuario;
         this.fecha = fecha;
@@ -44,6 +78,9 @@ public class Medidas {
         this.porcentaje_grasa = porcentaje_grasa;
     }
 
+    /**
+     *Constructor vacio.
+     */
     public Medidas() {
     }
 
@@ -94,6 +131,5 @@ public class Medidas {
     public void setPorcentaje_grasa(Integer porcentaje_grasa) {
         this.porcentaje_grasa = porcentaje_grasa;
     }
-    
-    
+
 }

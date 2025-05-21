@@ -12,23 +12,40 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
- *
+ *Clase que representa el tipo de usuario.
+ * 
  * @author edere
  */
 @Entity
 @Table(name="tipo_usuarios")
 public class TipoUsuario {
+    /**
+     * ID del tipo de usuario.
+     */
     @Id
     @Column(name="id_t_usuario")
     private Integer id;
     
+   /**
+    * Nombre del tipo de usuario.
+    */
     private String n_usuario;
 
+    
+    /**
+     * Constructor que inicializa un nuevo tipo de usuario.
+     * 
+     * @param id
+     * @param n_usuario 
+     */
     public TipoUsuario(Integer id, String n_usuario) {
         this.id = id;
         this.n_usuario = n_usuario;
     }
 
+    /**
+     * Constructor vacio.
+     */
     public TipoUsuario() {
     }
     

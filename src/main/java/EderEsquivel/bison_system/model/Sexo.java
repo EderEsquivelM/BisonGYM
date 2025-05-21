@@ -7,28 +7,42 @@ package EderEsquivel.bison_system.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
- *
+ *Clase que representa el sexo de un usuario.
+ * 
  * @author edere
  */
 @Entity
 @Table(name="sexo")
 public class Sexo {
+    /**
+     * ID del sexo.
+     */
     @Id
     @Column(name="id_sexo")
     private Integer id_sexo;
     
+    /**
+     * Sexo:femenino o masculino.
+     */
     private String descripcion;
 
+    /**
+     * Constructor que inicializa con la ID del sexo y cuales es.
+     * 
+     * @param id_sexo
+     * @param descripcion 
+     */
     public Sexo(Integer id_sexo, String descripcion) {
         this.id_sexo = id_sexo;
         this.descripcion = descripcion;
     }
 
+    /**
+     * Constructor vacio.
+     */
     public Sexo() {
     }
     

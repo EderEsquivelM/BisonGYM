@@ -14,25 +14,54 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
- *
+ *Clase que representa la serie de un ejercicio hecho en un entrenamiento.
+ * 
  * @author edere
  */
 @Entity
 @Table(name="series_entrenamiento")
 public class SeriesEntrenamiento {
+    
+    /**
+     * ID de la serie.
+     * 
+     * Se genera automaticamente.
+     */
     @Id
     @Column(name="id_serie")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_serie;
     
+    /**
+     * Relaciona {@link DetallesEntrenamiento} con una serie.
+     */
     @ManyToOne
     @JoinColumn(name="id_detalle_entrenamiento")
     private DetallesEntrenamiento detEntrenamiento;
     
+    /**
+     * Indica el numero de la seria.
+     */
     private Integer numero_serie;
+    
+    /**
+     * Repeticiones hechas.
+     */
     private Integer repeticiones;
+    
+    /**
+     * Peso usado en kg.
+     */
     private double peso_usado;
 
+    /**
+     * Constructor que inicializa una serie y relaciona con un entrenamiento.
+     * 
+     * @param detEntrenamiento
+     * @param numero_serie
+     * @param repeticiones
+     * @param peso_usado 
+     */
     public SeriesEntrenamiento(DetallesEntrenamiento detEntrenamiento, Integer numero_serie,Integer repeticiones, double peso_usado) {
         this.detEntrenamiento = detEntrenamiento;
         this.numero_serie = numero_serie;
@@ -40,6 +69,14 @@ public class SeriesEntrenamiento {
         this.peso_usado = peso_usado;
     }
 
+    /**
+     * Constructor que inicializa con la ID de la seria y la informacion con la 
+     * que se ejecuto.
+     * 
+     * @param numero_serie
+     * @param repeticiones
+     * @param peso_usado 
+     */
     public SeriesEntrenamiento(Integer numero_serie, Integer repeticiones, double peso_usado) {
         this.numero_serie = numero_serie;
         this.repeticiones = repeticiones;
@@ -47,7 +84,9 @@ public class SeriesEntrenamiento {
     }
     
     
-
+    /**
+     * Constructor vacio
+     */
     public SeriesEntrenamiento() {
     }
 

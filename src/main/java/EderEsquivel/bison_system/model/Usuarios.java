@@ -12,40 +12,94 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.util.Date;
+
 /**
- *
+ *Clase que representa un usuario.
+ * 
  * @author edere
  */
 @Entity
 @Table(name="usuarios")
 public class Usuarios {
+    /**
+     * ID del usuario.
+     * 
+     * Se genera automaticamente.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_usuario")
     private Long id;
     
+    /**
+     * Nombre del usuario.
+     */
     private String nombre;
+    
+    /**
+     * Apellido del usuario.
+     */
     private String apellido;
+    
+    /**
+     * Username o sobrenombre.
+     */
     private String username;
+    
+    /**
+     * Correo con el que se registra el usuario.
+     */
     private String correo;
+    
+    /**
+     * Contraseña.
+     */
     @Column(name = "password_hash")
     private String passwordHash; 
     
-    
+    /**
+     * Fecha de nacimiento.
+     */
     private LocalDate fecha_nacimiento;
+    
+    /**
+     * Indica si el usuario esta habilitado.
+     */
     private boolean activo;
     @ManyToOne
+    
+    /**
+     * Relaciona {@link Sexo} con el usuario.
+     */
     @JoinColumn(name="id_sexo")
     private Sexo sexo;  
     
+    /**
+     * Relaciona {@link TipoUsuario} con el usuario.
+     */
     @ManyToOne
     @JoinColumn(name="id_t_usuario")
     private TipoUsuario tipoUsuario;
     
-   
+   /**
+    * Fecha de cracion del usuario.
+    */
     private LocalDate fecha_creacion;
 
+    /**
+     * Constructor que inicializa un nuevo usuario.
+     * 
+     * @param nombre
+     * @param apellido
+     * @param username
+     * @param correo
+     * @param passwordHash
+     * @param fecha_nacimiento
+     * @param activo
+     * @param sexo
+     * @param tipoUsuario
+     * @param fecha_creacion 
+     */
     public Usuarios(String nombre, String apellido, String username,String correo , String passwordHash, LocalDate fecha_nacimiento, boolean activo,Sexo sexo, TipoUsuario tipoUsuario, LocalDate fecha_creacion) {
         this.nombre = nombre;
         this.apellido = apellido;
@@ -61,7 +115,9 @@ public class Usuarios {
     }
     
    
-    
+    /**
+     * Constructor vacio.
+     */
     public Usuarios() {
     }
     

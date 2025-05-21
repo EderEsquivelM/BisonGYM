@@ -15,28 +15,68 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 
 /**
- *
+ *Clase que representa un entrenamiento.
+ * 
  * @author edere
  */
 @Entity
 @Table(name="entrenamientos")
 public class Entrenamientos {
+    /**
+     * ID del entrenamiento.
+     * 
+     * Se genera automaticamente.
+     */
     @Id
     @Column(name="id_entrenamiento")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_entrenamiento;
     
+    /**
+     * Relaciona un {@link Usuarios} con un entrenamiento.
+     */
     @ManyToOne
     @JoinColumn(name="id_usuario")
     private Usuarios usuario;
     
+    /**
+     * Fecha de cuando se realizo el entrenamiento
+     */
     private LocalDate fecha;
+    
+    /**
+     * Nombre del entrenamiento.
+     */
     private String nombre;
+    
+    /**
+     * Descripcion del entrenamiento.
+     */
     private String descripcion;
+    
+    /**
+     * Tiempo que duro el entrenamiento.
+     */
     private Integer duracion_minutos;
+    
+    /**
+     * Observaciones del entrenamiento.
+     */
     private String observaciones;
 
-    public Entrenamientos(Usuarios usuario, LocalDate fecha, String nombre, String descripcion, Integer duracion_minutos, String observaciones) {
+    /**
+     *Constructor que inicializa un usuario con un entrenamiento junto con 
+     * sus caracteristicas generales.
+     * 
+     * @param usuario
+     * @param fecha
+     * @param nombre
+     * @param descripcion
+     * @param duracion_minutos
+     * @param observaciones
+     */
+    public Entrenamientos(Usuarios usuario, LocalDate fecha, String nombre, 
+            String descripcion, Integer duracion_minutos, String observaciones) {
         this.usuario = usuario;
         this.fecha = fecha;
         this.nombre = nombre;
@@ -45,7 +85,19 @@ public class Entrenamientos {
         this.observaciones = observaciones;
     }
 
-    public Entrenamientos(Long id_entrenamiento, LocalDate fecha, String nombre, String descripcion, Integer duracion_minutos, String observaciones) {
+    /**
+     *Constructo que inicializa un entrenamiento sin que se relacione con un 
+     * usuario.
+     * 
+     * @param id_entrenamiento
+     * @param fecha
+     * @param nombre
+     * @param descripcion
+     * @param duracion_minutos
+     * @param observaciones
+     */
+    public Entrenamientos(Long id_entrenamiento, LocalDate fecha, String nombre,
+            String descripcion, Integer duracion_minutos, String observaciones) {
         this.id_entrenamiento = id_entrenamiento;
         this.fecha = fecha;
         this.nombre = nombre;
@@ -54,15 +106,12 @@ public class Entrenamientos {
         this.observaciones = observaciones;
     }
     
-    
-
-    
-
+    /**
+     *Constructo vacio.
+     */
     public Entrenamientos() {
     }
-    
-    
-    
+
     public Long getId_entrenamiento() {
         return id_entrenamiento;
     }
@@ -118,7 +167,4 @@ public class Entrenamientos {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-    
-    
-    
 }
