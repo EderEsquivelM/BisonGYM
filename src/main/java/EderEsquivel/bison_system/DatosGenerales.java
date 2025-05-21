@@ -22,13 +22,36 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  *
+ * Clase utilizada para consultar datos generales y funciones rudimentales.
+ * 
+ * Contiene mapas estatico sobre datos de zonas anatomicas ,musculos,
+ * dificultades y ejercicios.
+ * 
  * @author edere
  */
 public class DatosGenerales {
+    
+    /**
+     * 
+     * Guarda los datos del usuario que inicio sesion.
+     * 
+     */
+    private static Usuarios infoUsuarios;
+    
+    /**
+     *
+     * Mapa estatico de zonas anatomicas con identificadores y nombres.
+     * 
+     * La clave es Integer, es la misma que la ID de la zona muscular y el 
+     * valor es el objeto {@link ZonasAnatomicas}.
+     * 
+     * Se utiliza para cuando no haya conexion a internet y asi mostrar los 
+     * datos sin esta misma.
+     * 
+     */
     public static final Map<Integer, ZonasAnatomicas> zonasAnatomicasMap = new HashMap<Integer, ZonasAnatomicas>() {{
         put(1, new ZonasAnatomicas(1, "Hombros"));
         put(2, new ZonasAnatomicas(2, "Brazos"));
@@ -44,7 +67,17 @@ public class DatosGenerales {
         put(12, new ZonasAnatomicas(12, "Pies"));
     }};
 
-    // HashMap completo de músculos (ID -> Objeto Musculos)
+    /**
+     *
+     * Mapa estatico de musculos con propiedades anatomicas.
+     * 
+     * La clave es Integer, es la misma que la ID del musculo y el valor es el 
+     * objeto {@link Musculos}.
+     * 
+     * Se utiliza para cuando no haya conexion a internet y asi mostrar los 
+     * datos sin esta misma.
+     * 
+     */
     public static final Map<Integer, Musculos> musculosMap = new HashMap<Integer, Musculos>() {{
         put(1, new Musculos(1, "Deltoides", zonasAnatomicasMap.get(1), "Permite el movimiento del brazo en varias direcciones"));
         put(2, new Musculos(2, "Bíceps braquial", zonasAnatomicasMap.get(2), "Flexiona el codo y supina el antebrazo"));
@@ -73,12 +106,34 @@ public class DatosGenerales {
         put(25, new Musculos(25, "Músculos intrínsecos del pie", zonasAnatomicasMap.get(12), "Estabilidad y movimiento de los dedos del pie"));
     }};
     
+    /**
+     *
+     * Mapa estatico de dificulates de los ejercicios.
+     * 
+     * La clave es Integer,es la misma que la ID de la dificultad y el valor es
+     * {@link Dificultades}.
+     * 
+     * Se utiliza para cuando no haya conexion a internet y asi mostrar los 
+     * datos sin esta misma.
+     * 
+     */
     public static final Map<Integer, Dificultades> dificultadesMap = new HashMap<Integer, Dificultades>() {{
         put(1, new Dificultades(1, "Principiante"));
         put(2, new Dificultades(2, "Intermedio"));
         put(3, new Dificultades(3, "Avanzado"));
     }};
     
+    /**
+     *
+     * Mapa estatico de Ejercicios.
+     * 
+     * La clave es Integer,es la misma que la ID del ejercicio y el valor es 
+     * {@link Ejercicios}.
+     * 
+     * Se utiliza para cuando no haya conexion a internet y asi mostrar los 
+     * datos sin esta misma.
+     * 
+     */
     public static final Map<Integer, Ejercicios> ejerciciosMap = new HashMap<Integer, Ejercicios>() {{
         put(1, new Ejercicios(1, "Abdominales con Peso", 
             "Sentado en el suelo, piernas elevadas o flexionadas, gira el torso de lado a lado sosteniendo un disco, mancuerna o balón medicinal.", 
@@ -245,6 +300,13 @@ public class DatosGenerales {
             musculosMap.get(19), musculosMap.get(16), dificultadesMap.get(2)));
     }};
     
+    /**
+     *
+     * @param idZona Es la Zona Muscular.
+     * @return una lista de {@link Musculos} de cierta zona anatomica.
+     * 
+     * @implNote Este metodo se utiliza para obtener los musculos de una zona.
+     */
     public static List<Musculos> obtenerMusculosDeZona(int idZona) {
         List<Musculos> musculosDeZona = new ArrayList<>();
 
@@ -257,8 +319,20 @@ public class DatosGenerales {
         return musculosDeZona;
     }
 
+    /**
+     *
+     * @param idZona Es la Zona Muscular.
+     * @return una lista de {@link Ejericios}.
+     * 
+     * @implNote Este metodo se utiliza para obtener los ejercicios de una zona
+     * muscular, utiliza el metodo obtenerMusculosDeZona para hacer mas eficiente
+     * la busqueda de los ejercicios.
+     */
     public static List<Ejercicios> obtenerEjerciciosPorZona(int idZona) {
+        //Obtiene los musculos de una zona
         List<Musculos> musculosDeZona = obtenerMusculosDeZona(idZona);
+        
+        //Guarda en el Set para que no haya repeticion de musculos por zona
         Set<Musculos> musculosSet = new HashSet<>(musculosDeZona);
         List<Ejercicios> ejerciciosFiltrados = new ArrayList<>();
 
@@ -275,8 +349,13 @@ public class DatosGenerales {
         return ejerciciosFiltrados;
     }
 
-
-    
+    /**
+     *
+     * @return Un valor booleano
+     * 
+     * @implNote Este metodo verifica que haya conexion a internet ,ayuda a 
+     * verificar si se pueden hacer consultas al a base de datos.
+     */
     public static boolean hayConexion() {
         try {
             URL url = new URL("http://www.google.com");
@@ -290,6 +369,14 @@ public class DatosGenerales {
         }
     }
     
+    /**
+     *
+     * @param fechaSinFormato Es una fecha de tipo Date .
+     * @return Una fecha de tipo LocalDate.
+     * 
+     * @implNote Este metodo cambia el tipo de dato de Date a LocalDate y sea
+     * mas facil de identificar en la base de datos.
+     */
     public static LocalDate cambioFecha(Date fechaSinFormato){
         if(fechaSinFormato!=null){
             return fechaSinFormato.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -299,17 +386,35 @@ public class DatosGenerales {
         }
     }
     
-   private static Usuarios infoUsuarios;
+    
 
+    /**
+     *
+     * @return Los datos del usuario que inicio sesion.
+     */
     public static Usuarios getInfoUsuarios() {
         return infoUsuarios;
     }
 
+    /**
+     *
+     * @param infoUsuarios Datos del usuario en objeto {@link Usuarios}.
+     * 
+     * @implNote Ayuda a sincronizar los cambios de informacion del usuario en
+     * la base de datos y en le programa.
+     */
     public static void setInfoUsuarios(Usuarios infoUsuarios) {
         DatosGenerales.infoUsuarios = infoUsuarios;
     }
 
-   
+    /**
+     *
+     * @param correo Correo de un usuario.
+     * @return Un valor bool
+     * 
+     * @implNote Este metodo ayuda a verificar si la extencio de correo es 
+     * correcta.
+     */
     public static boolean correoValido(String correo) {
         String regex = "^[\\w-\\.]+@([\\w-]+\\.)+(com|org|net|edu|gob|mx)$";
         return correo.matches(regex);
