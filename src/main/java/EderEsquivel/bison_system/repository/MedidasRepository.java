@@ -9,9 +9,17 @@ import EderEsquivel.bison_system.model.Usuarios;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- *
+ *Repositorio JPA para la entidad {@link Medidas}.
+ * 
+ * Se utiliza en {@link MedidasServices}.
  * @author edere
  */
 public interface MedidasRepository extends JpaRepository<Medidas,Long>{
+    
+    /**
+     * @implNote Busca la ultima medida ingresada por un usuario en especifico.
+     * @param us Usuario
+     * @return {@link Medidas} que fue ingresada
+     */
     Medidas findTopByUsuarioOrderByFechaDesc(Usuarios us);
 }

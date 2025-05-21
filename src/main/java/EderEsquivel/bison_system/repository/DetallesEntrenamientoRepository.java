@@ -8,7 +8,10 @@ import EderEsquivel.bison_system.model.DetallesEntrenamiento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- *
+ *Repositorio JPA para la entidad {@link DetallesEntrenamiento}.
+ * 
+ * Se utiliza en {@link DetallesEntrenamientosServices}.
+ * 
  * @author edere
  */
 public interface DetallesEntrenamientoRepository extends JpaRepository<DetallesEntrenamiento,Long> {
