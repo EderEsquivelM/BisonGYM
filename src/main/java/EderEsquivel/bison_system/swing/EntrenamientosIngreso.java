@@ -520,6 +520,7 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             
             //Verifica que no existan series vacias.
             if (!verificarSeries(seriesPorEjercicio)) {
+                return;
             }
 
             JOptionPane.showMessageDialog(this, "Series guardadas correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
