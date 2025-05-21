@@ -6,28 +6,32 @@ package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
-import static EderEsquivel.bison_system.DatosGenerales.obtenerEjerciciosPorZona;
 import EderEsquivel.bison_system.model.Ejercicios;
-import EderEsquivel.bison_system.model.Musculos;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
-import java.awt.Color;
 import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *Interfaz grafica para selecionar que ejecicios se hacen por zona anatomica.
+ * 
+ * Esta ventana muestra las zonas anatomicas y redireciona para que veas los 
+ * ejercicios donde se trabaja.
+ * 
  * @author edere
  */
 public class CategoriasEjercicios extends javax.swing.JInternalFrame {
 
+  
     /**
-     * Creates new form CategoriasEjercicios
+     * Guarda los ejercicios selecionados por la zona anatomica.
      */
-    
     public static List<Ejercicios> listaEjercicios= new ArrayList<>();
     
+    /**
+     * Constructo que inicializa cargando las zonas anatomicas al JComboBox.
+     */
     public CategoriasEjercicios() {
         initComponents();
         
@@ -112,15 +116,25 @@ public class CategoriasEjercicios extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Boton que consulta los ejercicios por zona anatomica y los guarda en una
+     * Lista estatica que se mostrara en un JDialog.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnVerEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerEjerciciosActionPerformed
         // TODO add your handling code here:
         try{
+            //Verifica que se este seleccionado una opcion del ComboBox
             if(cbxZonas.getSelectedIndex()==-1){
                 throw new CamposVaciosException("Selecciona una zona anatomica");
             }
             
+            //El indice del ComboBox esta relacionado a la Clave de la zona anatomica.
             int idZonaSelecionada =cbxZonas.getSelectedIndex()+ 1;
+            
+            //Busca los ejercicios por la id de la zona.
             listaEjercicios = DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
             
             if (!listaEjercicios.isEmpty()) {

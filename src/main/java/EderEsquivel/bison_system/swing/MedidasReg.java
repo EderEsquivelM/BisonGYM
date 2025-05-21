@@ -12,7 +12,12 @@ import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *Interfaz grafica para mostrar y editar las medidas corporales del usuario.
+ * 
+ * Esta interfa permite mostrar y editar las medidades corporles.
+ * 
+ * Se conecta al servicio con la clase {@link MedidasServices}.
+ * 
  * @author edere
  */
 public class MedidasReg extends javax.swing.JInternalFrame{
@@ -25,18 +30,23 @@ public class MedidasReg extends javax.swing.JInternalFrame{
             
     
     /**
-     * Creates new form Perfil
+     * Contructor que inicializa el servicio.
+     * @param mS Instancia del servicio {@link MedidasServices}
      */
     public MedidasReg(MedidasServices mS) {
         this.mS=mS;
         initComponents();
         taIMC.setEditable(false);
         this.setResizable(false);
+        
+        //Verifica que haya conexion a internet.
         if(!DatosGenerales.hayConexion()){
             JOptionPane.showMessageDialog(this,
                     "No hay conexion a internet",
                     "¡Sin conexion!", JOptionPane.ERROR_MESSAGE);
+            
         }else{
+            
             if(mS.buscarMedidaUsuario(DatosGenerales.getInfoUsuarios())==null){
                 pesoS= JOptionPane.showInputDialog(this,"Ingresa tu peso");
                 alturaS= JOptionPane.showInputDialog(this,"Ingresa tu altura en metros");
@@ -51,6 +61,7 @@ public class MedidasReg extends javax.swing.JInternalFrame{
                 mostrarInformacion(med);
 
             }else{
+                
                 Medidas med=null;
                 med=mS.buscarMedidaUsuario(DatosGenerales.getInfoUsuarios());
                 mostrarInformacion(med);
@@ -62,6 +73,11 @@ public class MedidasReg extends javax.swing.JInternalFrame{
        editable(false); 
     }
     
+    /**
+     * Este metodo que sea visibles ciertos componentes de la interfaz grafica.
+     * 
+     * @param estado Bool
+     */
     public void editable(boolean estado){
         tfPeso.setEditable(estado);
         tfAltura.setEditable(estado);
@@ -69,8 +85,15 @@ public class MedidasReg extends javax.swing.JInternalFrame{
         btnAplicar.setEnabled(estado);
     }
     
+    /**
+     * Este metodo muestra la ultima medidion en la interfaz grafica.
+     * 
+     * @param med Objeto {@link Medidas}
+     */
     public void mostrarInformacion(Medidas med){
+        //Calcula el IMC
         float imc=(float) (med.getPeso()/(med.getAltura()*med.getAltura()));
+        
         pesoS=String.valueOf(med.getPeso());
         alturaS=String.valueOf(med.getAltura());
         pGCS=String.valueOf(med.getPorcentaje_grasa())
@@ -251,12 +274,22 @@ public class MedidasReg extends javax.swing.JInternalFrame{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Boton que habilita cietos controles de la interfaz grafica.
+     * 
+     * @param evt Evento de accion del boton.
+     */
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         editable(true);
     }//GEN-LAST:event_btnEditarActionPerformed
-
+    
+    /**
+     * Boton que manda a la base de datos los cambios que hizo el usuario a 
+     * sus medidas corporales.
+     * 
+     * @param evt Evento de accion del boton.
+     */
     private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
         // TODO add your handling code here:
         try {

@@ -15,21 +15,44 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ *Interfaz grafica para administrar los usuarios.
+ * 
+ * Esta ventana permite editar y gestionar los datos de los usuarios.
+ * 
+ * Se conecta al servicio con la clase {@link UsuariosServices} para obtener los
+ * datos y actualizar la informacion.
+ * 
  * @author edere
  */
 public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
     
     private UsuariosServices usS;
-    private Usuarios usuarioOriginal;
-    private List<Usuarios> listaUsuarios=new ArrayList();
+    
     /**
-     * Creates new form AdministradorDeUsuarios
+     * Guarda un usuario consultado
+     */
+    private Usuarios usuarioOriginal;
+    
+    /**
+     * Guarda todos los usuarios del sistema para despues ser mostrado en un JTable.
+     */
+    private List<Usuarios> listaUsuarios=new ArrayList();
+    
+    /**
+     * Constructo que iniizaliza la instancia del servicio.
+     * 
+     * @param usS Instancia del servicio {@link UsuariosServices} utilizada
+     * para obtener y actualizar la información de los usuarios.
      */
     public AdministradorDeUsuarios(UsuariosServices usS) {
         this.usS=usS;
         initComponents();
         this.setResizable(false);
+        /*
+        Al iniciar esta ventana verifica si hay conexion a internet, si es el 
+        caso consulta todos los usuarios y los carga con la funcion
+        cargarUsuariosEnTabla()
+        */
         if(!DatosGenerales.hayConexion()){
             JOptionPane.showMessageDialog(this,
                     "No hay conexion a internet",
@@ -300,18 +323,28 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Este boton lo que hace es habilitar el boton para aplicar los cambios
+     * y asi mismo manda a varios JTextField la informacion del usuario 
+     * seleccionado en la tabla y asi poder editar.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         
         try{
+            //Guarda el indice que se esta seleccionando en la tabla
             int fila = tUsuarios.getSelectedRow();
+            
+            //Verifica que se este seleccionando un registro de JTable tUsuarios.
             if(fila == -1){
                 throw new CamposVaciosException("Selecciona un usuario para editar");
             }
             
             editarVisibles(true);
             
-            
+            //Hace un Cast en los registro del usuario seleccionado
             String nuevoNombre = (String) tUsuarios.getValueAt(fila, 1);
             String nuevoApellido = (String) tUsuarios.getValueAt(fila, 2);
             String nuevoCorreo = (String) tUsuarios.getValueAt(fila, 3);
@@ -319,17 +352,17 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             String nuevaContrasenia = (String) tUsuarios.getValueAt(fila, 5);
             boolean activo = (boolean) tUsuarios.getValueAt(fila, 6);
             
+            //Deshabilita el poder seleccionar otro usuario al estar editando uno.
             tUsuarios.setRowSelectionAllowed(false);
             
+            //Se refleja los datos del usuario en los JTextField.
             tfNombre.setText(nuevoNombre);
             tfApellido.setText(nuevoApellido);
             tfCorreo.setText(nuevoCorreo);
             tfUsername.setText(nuevoUsername);
             tfContrasenia.setText(nuevaContrasenia);
             cbActivo.setSelected(activo);
-            if (!DatosGenerales.hayConexion()) {
-                throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
-            }
+            
         }catch(CamposVaciosException ex){
                 JOptionPane.showMessageDialog(this,ex.getMessage(),"¡Error!", JOptionPane.ERROR_MESSAGE);       
         }catch (Exception ex) {
@@ -340,15 +373,33 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
         }
             
     }//GEN-LAST:event_btnEditarActionPerformed
-
+    
+    /**
+     * Boton que aplica los cambios al editar un usuario y los refleja en la
+     * tabla.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
         // TODO add your handling code here:
+        
+        //Declaracion de una variable auxiliar.
         Usuarios usuarioEditar;
+        
+        //Guarda el indice que se esta seleccionando en la tabla
         int fila = tUsuarios.getSelectedRow();
+        
+        /*
+        Castea el campo ID del registro que se selecciono para editarlo en la 
+        base de datos.
+        */
         Long idU = (Long) tUsuarios.getValueAt(fila, 0);
+        
+        //Busca al usuario y lo retorna para guardarlo en una variable local.
         usuarioOriginal=usS.buscarUsuarioID(idU);
         usuarioEditar=usuarioOriginal;
         try{
+            //Verificacion de campos vacios.
             if(tfNombre.getText().trim().isEmpty() || tfApellido.getText().trim().isEmpty()
                || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()
                || tfContrasenia.getText().trim().isEmpty()){
@@ -356,6 +407,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             
             }
             
+            //Verifica la extencion del correo
             if(!DatosGenerales.correoValido(tfCorreo.getText().trim())){
                    throw new CamposVaciosException("La dirección de correo electrónico no es válida.");
             }
@@ -370,8 +422,10 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             
             // Verificar que el correo no esté registrado por otro usuario
             if(usS.correoVerificar(tfCorreo.getText().trim())) {
-                // Aquí asumimos que correoVerificar solo dice si existe en la BD
-                // Si el correo es distinto al actual, entonces error
+                /* 
+                Aquí asumimos que correoVerificar solo dice si existe en la base 
+                de datos. Si el correo es distinto al actual, entonces error
+                */
                 if(!tfCorreo.getText().trim().equalsIgnoreCase(usuarioOriginal.getCorreo())) {
                     throw new Exception("El correo '"+ tfCorreo.getText() +"' ya está registrado");
                 }
@@ -392,6 +446,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             throw new Exception("No hay conexion a internet");
             }
             
+            //Aplica los cambios que se realizaron al usuario
             usuarioEditar.setNombre(tfNombre.getText().trim());
             usuarioEditar.setApellido(tfApellido.getText().trim());
             usuarioEditar.setCorreo(tfCorreo.getText().trim());
@@ -399,6 +454,7 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
             usuarioEditar.setPassword_hash(tfContrasenia.getText().trim());
             usuarioEditar.setActivo(cbActivo.isSelected());
             
+            //Si se realizo correctamente el guardado,lo indicara con un JOptionPane.
             if(usS.actualizarUsuarioAdmin(usuarioEditar)){
                 JOptionPane.showMessageDialog(this, "Usuario actualizado", "Actualizado",
                            JOptionPane.INFORMATION_MESSAGE);
@@ -424,29 +480,52 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
         } 
         
     }//GEN-LAST:event_btnAplicarActionPerformed
-
+    
+    /**
+     * Cancela el proceso de editado de un usuario.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
+        //Borra los datos consultados
         usuarioOriginal=null;
         editarVisibles(false);
         tUsuarios.setRowSelectionAllowed(true);
 
     }//GEN-LAST:event_btnCancelarActionPerformed
-
+    
+    /**
+     * Campo de texto para buscar por un filtro en especifico.
+     * 
+     * @param evt Evento que sucede al escribir en un JTextField.
+     */
     private void tfFiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfFiltroKeyReleased
         // TODO add your handling code here:
-        if(cbxFiltro.getSelectedItem() != null) { // Verificar que hay algo seleccionado
+        
+        // Verificar si se selecciono un tipo de filtro.
+        if(cbxFiltro.getSelectedItem() != null){ 
             filtrarUsuarios();
         }
     }//GEN-LAST:event_tfFiltroKeyReleased
-
+    
+    /**
+     *Boton que restaura el filtro por defecto(Nombre).
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnRestaurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestaurarActionPerformed
         // TODO add your handling code here:
         tfFiltro.setText("");
-        cbxFiltro.setSelectedIndex(0); // Seleccionar primer elemento en lugar de -1
+        cbxFiltro.setSelectedIndex(0);
         cargarUsuariosEnTabla();
     }//GEN-LAST:event_btnRestaurarActionPerformed
 
+    /**
+     * Selector para escoger un filtro.
+     * 
+     * @param evt Evento que sucede al dar seleccionar un elemento del JComboBox.
+     */
     private void cbxFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxFiltroActionPerformed
         // TODO add your handling code here
         if (!tfFiltro.getText().isEmpty() && cbxFiltro.getSelectedItem() != null){
@@ -455,11 +534,14 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_cbxFiltroActionPerformed
     
     
-    
+    /**
+     * Este metodo lo que hace es cargar todos los usuarios en la tabla.
+     */
     private void cargarUsuariosEnTabla() {
         DefaultTableModel model = (DefaultTableModel) tUsuarios.getModel();
         model.setRowCount(0); // Limpiar la tabla
-
+        
+        //For each para leer elemento por elemento.
         for (Usuarios u : listaUsuarios) {
             if (u.getTipoUsuario() != null && u.getTipoUsuario().getId_t_usuario() == 1) {
                 model.addRow(new Object[]{
@@ -475,30 +557,44 @@ public class AdministradorDeUsuarios extends javax.swing.JInternalFrame {
         }
     }
     
+    /**
+     * Filtra la lista de usuarios mostrada en la tabla según el texto ingresado
+     * y el campo seleccionado en el JComboBox de filtros.
+     * 
+     * El filtro se aplica en los campos: nombre, apellido, username o correo,
+     * dependiendo de la selección actual. La búsqueda no distingue entre mayúsculas
+     * y minúsculas
+     * 
+     */
     private void filtrarUsuarios() {
-        // Verificar que hay un campo seleccionado
+        // Verificar que hay un campo seleccionado.
         if(cbxFiltro.getSelectedItem() == null) {
             return;
         }
-
+        
+         // Obtener el texto ingresado por el usuario y convertirlo a minúsculas.
         String textoBusqueda = tfFiltro.getText().trim().toLowerCase();
+        
         String campoSeleccionado = cbxFiltro.getSelectedItem().toString().toLowerCase();
 
+        // Si no se ingresó texto, recargar la tabla con todos los usuarios sin filtro.
         if (textoBusqueda.isEmpty()) {
             cargarUsuariosEnTabla();
             return;
         }
-
+        
+        //Limpia la tabla.
         DefaultTableModel model = (DefaultTableModel) tUsuarios.getModel();
         model.setRowCount(0);
         
+        // Ordenar la lista de usuarios por ID antes de aplicar el filtro.
         listaUsuarios.sort(Comparator.comparing(Usuarios::getId));
 
         for (Usuarios u : listaUsuarios) {
             String valorCampo = "";
 
             switch (campoSeleccionado) {
-                case "nombre":  // Ahora en minúsculas para coincidir con toLowerCase()
+                case "nombre":
                     valorCampo = u.getNombre().toLowerCase();
                     break;
                 case "apellido":

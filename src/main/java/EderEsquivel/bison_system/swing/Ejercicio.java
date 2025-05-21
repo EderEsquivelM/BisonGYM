@@ -11,16 +11,32 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 /**
- *
+ *Interfaz grafica que muestra la lista estatica de ejercicios de 
+ * {@link CategoriasEjercicios}
+ * 
+ * Esta ventana muestra la informacion del ejercicio.
+ * 
  * @author edere
  */
 public class Ejercicio extends javax.swing.JDialog {
-
     /**
-     * Creates new form Ejercicios
+     * Controla el indice de {@code CategoriasEjercicios.listaEjercicios}.
+     */
+    public int indiceLista=0;
+    public String imagen;
+    
+    //Carga una imagen que nunca cambia.
+    public ImageIcon icon;
+    public String imagengm= imagen = "/GM.jpeg";
+    public ImageIcon icongm =new ImageIcon(getClass().getResource(imagengm));
+    
+    /**
+     * Constructor que carga todos ejercicios.
+     * 
+     * @param parent Es el Frame padre donde se va a mostrar.
      */
     public Ejercicio(java.awt.Frame parent) {
-        super(parent, "Ejercicios", ModalityType.APPLICATION_MODAL);
+    super(parent, "Ejercicios", ModalityType.APPLICATION_MODAL);
         setResizable(false);
         initComponents();
         gM.setIcon(icongm);
@@ -102,6 +118,7 @@ public class Ejercicio extends javax.swing.JDialog {
         taDescripcion.setLineWrap(true);
         taDescripcion.setRows(5);
         taDescripcion.setWrapStyleWord(true);
+        taDescripcion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane5.setViewportView(taDescripcion);
 
         jScrollPane6.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -111,6 +128,7 @@ public class Ejercicio extends javax.swing.JDialog {
         taMP.setColumns(20);
         taMP.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         taMP.setRows(5);
+        taMP.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane6.setViewportView(taMP);
 
         jScrollPane7.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -120,6 +138,7 @@ public class Ejercicio extends javax.swing.JDialog {
         taMS.setColumns(100);
         taMS.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         taMS.setRows(5);
+        taMS.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane7.setViewportView(taMS);
 
         jScrollPane8.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -129,6 +148,7 @@ public class Ejercicio extends javax.swing.JDialog {
         taDificultad.setColumns(20);
         taDificultad.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         taDificultad.setRows(5);
+        taDificultad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jScrollPane8.setViewportView(taDificultad);
 
         gM.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -204,7 +224,7 @@ public class Ejercicio extends javax.swing.JDialog {
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAnteriorEjercicio)
                     .addComponent(btnSiguienteEjercicio)))
@@ -216,20 +236,23 @@ public class Ejercicio extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 901, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 907, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Boton que hace que se cambie de ejercicio mediate el indice.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnSiguienteEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteEjercicioActionPerformed
         // TODO add your handling code here:
         if (indiceLista < CategoriasEjercicios.listaEjercicios.size() - 1) {
@@ -237,7 +260,12 @@ public class Ejercicio extends javax.swing.JDialog {
             actEjercicio();
         }
     }//GEN-LAST:event_btnSiguienteEjercicioActionPerformed
-
+    
+    /**
+     * Boton que hace que cambie el ejercicio mediante el indice.
+     * 
+     * @param evt Evento que sucede al dar click al boton .
+     */
     private void btnAnteriorEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorEjercicioActionPerformed
         // TODO add your handling code here:
         if (indiceLista > 0) {
@@ -245,18 +273,31 @@ public class Ejercicio extends javax.swing.JDialog {
             actEjercicio();
         }
     }//GEN-LAST:event_btnAnteriorEjercicioActionPerformed
-
+    
+    /**
+     * 
+     * @param evt Evento que sucede al dar click aun Label o en su caso una imagen.
+     */
     private void gMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gMMouseClicked
         // TODO add your handling code here:
+        
+        //Se abre un JDialog con una imagen en mayor resolucion.
         abrirGPMayorResolucion();
     }//GEN-LAST:event_gMMouseClicked
     
-    
+    /**
+     * Actualiza la interfaz gráfica con la información del ejercicio actual seleccionado,
+     * usando el índice {@code indiceLista} para acceder al ejercicio en la lista.
+     */
     private void actEjercicio(){
+        // Actualizar el título y descripción del ejercicio
         lblTituloEjercicio.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getNombre());
         taDescripcion.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getDescripcion());
+        
+         // Mostrar el músculo principal
         taMP.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getMusculoPrincipal().getNombre());
         
+        // Obtener el músculo secundario y validarlo antes de mostrarlo
         Musculos musculoSecundario = CategoriasEjercicios.listaEjercicios.get(indiceLista).getMusculoSecundario();
         if (musculoSecundario != null && musculoSecundario.getNombre() != null) {
             taMS.setText(musculoSecundario.getNombre());
@@ -265,41 +306,40 @@ public class Ejercicio extends javax.swing.JDialog {
         }
         
         taDificultad.setText(CategoriasEjercicios.listaEjercicios.get(indiceLista).getId_dificultad().getNombre());
+        
+         // Cargar la imagen del ejercicio desde un recurso local (archivo .gif)
         imagen = "/" + CategoriasEjercicios.listaEjercicios.get(indiceLista).getId_ejericio() + ".gif";
         icon = new ImageIcon(getClass().getResource(imagen));
         imagenEjercicio.setIcon(icon);;
         
+        // Activar o desactivar botones de navegación dependiendo de la posición
         btnAnteriorEjercicio.setEnabled(indiceLista > 0);
         btnSiguienteEjercicio.setEnabled(indiceLista < CategoriasEjercicios.listaEjercicios.size() - 1);
     }
     
+    /**
+     * Abre un cuadro de diálogo modal con una imagen de mayor resolución
+     * que muestra los grupos musculares del cuerpo humano.
+     */
     private void abrirGPMayorResolucion() {
         JDialog imagenGrandeDialog = new JDialog(this, "Grupos Musculares", true);
 
+        // Cargar la imagen de alta resolución desde los recursos del proyecto
         String imagenAltaResolucion = "/GruposMusculares.jpeg"; 
         ImageIcon iconAltaResolucion = new ImageIcon(getClass().getResource(imagenAltaResolucion));
 
         JLabel imagenLabel = new JLabel(iconAltaResolucion);
-
+        
+        // Configurar el diseño del cuadro de diálogo y agregar la imagen
         imagenGrandeDialog.setLayout(new BorderLayout());
         imagenGrandeDialog.add(imagenLabel, BorderLayout.CENTER);
-
+        
+        // Ajustar el tamaño del cuadro de diálogo al tamaño de la imagen
         imagenGrandeDialog.pack();  
 
         imagenGrandeDialog.setLocationRelativeTo(this); 
         imagenGrandeDialog.setVisible(true);
     }
-    /**
-     * @param args the command line arguments
-     */
-    
- 
-    
-    public int indiceLista=0;
-    public String imagen;
-    public ImageIcon icon;
-    public String imagengm= imagen = "/GM.jpeg";
-    public ImageIcon icongm =new ImageIcon(getClass().getResource(imagengm));
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnteriorEjercicio;

@@ -17,14 +17,14 @@ import java.util.Date;
 
 
 /**
- *
+ *Interfaz grafica para registrar usuarios
+ * 
+ * Esta ventana se registran nuevos usuarios.
+ * 
  * @author edere
  */
 public class Registro extends javax.swing.JDialog  {
 
-    /**
-     * Creates new form Registro
-     */
     private UsuariosServices usS;
     private char contrasena;
     private Sexo femenino=new Sexo(1,"femenino");
@@ -253,10 +253,16 @@ public class Registro extends javax.swing.JDialog  {
             
         }
     }//GEN-LAST:event_formWindowClosing
-
+    
+    /**
+     *Este metodo regitra un nuevo usuario en el sistema.
+     * 
+     * @param evt Evento de accion del boton.
+     */
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
         try{
+            //Verifica que no haya campos vacios.
             if(dcFechaNacimiento.getDate() == null || tfNombre.getText().trim().isEmpty() || tfApellido.getText().trim().isEmpty()
                || tfUsername.getText().trim().isEmpty() || tfCorreo.getText().trim().isEmpty()||cbxGenero.getSelectedIndex()==-1
                || pfContrasena.getPassword().length==0){
@@ -264,6 +270,8 @@ public class Registro extends javax.swing.JDialog  {
                 throw new CamposVaciosException("Debes llenar todos los campos");
                 
             }
+            
+            // Verifica que el correo electrónico tenga un formato válido usando una expresión regular
             if(!DatosGenerales.correoValido(tfCorreo.getText().trim())){
                    throw new CamposVaciosException("La dirección de correo electrónico no es válida.");
             }
@@ -280,6 +288,7 @@ public class Registro extends javax.swing.JDialog  {
                 throw new Exception("El correo '"+ tfCorreo.getText()+"'\nya esta registrado");
             }
             
+            //Comprueba si el nombre de usuario ya está registrado en el sistema
             if(usS.usernameVerificar(tfUsername.getText().trim())){
                 throw new Exception("El usuario '"+tfUsername.getText() +"'\nya esta registrado");
             }
@@ -287,22 +296,33 @@ public class Registro extends javax.swing.JDialog  {
             if (!DatosGenerales.hayConexion()) {
                 throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
             }
-
+            
+            // Obtiene la fecha actual para posibles validaciones
             Date fechaHoy = new Date();
+            
             Sexo generoElegido=null;
+            
             if(cbxGenero.getSelectedIndex()==0){
                 generoElegido=femenino;
             }else if(cbxGenero.getSelectedIndex()==1){
                 generoElegido=masculino;
             }
-                
+            
+            // Obtiene y limpia la contraseña ingresada  
             String password = new String(pfContrasena.getPassword()).trim();
+            
             TipoUsuario tusuario=new TipoUsuario(1  ,"usuario");
+            
+            // Construye el objeto Usuario con todos los datos proporcionados
             Usuarios nUsuario=new Usuarios(tfNombre.getText().trim(),tfApellido.getText().trim(),tfUsername.getText().trim()
                     ,tfCorreo.getText().trim(),password,DatosGenerales.cambioFecha(dcFechaNacimiento.getDate()),true,
                     generoElegido,tusuario,LocalDate.now());
+            
+            //Intenta guardar el nuevo usuario en la base de datos
             if(usS.nuevoUsuario(nUsuario)){
-                JOptionPane.showMessageDialog(this, "Usuario registrado");                
+                JOptionPane.showMessageDialog(this, "Usuario registrado");
+
+                // Vacía todos los campos después de un registro exitoso                
                 tfNombre.setText("");
                 tfApellido.setText("");
                 tfUsername.setText("");
@@ -324,7 +344,11 @@ public class Registro extends javax.swing.JDialog  {
         }         
         
     }//GEN-LAST:event_btnRegistrarActionPerformed
-
+    
+    /**
+     * 
+     * @param evt Evento de accion al presionar el CheckBox
+     */
     private void chbxMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbxMostrarActionPerformed
         // TODO add your handling code here:
         if(chbxMostrar.isSelected()){
@@ -340,6 +364,8 @@ public class Registro extends javax.swing.JDialog  {
     
     
     /**
+     * Metodo para mostrar u ocultar la contraseña.
+     * 
      * @param args the command line arguments
      */
     

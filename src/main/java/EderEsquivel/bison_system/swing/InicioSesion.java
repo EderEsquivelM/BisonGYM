@@ -16,15 +16,20 @@ import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import java.awt.Color;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane; 
-
+import javax.swing.JOptionPane;
 
 /**
- *
+ *Interfaz grafica para que el usuario inicie sesion al sistema.
+ * 
+ * Esta veentana de inicio de sesión para el sistema BisonGYM
+ * 
+ * Se conecta con los servicios {@link InicioSesionServices} para verificar 
+ * credenciales y{@link UsuariosServices} para obtener información del usuario.
+ * 
  * @author edere
  */
 public class InicioSesion extends javax.swing.JFrame {
-    
+
     private UsuariosServices usS;
     private InicioSesionServices isS;
     private MedidasServices mS;
@@ -33,31 +38,42 @@ public class InicioSesion extends javax.swing.JFrame {
     private SeriesEntrenamientoServices seS;
     private DatosDeUsuarioServices gS;
     private char contrasena;
-    private String imagen="/logoSinFondo200x200.png";
-    private ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
+    private String imagen = "/logoSinFondo200x200.png";
+    private ImageIcon icon = new ImageIcon(getClass().getResource(imagen));
     
-    public static boolean modoSinConexion;
     /**
-     * Creates new form InicioSesion
+     * Se habilita el modo sin conexion.
      */
+    public static boolean modoSinConexion;
+
     
-    public InicioSesion(UsuariosServices usS,InicioSesionServices isS, MedidasServices mS,EntrenamientosServices eS,
-    DetallesEntrenamientoServices deS,SeriesEntrenamientoServices seS,DatosDeUsuarioServices gS) {        
+    /**
+     * Constructor que inicializa la ventana de inicio de sesión.
+     * 
+     * @param usS Instancia el servicio de {@link UsuariosServices}.
+     * @param isS Instancia el servicio de {@link InicioSesionServices}.
+     * @param mS Instancia el servicio de {@link MedidasServices}.
+     * @param eS Instancia el servicio de {@link EntrenamientosServices}.
+     * @param deS Instancia el servicio de {@link DetallesEntrenamientoServices}.
+     * @param seS Instancia el servicio de {@link SeriesEntrenamientoServices}.
+     * @param gS Instancia el servicio de {@link DatosDeUsuarioServices}.
+     */
+    public InicioSesion(UsuariosServices usS, InicioSesionServices isS, MedidasServices mS, EntrenamientosServices eS,
+            DetallesEntrenamientoServices deS, SeriesEntrenamientoServices seS, DatosDeUsuarioServices gS) {
         initComponents();
-        this.usS=usS;
-        this.isS=isS;
-        this.mS=mS;
-        this.eS=eS;
-        this.deS=deS;
-        this.seS=seS;
-        this.gS=gS;
-        contrasena=pfContrasena.getEchoChar();
+        this.usS = usS;
+        this.isS = isS;
+        this.mS = mS;
+        this.eS = eS;
+        this.deS = deS;
+        this.seS = seS;
+        this.gS = gS;
+        contrasena = pfContrasena.getEchoChar();
         setResizable(false);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         logo.setIcon(icon);
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -222,18 +238,28 @@ public class InicioSesion extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Maneja el evento del checkbox para mostrar/ocultar la contraseña.
+     * 
+     * @param evt Evento de acción del checkbox.
+     */
     private void chbxMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbxMostrarActionPerformed
         // TODO add your handling code here:
 
-        if(chbxMostrar.isSelected()){
-            pfContrasena.setEchoChar((char)0);
-        }else{
+        if (chbxMostrar.isSelected()) {
+            pfContrasena.setEchoChar((char) 0);
+        } else {
             pfContrasena.setEchoChar(contrasena);
         }
 
     }//GEN-LAST:event_chbxMostrarActionPerformed
     
+    /**
+     * Maneja el evento del botón de inicio de sesión.
+     * 
+     * @param evt Evento de acción del botón
+     */
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         // TODO add your handling code here:t
         try {
@@ -243,23 +269,24 @@ public class InicioSesion extends javax.swing.JFrame {
             }
 
             if (!DatosGenerales.hayConexion()) {
-            int opcion = JOptionPane.showConfirmDialog(this, 
-                "No hay conexión a internet.\n¿Deseas continuar en modo sin conexión?", 
-                "Sin conexión", 
-                JOptionPane.YES_NO_OPTION, 
-                JOptionPane.WARNING_MESSAGE);
-
-            if (opcion == JOptionPane.YES_OPTION) {
-                modoSinConexion=true;
-                MenuGeneral menu = new MenuGeneral(null, null, null, null, null, null);
-                menu.setVisible(true);
-                menu.setLocationRelativeTo(null);
-                this.dispose();
-                return;
-            } else {
-                return; // Si elige NO, simplemente no continúa
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "No hay conexión a internet.\n¿Deseas continuar en modo sin conexión?",
+                        "Sin conexión",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+                
+                //Si acepta el usuario,entra al modo sin conexion.
+                if (opcion == JOptionPane.YES_OPTION) {
+                    modoSinConexion = true;
+                    MenuGeneral menu = new MenuGeneral(null, null, null, null, null, null);
+                    menu.setVisible(true);
+                    menu.setLocationRelativeTo(null);
+                    this.dispose();
+                    return;
+                } else {
+                    return; // Si elige NO, simplemente no continúa
+                }
             }
-        }
             String usuario = tfUsuario.getText();
             String password = new String(pfContrasena.getPassword());
             Integer tuElegido = (cmbTipoUsuario.getSelectedIndex() == 0) ? 1 : 2;
@@ -273,7 +300,7 @@ public class InicioSesion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Inicio de Sesión Correcto");
             DatosGenerales.setInfoUsuarios(usS.infoUsuario(usuario));
 
-            MenuGeneral menu = new MenuGeneral(usS, mS, eS, deS, seS,gS);
+            MenuGeneral menu = new MenuGeneral(usS, mS, eS, deS, seS, gS);
             menu.setVisible(true);
             menu.setLocationRelativeTo(null);
             this.dispose();
@@ -289,25 +316,33 @@ public class InicioSesion extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnIngresarActionPerformed
 
-    
+    /**
+     * Maneja el evento de cierre de la ventana.Cierra completamente la
+     * aplicación cuando se intenta cerrar esta ventana.
+     * 
+     * @param evt Evento de cierre de ventana
+     */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-       dispose(); // Cierra la ventana
-       System.exit(0);
-        
-    }//GEN-LAST:event_formWindowClosing
+        dispose(); // Cierra la ventana
+        System.exit(0);
 
+    }//GEN-LAST:event_formWindowClosing
+    
+    /**
+     * Maneja el evento del botón de registro.Abre la ventana de registro 
+     * para crear una nueva cuenta de usuario.
+     * 
+     * @param evt Evento de acción del botón.
+     */
     private void btnRegistrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarseActionPerformed
         // TODO add your handling code here:
-        Registro registro = new Registro(this,usS); 
+        Registro registro = new Registro(this, usS);
         registro.setLocationRelativeTo(null);
         registro.setBackground(Color.white);
         registro.setVisible(true);
     }//GEN-LAST:event_btnRegistrarseActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -335,12 +370,11 @@ public class InicioSesion extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new InicioSesion().setVisible(true);
 
             }
         });
     }
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnRegistrarse;

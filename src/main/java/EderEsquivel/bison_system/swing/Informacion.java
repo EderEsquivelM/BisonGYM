@@ -8,25 +8,36 @@ import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.services.UsuariosServices;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *Interfaz grafica para ver y modificar la informacion del usuario.
+ * 
+ * Esta ventana permite ver y editar la informacion del usuario.
+ * 
+ * Se conecta al servicio con la clase {@link UsuariosServices} para obtener los
+ * datos y actualizar la informacion.
+ * 
  * @author edere
  */
 public class Informacion extends javax.swing.JInternalFrame {
     
+    private char contrasena;
     private UsuariosServices usS;
+   
     /**
-     * Creates new form Perfil
+     * Constructo que iniizaliza la instancia del servicio.
+     * @param usS Instancia del servicio {@link UsuariosServices} utilizada
+     * para obtener y actualizar la información del usuario
      */
     public Informacion(UsuariosServices usS) {
         this.usS=usS;
         initComponents();
         this.setResizable(false);
+        
+        //Verifica que haya conexion
         if(!DatosGenerales.hayConexion()){
             JOptionPane.showMessageDialog(this,
                     "No hay conexion a internet",
@@ -240,12 +251,22 @@ public class Informacion extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Boton que manda a llamar una funcion para habilitar elementos.
+     * 
+     * @param evt Evento que sucede al presionar el boton. 
+    */
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         editable(true);
     }//GEN-LAST:event_btnEditarActionPerformed
-
+    
+    /**
+     * Boton que aplica los cambios que hizo el usuario.
+     * 
+     * @param evt 
+     */
     private void btnAplicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAplicarActionPerformed
         // TODO add your handling code here:
         try {
@@ -316,7 +337,12 @@ public class Informacion extends javax.swing.JInternalFrame {
         } 
         
     }//GEN-LAST:event_btnAplicarActionPerformed
-
+    
+    /**
+     * CheckBox que muestra la contraseña oculta del usuario.
+     * 
+     * @param evt Evento que sucede al presionar un check box.
+     */
     private void chbxMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbxMostrarActionPerformed
         // TODO add your handling code here:
         if(chbxMostrar.isSelected()){
@@ -325,23 +351,34 @@ public class Informacion extends javax.swing.JInternalFrame {
             pfContrasena.setEchoChar(contrasena);
         }
     }//GEN-LAST:event_chbxMostrarActionPerformed
-
+    
+    /**
+     * Metodo que muestra la información del usuario actual en los campos 
+     * de la interfaz.
+     */
     public void mostrarInfo(){
         try{
+            // Verificar conexión a internet
             if(!DatosGenerales.hayConexion()){
             JOptionPane.showMessageDialog(this,
                     "No hay conexion a internet",
                     "¡Sin conexion!", JOptionPane.ERROR_MESSAGE);
              }
+            
+            // Obtener información del usuario actual
             Usuarios usuario;
             usuario=DatosGenerales.getInfoUsuarios();
+            
             Date fechaCambio=Date.from(usuario.getFecha_nacimiento().atStartOfDay(ZoneId.systemDefault()).toInstant());
+           
+            // Mostrar datos en los campos correspondientes
             tfNombre.setText(usuario.getNombre());
             tfApellido.setText(usuario.getApellido());
             tfCorreo.setText(usuario.getCorreo());
             tfUsername.setText(usuario.getUsername());
             dcFechaNac.setDate(fechaCambio);
             pfContrasena.setText(usuario.getPasswordHash());
+            
         }catch(Exception ex){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
                        JOptionPane.ERROR_MESSAGE);
@@ -350,6 +387,11 @@ public class Informacion extends javax.swing.JInternalFrame {
         
     }
     
+    /**
+     * Este metodo habilita cierto campos de la interfaz.
+     * 
+     * @param estado Bool.
+     */
     public void editable(boolean estado){
         tfNombre.setEditable(estado);
         tfApellido.setEditable(estado);
@@ -360,8 +402,6 @@ public class Informacion extends javax.swing.JInternalFrame {
         pfContrasena.setEditable(estado);
         btnAplicar.setEnabled(estado);
     }
-    
-    private char contrasena;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAplicar;

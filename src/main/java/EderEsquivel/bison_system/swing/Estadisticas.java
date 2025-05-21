@@ -26,16 +26,27 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 /**
- *
+ *Interfaz grafica para mostrar estadisticas de usuario.
+ * 
+ * Esta ventana permite visualizar las estadisticas del usuarios mediante 
+ * graficas por periodos de tiempo que el usuario quiera.
+ * 
+ * Se conecta al servicio con clase {@link DatosDeUsuarioServices} para 
+ * obtener los datos y asi graficarlos.
+ * 
  * @author edere
  */
 public class Estadisticas extends javax.swing.JInternalFrame {
+    
      private DatosDeUsuarioServices gS;
      public ChartPanel chartPanel=new ChartPanel(null);
      public Ejercicios ejercicioSelect;
+     
     /**
-     * Creates new form Perfil
-     */
+     * Constructor que crea una nueva instancia de la ventana estadisticas.
+     * 
+     * @param gS Instancia el servicio {@link DatosDeUsuarioServices}.
+     */ 
     public Estadisticas(DatosDeUsuarioServices gS) {
         this.gS=gS;
         initComponents();
@@ -49,6 +60,9 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         cbxGraficas.setSelectedIndex(-1);
     }
     
+    /**
+     * Este metodo genera y muesta la grafica seleccionada por el usuario.
+     */
     private void mostrarGrafica() {
         // Crear dataset con datos reales
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -58,11 +72,13 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         switch(gSelect){
             case 0: 
                 List<DatosGraficaSL> listEntrenamiento = new ArrayList<>();
+                
                 listEntrenamiento = gS.EntrenamientosPorMes(
                     DatosGenerales.getInfoUsuarios().getId(),
                     DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate())
                 );
+                
                 if(listEntrenamiento.isEmpty()){
                     JOptionPane.showMessageDialog(this, "No hay datos",
                 "¡Error!", JOptionPane.ERROR_MESSAGE);
@@ -70,6 +86,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                     for (DatosGraficaSL em : listEntrenamiento) {
                     dataset.addValue(em.getDato(), "Veces por mes", em.getCampo());
                     }
+                    
                     JFreeChart barChart = ChartFactory.createBarChart(
                         "Entrenamientos por mes", // Título
                         "Mes",                    // Eje X
@@ -78,21 +95,23 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                         PlotOrientation.VERTICAL,
                         true,                     // incluir leyenda
                         true,                     // tooltips
-                        false                     // URLs
+                        false                     
                     );
 
-                    // Crear panel del gráfico y establecer tamaño reducido
+                    // Crear panel del gráfico
                     chartPanel = new ChartPanel(barChart);
-                    
                 }
                 break;
                 
             case 1:
                 List<DatosGraficaSD> listPeso=new ArrayList<>();
+                
                 Integer idEjercicio=obtenerIDEjercicio(cbxEjercicio.getSelectedItem().toString());
+                
                 listPeso=gS.evolucionPesoCargado(DatosGenerales.getInfoUsuarios().getId(), 
                         idEjercicio, DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                
                 if (listPeso.size()<=1) {
                     JOptionPane.showMessageDialog(this, "No hay datos",
                         "¡Error!", JOptionPane.ERROR_MESSAGE);
@@ -110,9 +129,10 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                         PlotOrientation.VERTICAL,
                         true,                           // incluir leyenda
                         true,                           // tooltips
-                        false                           // URLs
+                        false                           
                     );
-
+                    
+                    // Crear panel del gráfico
                     chartPanel = new ChartPanel(lineChart);
                     
                 }
@@ -120,9 +140,11 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 
             case 2:
                 List<DatosGraficaSD> listPesoU=new ArrayList<>();
+                
                 listPesoU=gS.evolucionPesoUsuario(DatosGenerales.getInfoUsuarios().getId(),
                   DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                
                 if (listPesoU.size()<=1) {
                     JOptionPane.showMessageDialog(this, "No hay datos",
                         "¡Error!", JOptionPane.ERROR_MESSAGE);
@@ -140,9 +162,9 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                         PlotOrientation.VERTICAL,
                         true,                           // incluir leyenda
                         true,                           // tooltips
-                        false                           // URLs
+                        false                           
                     );
-
+                    // Crear panel del gráfico
                    chartPanel = new ChartPanel(lineChart);
                    
                 }
@@ -150,9 +172,11 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                 
             case 3:
                 List<DatosGraficaSL> listPGC=new ArrayList<>();
+                
                 listPGC=gS.evolucionPGC(DatosGenerales.getInfoUsuarios().getId(),
                   DatosGenerales.cambioFecha(dcFechaI.getDate()),
                     DatosGenerales.cambioFecha(dcFechaF.getDate()));
+                
                 if (listPGC.size()<=1) {
                     JOptionPane.showMessageDialog(this, "No hay datos",
                         "¡Error!", JOptionPane.ERROR_MESSAGE);
@@ -170,13 +194,15 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                         PlotOrientation.VERTICAL,
                         true,                           // incluir leyenda
                         true,                           // tooltips
-                        false                           // URLs
+                        false                           
                     );
-
+                    
+                    // Crear panel del gráfico 
                    chartPanel = new ChartPanel(lineChart);
                    
                 }
                 break;
+                
             case 4:
                 List<DatosGraficaSL> listDificultad=new ArrayList<>();
                 listDificultad=gS.ejerciciosHechosDificultad(DatosGenerales.getInfoUsuarios().getId(),
@@ -197,12 +223,13 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                         datasetPastel,                // Dataset
                         true,                         // Leyenda
                         true,                         // Tooltips
-                        false                         // URLs
+                        false                         
                     );
+                    
+                    // Crear panel del gráfico 
                     PiePlot plot = (PiePlot) pieChart.getPlot();
                     plot.setLabelGenerator(new StandardPieSectionLabelGenerator("{0}: {1}"));
                     chartPanel = new ChartPanel(pieChart);
-                   
                 }
                 break;
                 
@@ -229,7 +256,7 @@ public class Estadisticas extends javax.swing.JInternalFrame {
                         PlotOrientation.HORIZONTAL,   // Orientación horizontal
                         true,                         // Leyenda
                         true,                         // Tooltips
-                        false                         // URLs
+                        false                         
                     );
 
                     chartPanel = new ChartPanel(barChart);
@@ -240,7 +267,6 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         if (chartPanel != null) {
             jpGrafica.remove(chartPanel);
         }
-        
 
         jpGrafica.removeAll();
         jpGrafica.setLayout(new java.awt.BorderLayout());
@@ -413,13 +439,19 @@ public class Estadisticas extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Boton que permite que se ejecute la funcion mostrarGrafica() haciendo 
+     * verificaciones para evitara errores.
+     * 
+     * @param evt Evento que sucede al precionar el boton.
+     */
     private void btnSGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSGActionPerformed
         // TODO add your handling code here:
         try{   
             if(cbxGraficas.getSelectedIndex()==-1){
                 throw new CamposVaciosException("Selecciona una tipo de grafica");
             }
+            
             if(dcFechaI.getDate()==null || dcFechaF.getDate()==null){
                 throw new CamposVaciosException("Selecciona las fechas");
             }
@@ -441,7 +473,9 @@ public class Estadisticas extends javax.swing.JInternalFrame {
              if(!DatosGenerales.hayConexion()){
                 throw new Exception("No hay conexión a internet.\nIntente reconectarse a una red.");
             }
-             mostrarGrafica();
+             
+            mostrarGrafica();
+             
         }catch(CamposVaciosException ex){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
                     JOptionPane.ERROR_MESSAGE);
@@ -453,19 +487,34 @@ public class Estadisticas extends javax.swing.JInternalFrame {
            
         
     }//GEN-LAST:event_btnSGActionPerformed
-
+    
+    /**
+     * Este metodo permite que al seleccionar el objeto "Evolucion peso por ejercicio"
+     * en el combo box de la tipos de grafica se despliegue las zonas anatomicas.
+     * 
+     * @param evt Evento que sucede al seleccionar un elemento.
+     */
     private void cbxCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCategoriaActionPerformed
         // TODO add your handling code here:
         cbxEjercicio.removeAllItems();
+        
         int idZonaSelecionada=cbxCategoria.getSelectedIndex()+1;
+        
         listaEjercicios=DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
+        
         for (Ejercicios ejercicio : listaEjercicios) {
             cbxEjercicio.addItem(ejercicio.getNombre());
         }
         cbxEjercicio.setSelectedIndex(-1);
         
     }//GEN-LAST:event_cbxCategoriaActionPerformed
-
+    
+    /**
+     * Este metodo oculta elementos que no se requieren hasta que se seleccione 
+     * el elemento "Evolucion peso por ejercicio".
+     * 
+     * @param evt Evento que sucede al seleccionar un elemento.
+     */
     private void cbxGraficasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxGraficasActionPerformed
         // TODO add your handling code here:
         if(cbxGraficas.getSelectedIndex()!=1){
@@ -480,7 +529,13 @@ public class Estadisticas extends javax.swing.JInternalFrame {
 
         }
     }//GEN-LAST:event_cbxGraficasActionPerformed
-
+    
+    /**
+     * Este metodo maneja el evento de selección de ejercicio para
+     * almacenar el ejercicio seleccionado.
+     * 
+     * @param evt Evento que sucede al seleccionar un elemento.
+     */
     private void cbxEjercicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxEjercicioActionPerformed
         // TODO add your handling code here:
         String ejercicioSeleccionado = (String) cbxEjercicio.getSelectedItem();
@@ -491,6 +546,12 @@ public class Estadisticas extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_cbxEjercicioActionPerformed
     
+    /**
+     * Obtiene el ID de un ejercicio basado en su nombre.
+     * 
+     * @param nombreEjercicio El nombre del ejercicio a buscar.
+     * @return El ID del ejercicio si se encuentra, null si no existe.
+     */
     public static Integer obtenerIDEjercicio(String nombreEjercicio) {
     for (Map.Entry<Integer, Ejercicios> entry : DatosGenerales.ejerciciosMap.entrySet()) {
         Ejercicios ejercicio = entry.getValue();

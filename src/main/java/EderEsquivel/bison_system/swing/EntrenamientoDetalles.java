@@ -22,18 +22,42 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *Interfaz grafica para el ingreso de datos generales de un entrenamiento.
+ * 
+ * Esta ventana muestra campos donde puedes ingresar datos genereles de un 
+ * entrenamiento.
+ * 
+ * Se conecta a los servicios de {@link EntrenamientosServices}, 
+ * {@link DetallesEntrenamientoServices} y {@link SeriesEntrenamientoServices}.
+ * 
  * @author edere
  */
 public class EntrenamientoDetalles extends javax.swing.JDialog {
-
+    
     private EntrenamientosServices eS;
     private DetallesEntrenamientoServices deS;
     private SeriesEntrenamientoServices seS;
-    public  List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
-    public  Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
     /**
-     * Creates new form EntrenamientoDetalles
+     * Guarda los ejercicios seleccionados de una lista estatica de 
+     * {@link EntrenamientosIngreso}.
+     */
+    public  List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
+    
+    /**
+     * Guarda las series de los ejercicios seleccionados.
+     */
+    public  Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
+    
+    /**
+     * Constructor que inicializa los servicios y estructuras de datos de los ejercicios.
+     * 
+     * @param parent Ventana padre desde donde se manda a llamar.
+     * @param eS Instancia del servicio {@link EntrenamientosServices},
+     * @param deS Instancia del servicio {@link DetallesEntrenamientoServices}.
+     * @param seS Instancia del servicio {@link SeriesEntrenamientoServices}.
+     * @param listaEjerciciosSeleccionados Lista de {@link Ejercicios}
+     * @param seriesPorEjercicio Mapa de String(Nombre del ejercicio) y
+     * {@link SeriesEntrenamiento}.
      */
     public EntrenamientoDetalles(java.awt.Frame parent ,EntrenamientosServices eS,DetallesEntrenamientoServices deS,
             SeriesEntrenamientoServices seS,List<Ejercicios> listaEjerciciosSeleccionados ,
@@ -191,6 +215,11 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Boton que guarda todo los detalles del entrenamiento y las series hechas.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         try {
@@ -242,10 +271,6 @@ public class EntrenamientoDetalles extends javax.swing.JDialog {
 
         
     }//GEN-LAST:event_btnGuardarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;

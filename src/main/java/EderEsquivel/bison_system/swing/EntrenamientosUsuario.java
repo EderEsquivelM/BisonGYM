@@ -16,16 +16,38 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ *Interfaz grafica que muestra los entrenamientos realizado por el usurio.
+ * 
+ * Esta ventana muestra todos los entrenamientos realizado por el usuario,junto
+ * con sus ejercicios y series.
+ * 
  * @author edere
  */
 public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
+    
     private DatosDeUsuarioServices duS;
-    private List<Entrenamientos> listaEnt;
-    private List<DetallesEntrenamiento> listaDE;
-    public int fila;
+    
     /**
-     * Creates new form EntrenamientosUsuario
+     * Lista de {@link Entrenamientos} que guarda todos los entrenamientos hechos
+     * por el usuario.
+     */
+    private List<Entrenamientos> listaEnt;
+    
+    /**
+     * Lista de {@link DetallesEntrenamiento} que guarda todos los detalles.
+     *
+     */
+    private List<DetallesEntrenamiento> listaDE;
+    
+    /**
+     * Guarda el indice de un registro de un JTable
+     */
+    public int fila;
+   
+    /**
+     * Contructor inicializa todo los entrenamientos hechos por el usuario.
+     * 
+     * @param duS Instancia del servicio {@link DatosDeUsuarioServices}.
      */
     public EntrenamientosUsuario(DatosDeUsuarioServices duS) {
         initComponents();
@@ -214,10 +236,17 @@ public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Este boton muestra los ejercicios hechos por el usuario y sus respectivas
+     * series en JTable.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnDetallesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetallesActionPerformed
         // TODO add your handling code here:
         try{
+            //Verifica que se este seleccionando un entrenamiento de la tabla.
             fila=tEntrenamientos.getSelectedRow();
             if(fila == -1){
                 throw new CamposVaciosException("Selecciona un usuario para editar");
@@ -226,6 +255,7 @@ public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
             if(!DatosGenerales.hayConexion()){
                 throw new Exception("No hay conexion a internet");
             }
+            //Vacia las tablas tEjericios y tSeries.
             DefaultTableModel modelE = (DefaultTableModel) tEjercicios.getModel();
             modelE.setRowCount(0);
             
@@ -247,23 +277,36 @@ public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_btnDetallesActionPerformed
-
+    
+    /**
+     * Este metodo carga las series de un ejercicio en un tabla.
+     * 
+     * @param evt Evento que sucede al presionar un registro de un JTable.
+     */
     private void tEjerciciosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tEjerciciosMouseClicked
         // TODO add your handling code here:
         int filaS = tEjercicios.rowAtPoint(evt.getPoint());
         if (filaS != -1) {
+            //Metodo de carga.
             cargarDetalles(filaS);
         }
     }//GEN-LAST:event_tEjerciciosMouseClicked
     
+    /**
+     * Este metodo carga la todos los entrenamientos realizados por el usuario
+     * y los ingresa a la tabla.
+     */
     private void cargarEntrenamientos() {
         try{
             if(!DatosGenerales.hayConexion()){
                 throw new Exception("No hay conexion a internet");
             }
+            
+            // Limpiar la tabla
             DefaultTableModel model = (DefaultTableModel) tEntrenamientos.getModel();
-            model.setRowCount(0); // Limpiar la tabla
-
+            model.setRowCount(0); 
+            
+            //Consulta a la base de datos llos entrenamientos.
             listaEnt=duS.entrenamientosUsuario(DatosGenerales.getInfoUsuarios().getId());
             for (Entrenamientos ent:listaEnt) {
                     model.addRow(new Object[]{
@@ -282,17 +325,28 @@ public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
         }
         
     }
-
+    /**
+     * Este metodo carga todos los ejercicios hechos en un entrenamiento seleccionado.
+     * 
+     * @param idEnt ID del entrenamiento seleccionado.
+     */
     private void cargarEjercicio(int idEnt){
         try{
             if(!DatosGenerales.hayConexion()){
                 throw new Exception("No hay conexion a internet");
             }
+            
+            //Vacia la tabla.
             DefaultTableModel model = (DefaultTableModel) tEjercicios.getModel();
             model.setRowCount(0);
         
+            /*
+            Consulta a la base de datos los ejercicios realizados en el 
+            entrenamiento
+            */
             listaDE=duS.detallesEntreUsuario(listaEnt.get(idEnt).getId_entrenamiento());
-   
+            
+            //Carga los datos en la tabla.
             for(DetallesEntrenamiento detalle: listaDE){
                 model.addRow(new Object[]{ 
                     detalle.getId_ejer().getNombre()
@@ -306,17 +360,29 @@ public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
         
     }
     
+    
+    /**
+     * Metodo que carga la informacion de la series de un ejercicio de un 
+     * entrenamiento seleccionado.
+     * 
+     * @param idEjer ID del ejercicio del entrenamiento seleccionado.
+     */
     private void cargarDetalles(int idEjer){
         try{
             if(!DatosGenerales.hayConexion()){
                 throw new Exception("No hay conexion a internet");
             }
+            
+            //Vacia la tabla.
             DefaultTableModel model = (DefaultTableModel) tSeries.getModel();
              model.setRowCount(0);
-        
+             
             Long id = listaDE.get(idEjer).getId_detalle();
+            
+            //Consulta las series del entrenamieto.
             List<SeriesEntrenamiento> listaDS=duS.SeriesEntreUsuario(id);
-
+            
+            //Carga los datos a la tabla,
             for(SeriesEntrenamiento se:listaDS){
                 model.addRow(new Object[]{
                         se.getNumero_serie(),
@@ -328,11 +394,8 @@ public class EntrenamientosUsuario extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "¡Error!",
                        JOptionPane.ERROR_MESSAGE);
         }
-        
-        
-        
-        
     }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetalles;
     private javax.swing.JLabel jLabel1;

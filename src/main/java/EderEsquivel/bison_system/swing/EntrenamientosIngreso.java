@@ -6,33 +6,52 @@ package EderEsquivel.bison_system.swing;
 
 import EderEsquivel.bison_system.CamposVaciosException;
 import EderEsquivel.bison_system.DatosGenerales;
-import EderEsquivel.bison_system.model.DetallesEntrenamiento;
 import EderEsquivel.bison_system.model.Ejercicios;
 import EderEsquivel.bison_system.model.SeriesEntrenamiento;
-import EderEsquivel.bison_system.model.Usuarios;
 import EderEsquivel.bison_system.model.ZonasAnatomicas;
 import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
 import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import static EderEsquivel.bison_system.swing.CategoriasEjercicios.listaEjercicios;
 import java.awt.Frame;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ *Interfaz grafica para seleccionar ejercicios e ingresar sus series.
+ * 
+ * Esta ventana permite el ingreso de ejercicios a un entrenamiento e ingresas
+ * sus respectivas series.
+ * 
+ * No utiliza algun servicio, solo estan declarados para pasar a una ventana hija.
+ * 
  * @author edere
  */
 public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
+    /**
+     * Lista de ejercicios hecho en el entrenamiento.
+     */
+    public  List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
     
     /**
-     * Creates new form Entrenamientos
+     * Mapa de series ingresadas por ejercicio.
+     */
+    public  Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
+    
+    private EntrenamientosServices eS;
+    private DetallesEntrenamientoServices deS;
+    private SeriesEntrenamientoServices seS;
+    
+    /**
+     * Constructor que inicializa las zonas anatomicas en un ComboBox.
+     * 
+     * @param eS Instancia del servicio {@link EntrenamientosServices},
+     * @param deS Instancia del servicio {@link DetallesEntrenamientoServices}.
+     * @param seS Instancia del servicio {@link SeriesEntrenamientoServices}.
      */
     public EntrenamientosIngreso(EntrenamientosServices eS,DetallesEntrenamientoServices deS,
             SeriesEntrenamientoServices seS) {
@@ -229,7 +248,12 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Boton que hace que cargue los ejercicios de una zona anatomica a un ComboBox.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnSCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSCActionPerformed
         // TODO add your handling code here:
         try{
@@ -250,7 +274,13 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_btnSCActionPerformed
-
+    
+    /**
+     * Boton que realiza la seleccion de un ejercicio y lo agrega a la tabla de 
+     * ejercicios selecionados.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnSEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSEActionPerformed
         // TODO add your handling code here:
         try {   
@@ -307,7 +337,13 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
                     JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnSEActionPerformed
-
+    
+    /**
+     * Boton para elimiar un ejercico ingresado y si en el caso de que se 
+     * ingresaron sus series,se eliminan tambien.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
         try {
@@ -348,7 +384,12 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
-
+    
+    /**
+     * Boton para modificar el numero de series realizada de un ejercicio.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         // TODO add your handling code here:
         try {
@@ -395,7 +436,12 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_btnModificarActionPerformed
-
+    
+    /**
+     * Boton para ingresar las repeticiones y peso de una serie de ejercicio.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnDEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDEActionPerformed
         // TODO add your handling code here:
         try {
@@ -458,14 +504,21 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_btnDEActionPerformed
-
+    
+    /**
+     * Boton para ir a cargar los ejercicios y sus series.
+     * 
+     * @param evt Evento que sucede al dar click al boton.
+     */
     private void btnCDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCDActionPerformed
         // TODO add your handling code here:
         try {
+            //Verifica que se hayan seleccionado ejercicios.
             if (listaEjerciciosSeleccionados.isEmpty()) {
                 throw new CamposVaciosException("No hay ejercicios seleccionados.");
             }
-
+            
+            //Verifica que no existan series vacias.
             if (!verificarSeries(seriesPorEjercicio)) {
             }
 
@@ -494,7 +547,12 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnCDActionPerformed
     
-    
+    /**
+     * Metodo para verificar que una serie de un ejercicio no este vacia.
+     * 
+     * @param seriesPorEjercicio Mapa de ejercicios con sus series.
+     * @return true si no esta vacia o no falta alguna serie por ingresar.
+     */
     private boolean verificarSeries(Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio) {
         List<String> ejerciciosConSeriesIncompletas = new ArrayList<>();
 
@@ -533,14 +591,6 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
 
         return true;
     }
-
-
-    public  List<Ejercicios>listaEjerciciosSeleccionados=new ArrayList<>();
-    public  Map<String, List<SeriesEntrenamiento>> seriesPorEjercicio = new HashMap<>();
-    
-    private EntrenamientosServices eS;
-    private DetallesEntrenamientoServices deS;
-    private SeriesEntrenamientoServices seS;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TEjerciciosS;

@@ -9,22 +9,26 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 
 /**
- *
+ *Interfaz grafica que muestra una imagen con los grupos musculares del cuerpo.
+ * 
  * @author edere
  */
 public class GruposMusculares extends javax.swing.JInternalFrame {
 
-    
+    /**
+     * Ruta donde se encuentra la imgen
+     */
     String imagen="/GruposMusculares.jpeg";
     ImageIcon icon=new ImageIcon(getClass().getResource(imagen));
+    
     /**
-     * Creates new form GruposMusculares
+     * Constructor que inicializa la clase junto con la imagen.
      */
     public GruposMusculares() {
         initComponents();
         imagenGrupoMuscular.setIcon(icon);
         this.getContentPane().setBackground(Color.WHITE);
-
+        this.setResizable(false);
     }
 
     /**

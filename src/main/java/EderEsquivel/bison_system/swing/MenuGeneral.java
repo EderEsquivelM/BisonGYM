@@ -7,14 +7,16 @@ package EderEsquivel.bison_system.swing;
 import EderEsquivel.bison_system.DatosGenerales;
 import EderEsquivel.bison_system.services.DetallesEntrenamientoServices;
 import EderEsquivel.bison_system.services.EntrenamientosServices;
-import EderEsquivel.bison_system.services.GraficasServices;
+import EderEsquivel.bison_system.services.DatosDeUsuarioServices;
 import EderEsquivel.bison_system.services.MedidasServices;
 import EderEsquivel.bison_system.services.SeriesEntrenamientoServices;
 import EderEsquivel.bison_system.services.UsuariosServices;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *Interfaz grafica que muestra el menu general con todas las opciones
+ * que el usuario puede ejecutar.
+ * 
  * @author edere
  */
 public class MenuGeneral extends javax.swing.JFrame {
@@ -26,30 +28,39 @@ public class MenuGeneral extends javax.swing.JFrame {
     private CategoriasEjercicios ventanaCatEjercicios;
     private EntrenamientosIngreso ventanaEntrenamientos;
     private AdministradorDeUsuarios ventanaAU;
+    private EntrenamientosUsuario ventanaEU;
     
     private UsuariosServices usS;
     private MedidasServices mS;
     private EntrenamientosServices eS;
     private DetallesEntrenamientoServices deS;
     private SeriesEntrenamientoServices seS;
-    private GraficasServices gS;
+    private DatosDeUsuarioServices duS;
+    
     /**
-     * Creates new form MenuGeneral
+     * Constructor que inicializa el menu general.
+     * @param usS Instancia el servicio de {@link UsuariosServices}.
+     * @param mS Instancia el servicio de {@link MedidasServices}.
+     * @param eS Instancia el servicio de {@link EntrenamientosServices}.
+     * @param deS Instancia el servicio de {@link DetallesEntrenamientoServices}.
+     * @param seS Instancia el servicio de {@link SeriesEntrenamientoServices}.
+     * @param duS Instancia el servicio de {@link DatosDeUsuarioServices}
      */
     public MenuGeneral(UsuariosServices usS,MedidasServices mS,EntrenamientosServices eS,DetallesEntrenamientoServices deS,
-            SeriesEntrenamientoServices seS,GraficasServices gS) {
+            SeriesEntrenamientoServices seS,DatosDeUsuarioServices duS) {
         this.usS=usS;
         this.mS=mS;
         this.eS=eS;
         this.deS=deS;
         this.seS=seS;
-        this.gS=gS;
+        this.duS=duS;
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 700);
         this.setLocationRelativeTo(null);
         menuUsuarios.setVisible(false);
        
+        //Si se entra al modo conexion se inhabilitan funciones del menu,
         if(InicioSesion.modoSinConexion){
             menuPerfil.setVisible(false);
             menuEntrenamientos.setVisible(false);
@@ -83,6 +94,7 @@ public class MenuGeneral extends javax.swing.JFrame {
         miEstadiscticas = new javax.swing.JMenuItem();
         menuEntrenamientos = new javax.swing.JMenu();
         miAnadirEntenamiento = new javax.swing.JMenuItem();
+        miEntrenamientos = new javax.swing.JMenuItem();
         menuEjercicios = new javax.swing.JMenu();
         miVerEjercicios = new javax.swing.JMenuItem();
         miGruposMusculares = new javax.swing.JMenuItem();
@@ -147,6 +159,7 @@ public class MenuGeneral extends javax.swing.JFrame {
 
         menuEntrenamientos.setText("Entrenamientos");
 
+        miAnadirEntenamiento.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         miAnadirEntenamiento.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miAnadirEntenamiento.setText("Añadir");
         miAnadirEntenamiento.addActionListener(new java.awt.event.ActionListener() {
@@ -156,10 +169,21 @@ public class MenuGeneral extends javax.swing.JFrame {
         });
         menuEntrenamientos.add(miAnadirEntenamiento);
 
+        miEntrenamientos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        miEntrenamientos.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        miEntrenamientos.setText("Ver Entrenamientos");
+        miEntrenamientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miEntrenamientosActionPerformed(evt);
+            }
+        });
+        menuEntrenamientos.add(miEntrenamientos);
+
         menuPrincipal.add(menuEntrenamientos);
 
         menuEjercicios.setText("Ejercicios");
 
+        miVerEjercicios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         miVerEjercicios.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miVerEjercicios.setText("Ejercicios");
         miVerEjercicios.addActionListener(new java.awt.event.ActionListener() {
@@ -169,6 +193,7 @@ public class MenuGeneral extends javax.swing.JFrame {
         });
         menuEjercicios.add(miVerEjercicios);
 
+        miGruposMusculares.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         miGruposMusculares.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         miGruposMusculares.setText("Grupos Musculares");
         miGruposMusculares.addActionListener(new java.awt.event.ActionListener() {
@@ -182,6 +207,7 @@ public class MenuGeneral extends javax.swing.JFrame {
 
         menuUsuarios.setText("Usuarios");
 
+        miAdministrarU.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
         miAdministrarU.setText("Administrar");
         miAdministrarU.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -207,7 +233,11 @@ public class MenuGeneral extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Este metodo pregunta al usuario si se quiere salir del programa.
+     * 
+     * @param evt Cierre de ventana.
+     */
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
          int respuesta = JOptionPane.showConfirmDialog(
@@ -224,7 +254,12 @@ public class MenuGeneral extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_formWindowClosing
-
+    
+    /**
+     * Este metodo abre la ventan de Informacion del usuario.
+     * 
+     * @param evt Evento de acccion del boton.
+     */
     private void miInformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miInformacionActionPerformed
         // TODO add your handling code here:
          if (ventanaInformacion == null || ventanaInformacion.isClosed()) {
@@ -248,7 +283,12 @@ public class MenuGeneral extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_miInformacionActionPerformed
-
+    
+    /**
+     * Este metodo abre la ventan de Medidas del usuario.
+     * 
+     * @param evt Evento de acccion del boton.
+     */
     private void miMedidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMedidasActionPerformed
         // TODO add your handling code here:
         if (ventanaMedidas == null || ventanaMedidas.isClosed()) {
@@ -272,11 +312,16 @@ public class MenuGeneral extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_miMedidasActionPerformed
-
+    
+    /**
+     * Este metodo abre la ventan de Estadisticas del usuario.
+     * 
+     * @param evt Evento de acccion del boton.
+     */
     private void miEstadiscticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEstadiscticasActionPerformed
         // TODO add your handling code here:
          if (ventanaEstadisticas == null || ventanaEstadisticas.isClosed()) {
-            ventanaEstadisticas = new Estadisticas(gS);
+            ventanaEstadisticas = new Estadisticas(duS);
             dpFondo.add(ventanaEstadisticas);
             int x = (dpFondo.getWidth() - ventanaEstadisticas.getWidth()) / 2;
             int y = (dpFondo.getHeight() - ventanaEstadisticas.getHeight()) / 2;
@@ -298,7 +343,12 @@ public class MenuGeneral extends javax.swing.JFrame {
          
         
     }//GEN-LAST:event_miEstadiscticasActionPerformed
- 
+    
+    /**
+     * Este metodo abre la ventan de Grupos musculares
+     * 
+     * @param evt Evento de acccion del boton.
+     */
     private void miGruposMuscularesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGruposMuscularesActionPerformed
         // TODO add your handling code here:
         if (ventanaGM == null || ventanaGM.isClosed()) {
@@ -322,7 +372,12 @@ public class MenuGeneral extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_miGruposMuscularesActionPerformed
-
+    
+    /**
+     * Este metodo abre la ventan de Ver ejercicios.
+     * 
+     * @param evt Evento de acccion del boton.
+     */
     private void miVerEjerciciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVerEjerciciosActionPerformed
         // TODO add your handling code here:
          if (ventanaCatEjercicios == null || ventanaCatEjercicios.isClosed()) {
@@ -346,7 +401,12 @@ public class MenuGeneral extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_miVerEjerciciosActionPerformed
-
+    
+    /**
+     * Este metodo abre la ventan de Añadir entrenamientos.
+     * 
+     * @param evt Evento de acccion del boton.
+     */
     private void miAnadirEntenamientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAnadirEntenamientoActionPerformed
         // TODO add your handling code here:
         if (ventanaEntrenamientos == null || ventanaEntrenamientos.isClosed()) {
@@ -370,7 +430,12 @@ public class MenuGeneral extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_miAnadirEntenamientoActionPerformed
-
+    
+    /**
+     * Este metodo abre la ventan de IAdministrar Usuarios.
+     * 
+     * @param evt Evento de acccion del boton.
+     */
     private void miAdministrarUActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAdministrarUActionPerformed
         // TODO add your handling code here:
         if (ventanaAU == null || ventanaAU.isClosed()) {
@@ -394,6 +459,35 @@ public class MenuGeneral extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_miAdministrarUActionPerformed
+    
+    /**
+     * Este metodo abre la ventan de Entrenamientos hechos del usuario.
+     * 
+     * @param evt Evento de acccion del boton.
+     */
+    private void miEntrenamientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEntrenamientosActionPerformed
+        // TODO add your handling code here:
+        if (ventanaEU == null || ventanaEU.isClosed()) {
+            ventanaEU = new EntrenamientosUsuario(duS);
+            dpFondo.add(ventanaEU);
+            int x = (dpFondo.getWidth() - ventanaEU.getWidth()) / 2;
+            int y = (dpFondo.getHeight() - ventanaEU.getHeight()) / 2;
+            ventanaEU.setLocation(x, y);
+            ventanaEU.setVisible(true);
+        } else {
+            try {
+           
+                ventanaEU.setIcon(false); // Restaurar si está minimizada
+                int x = (dpFondo.getWidth() - ventanaEU.getWidth()) / 2;
+                int y = (dpFondo.getHeight() - ventanaEU.getHeight()) / 2;
+                ventanaEU.setLocation(x, y);
+                ventanaEU.setSelected(true); // Darle foco
+                ventanaEU.toFront(); // Al frente
+            } catch (java.beans.PropertyVetoException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_miEntrenamientosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -426,7 +520,7 @@ public class MenuGeneral extends javax.swing.JFrame {
         EntrenamientosServices eS=null;
         DetallesEntrenamientoServices deS=null;
         SeriesEntrenamientoServices seS=null;
-        GraficasServices gS=null;
+        DatosDeUsuarioServices gS=null;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -451,6 +545,7 @@ public class MenuGeneral extends javax.swing.JFrame {
     private javax.swing.JMenu menuUsuarios;
     private javax.swing.JMenuItem miAdministrarU;
     private javax.swing.JMenuItem miAnadirEntenamiento;
+    private javax.swing.JMenuItem miEntrenamientos;
     private javax.swing.JMenuItem miEstadiscticas;
     private javax.swing.JMenuItem miGruposMusculares;
     private javax.swing.JMenuItem miInformacion;
