@@ -80,7 +80,6 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         cbxCategoria = new javax.swing.JComboBox<>();
         cbxEjercicio = new javax.swing.JComboBox<>();
-        btnSC = new javax.swing.JButton();
         btnSE = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TEjerciciosS = new javax.swing.JTable();
@@ -88,6 +87,8 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         btnModificar = new javax.swing.JButton();
         btnDE = new javax.swing.JButton();
         btnCD = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
@@ -96,17 +97,14 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
 
         cbxCategoria.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cbxCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        cbxCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxCategoriaActionPerformed(evt);
+            }
+        });
 
         cbxEjercicio.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         cbxEjercicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        btnSC.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        btnSC.setText("Seleccionar Categoria");
-        btnSC.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSCActionPerformed(evt);
-            }
-        });
 
         btnSE.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         btnSE.setText("Seleccionar Ejercicio");
@@ -179,6 +177,12 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jLabel1.setText("Ejercicios");
+
+        jLabel2.setFont(new java.awt.Font("Verdana", 1, 12)); // NOI18N
+        jLabel2.setText("Categorias de ejercicios");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -201,28 +205,34 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
                         .addContainerGap(20, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSC))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbxEjercicio, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(btnSE, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbxEjercicio, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addComponent(btnSE, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(98, 98, 98)
+                                .addComponent(jLabel1)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(4, 4, 4)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cbxEjercicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSC)
-                    .addComponent(btnSE))
+                .addComponent(btnSE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -249,32 +259,7 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    /**
-     * Boton que hace que cargue los ejercicios de una zona anatomica a un ComboBox.
-     * 
-     * @param evt Evento que sucede al dar click al boton.
-     */
-    private void btnSCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSCActionPerformed
-        // TODO add your handling code here:
-        try{
-            if(cbxCategoria.getSelectedIndex()==-1){
-                throw new CamposVaciosException("Debes seleccionar un grupo muscular");
-            }else{
-                cbxEjercicio.removeAllItems();
-                int idZonaSelecionada=cbxCategoria.getSelectedIndex()+1;
-                listaEjercicios=DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
-                for (Ejercicios ejercicio : listaEjercicios) {
-                    cbxEjercicio.addItem(ejercicio.getNombre());
-                }
-                cbxEjercicio.setSelectedIndex(-1);
-            }  
-        }catch(CamposVaciosException ex){
-            JOptionPane.showMessageDialog(this, ex.getMessage(),"¡Error!", 
-                    JOptionPane.WARNING_MESSAGE);
-        }
-        
-    }//GEN-LAST:event_btnSCActionPerformed
-    
+   
     /**
      * Boton que realiza la seleccion de un ejercicio y lo agrega a la tabla de 
      * ejercicios selecionados.
@@ -547,6 +532,20 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
     }//GEN-LAST:event_btnCDActionPerformed
+
+    private void cbxCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxCategoriaActionPerformed
+        // TODO add your handling code here:
+        cbxEjercicio.removeAllItems();
+        
+        int idZonaSelecionada=cbxCategoria.getSelectedIndex()+1;
+        
+        listaEjercicios=DatosGenerales.obtenerEjerciciosPorZona(idZonaSelecionada);
+        
+        for (Ejercicios ejercicio : listaEjercicios) {
+            cbxEjercicio.addItem(ejercicio.getNombre());
+        }
+        cbxEjercicio.setSelectedIndex(-1);
+    }//GEN-LAST:event_cbxCategoriaActionPerformed
     
     /**
      * Metodo para verificar que una serie de un ejercicio no este vacia.
@@ -599,10 +598,11 @@ public class EntrenamientosIngreso extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDE;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JButton btnSC;
     private javax.swing.JButton btnSE;
     private javax.swing.JComboBox<String> cbxCategoria;
     private javax.swing.JComboBox<String> cbxEjercicio;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
